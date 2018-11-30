@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "232932737132-u5cnedm266o308kkk4if2p8n2jeibp02.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ido.appex2",
+            "certificate_hash": "bc25472c2de06a9abdef6db3856189da02562224"
+          }
+        },
+        {
+          "client_id": "232932737132-63gi3tj3mjjdrobts8np6dvc5qk8jbi2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ido.appex2",
+            "certificate_hash": "5b326bc4d75b29f77ee8859b2ae091af1359cb96"
+          }
+        },
+        {
           "client_id": "232932737132-t6rs0p4v5u07lbsvfkgbrv1989k1ng3s.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -40,7 +56,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "232932737132-t6rs0p4v5u07lbsvfkgbrv1989k1ng3s.apps.googleusercontent.com",
+              "client_id": "232932737132-qv84784i9u0n85a40ufo8fuqu0kl08ma.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
