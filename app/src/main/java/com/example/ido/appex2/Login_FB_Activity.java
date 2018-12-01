@@ -37,7 +37,7 @@ public class Login_FB_Activity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseRemoteConfig mConfig;
 
-    //private TextView mStatus;
+    private TextView mStatus;
     private ImageView mProfileImage;
     private TextView mFacebookEmail;
     private TextView mFacebookUserName;
@@ -49,6 +49,7 @@ public class Login_FB_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login__fb_);
+        mStatus = findViewById(R.id.tvStatusUser);
         mFacebookUserName = findViewById(R.id.tvUserNameFacebook);
         mFacebookEmail =  findViewById(R.id.tvEmailFacebook);
         mProfileImage = findViewById(R.id.ivFacebook);
@@ -100,12 +101,15 @@ public class Login_FB_Activity extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
 
         if (user == null) {
-            mFacebookUserName.setText("SIGNED-OUT \ndetails:" + details);
+            mStatus.setText("SIGNED-OUT");
+            mFacebookUserName.setText("Details: " + details);
+            mFacebookEmail.setText("Details: " + details);
             mProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
-        } else {
-
-            mFacebookUserName.setText("SIGNED-IN\nname:" + user.getDisplayName());
-            mFacebookEmail.setText("Email: " + user.getEmail());
+        } else
+            {
+            mStatus.setText("SIGNED-IN");
+            mFacebookUserName.setText("NAME: " + user.getDisplayName());
+            mFacebookEmail.setText("EMAIL: " + user.getEmail());
 
            // if (mConfig.getBoolean("display_profile_image")) {
                 Glide.with(this)

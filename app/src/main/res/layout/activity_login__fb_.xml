@@ -9,33 +9,55 @@
 
     <ImageView
         android:id="@+id/ivFacebook"
-        android:layout_width="398dp"
-        android:layout_height="354dp"
+        android:layout_width="373dp"
+        android:layout_height="355dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/border_image"
+        android:cropToPadding="true"
+        android:padding="3dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
         tools:layout_editor_absoluteX="71dp"
         tools:layout_editor_absoluteY="16dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
+        android:id="@+id/tvStatusUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/architects_daughter"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/tvUserNameFacebook"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:fontFamily="@font/alex_brush"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/architects_daughter"
         android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tvEmailFacebook"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:fontFamily="@font/alex_brush"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/architects_daughter"
         android:textSize="24sp" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dip"
+        android:layout_marginBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="25sp"/>
 
 
 </LinearLayout>
