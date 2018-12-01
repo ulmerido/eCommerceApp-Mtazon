@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginLeft="10dp"
-        android:fontFamily="@font/architects_daughter"
+        android:fontFamily="@font/anaheim"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="24sp"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:fontFamily="@font/architects_daughter"
+        android:fontFamily="@font/anaheim"
         android:textSize="24sp" />
 
     <TextView
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:fontFamily="@font/architects_daughter"
+        android:fontFamily="@font/anaheim"
         android:textSize="24sp" />
 
     <com.facebook.login.widget.LoginButton

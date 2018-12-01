@@ -102,8 +102,8 @@ public class Login_FB_Activity extends AppCompatActivity {
 
         if (user == null) {
             mStatus.setText("SIGNED-OUT");
-            mFacebookUserName.setText("Details: " + details);
-            mFacebookEmail.setText("Details: " + details);
+            mFacebookUserName.setText("NAME: " + details);
+            mFacebookEmail.setText("EMAIL: " + details);
             mProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
         } else
             {
