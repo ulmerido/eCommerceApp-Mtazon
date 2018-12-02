@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private TextView                       m_EtUserEmail;
     private TextView                       tvRecoverPassword;
     private TextView                       m_EtUserPassword;
+    private TextView                       m_TvAnonymous;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,15 +57,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         m_Auth = FirebaseAuth.getInstance();
-        m_FacebookLogin_btn = (LoginButton)findViewById(R.id.login_button);
+        m_FacebookLogin_btn = (LoginButton) findViewById(R.id.login_button);
         m_CallbackManager = CallbackManager.Factory.create();
-        m_GoogleSignInButton = (SignInButton)findViewById(R.id.googleSignInButton);
+        m_GoogleSignInButton = (SignInButton) findViewById(R.id.googleSignInButton);
         m_SignUp_btn = (Button) findViewById(R.id.btn_SignUp);
         mBtnSignin = (Button) findViewById(R.id.btn_SignIn);
         tvRecoverPassword = (TextView) findViewById(R.id.tvForgetPass);
         m_EtUserEmail = (TextView) findViewById(R.id.etEmail);
         m_EtUserPassword = (TextView) findViewById(R.id.et_UserPassword);
-
+        m_TvAnonymous = (TextView) findViewById(R.id.tvAnonymous);
         googleSignInBuilder();
         facebookLoginInit();
 
@@ -108,14 +109,44 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        m_TvAnonymous.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                signAnonymosly();
+                Intent intent_signAnonymos = new Intent(getApplicationContext(), UserActivity.class);
+                startActivity(intent_signAnonymos);
+                finish();
+            }
+        });
+    }
+
+    private void signAnonymosly()
+    {
+        m_Auth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            Log.d(TAG, "signInAnonymously:success");
+                            FirebaseUser user = m_Auth.getCurrentUser();
+                        } else
+                        {
+                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void openDialog()
     {
         ForgotPasswordDialog fpDialog = new ForgotPasswordDialog();
         fpDialog.show(getSupportFragmentManager(), "Forgot pass dialog");
-        Toast.makeText(MainActivity.this, "recovery email sent",Toast.LENGTH_SHORT).show();
-
     }
 
     //////////////////////////////////////////////////////////////////
@@ -164,35 +195,6 @@ public class MainActivity extends AppCompatActivity
         else
         {
             Toast.makeText(MainActivity.this, "unverified email",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void recoverPassowrd()
-    {
-        m_Auth = FirebaseAuth.getInstance();
-
-        if(m_Auth.getCurrentUser() != null)
-        {
-            String emailAddress = m_Auth.getCurrentUser().getEmail();
-            m_Auth.sendPasswordResetEmail(emailAddress)
-                    .addOnCompleteListener(new OnCompleteListener<Void>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task)
-                        {
-                            if (task.isSuccessful())
-                            {
-                                Log.d(TAG, "Email sent.");
-                                Toast.makeText(MainActivity.this, "zzzz",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-        else
-        {
-            Toast.makeText(MainActivity.this, "you are not logged in",
                     Toast.LENGTH_SHORT).show();
         }
     }
