@@ -55,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity
 
     private void registerUser()
     {
+        Log.e(TAG, "registerUser() >>");
         final String passString = etPassword.getText().toString().trim();
         final String emailString = etEmail.getText().toString().trim();
 
@@ -108,13 +109,17 @@ public class SignUpActivity extends AppCompatActivity
                         }
                     }
                 });
+        Log.e(TAG, "registerUser() <<");
     }
     private void finishSignUp()
     {
+        Log.e(TAG, "finishSignUp() >>");
         Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent_SignUp);
         finish();
         Toast.makeText(getApplicationContext(), "Please verify email and then sign in", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "finishSignUp() <<");
+
     }
 
 

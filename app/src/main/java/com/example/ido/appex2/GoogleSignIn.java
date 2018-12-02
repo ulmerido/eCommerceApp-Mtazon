@@ -49,20 +49,25 @@ public class GoogleSignIn extends AppCompatActivity
 
     private  void googleSignInBuilder()
     {
+        Log.e(TAG, "googleSignInBuilder >>");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         m_GoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this,gso);
+        Log.e(TAG, "googleSignInBuilder <<");
     }
     private void signIn()
     {
+        Log.e(TAG, "signIn >>");
         Intent signInIntent = m_GoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 101);
+        Log.e(TAG, "signIn <<");
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        Log.e(TAG, "onActivityResult >>");
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 101)
@@ -81,10 +86,12 @@ public class GoogleSignIn extends AppCompatActivity
                 // ...
             }
         }
+        Log.e(TAG, "onActivityResult <<");
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount i_Account)
     {
+        Log.e(TAG, "firebaseAuthWithGoogle >>");
         Log.d(TAG, "firebaseAuthWithGoogle:" + i_Account.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(i_Account.getIdToken(), null);
         m_Auth.signInWithCredential(credential)
@@ -111,5 +118,6 @@ public class GoogleSignIn extends AppCompatActivity
                         }
                     }
                 });
+        Log.e(TAG, "firebaseAuthWithGoogle <<");
     }
 }

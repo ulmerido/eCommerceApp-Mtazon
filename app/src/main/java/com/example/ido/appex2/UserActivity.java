@@ -3,6 +3,7 @@ package com.example.ido.appex2;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.UserInfo;
 
 public class UserActivity extends AppCompatActivity
 {
+    public static final String             TAG ="User Activity:";
     private FirebaseAuth m_Auth;
     private TextView m_Status;
     private ImageView m_ProfileImage;
@@ -52,18 +54,16 @@ public class UserActivity extends AppCompatActivity
         updateLoginStatus("kaki");
 
     }
-
-
+    
     private void updateLoginStatus(String details)
     {
+
         String profilePicUrl ="";
-
         FirebaseUser user = m_Auth.getCurrentUser();
-        Toast.makeText(getApplicationContext(), user.getProviderId(), Toast.LENGTH_SHORT).show();
 
-
-        if (user.isAnonymous())
+        if (user == null || user.isAnonymous())
         {
+
             m_Status.setText("Anonymous signed");
             m_UserName.setText("Name: Anoni Mos");
             m_Email.setText("email: mos@ano.ni" );
@@ -74,27 +74,24 @@ public class UserActivity extends AppCompatActivity
             for(String a: user.getProviders() )
             {
                 Toast.makeText(getApplicationContext(), a, Toast.LENGTH_SHORT).show();
-
                 if (a.contains("facebook"))
                 {
                     profilePicUrl = user.getPhotoUrl().toString() + "/picture?type=large";
                 }
+
                 else if (a.contains("google"))
                 {
                     profilePicUrl = user.getPhotoUrl().toString();
                 }
             }
-
             m_Status.setText("SIGNED-IN");
             m_UserName.setText("NAME: " + user.getDisplayName());
             m_Email.setText("EMAIL: " + user.getEmail());
-
             // if (mConfig.getBoolean("display_profile_image")) {
             Glide.with(this)
                     .load(profilePicUrl)
                      .into(m_ProfileImage);
         }
-
-
+        Log.e(TAG, "updateLoginStatus() <<");
     }
 }

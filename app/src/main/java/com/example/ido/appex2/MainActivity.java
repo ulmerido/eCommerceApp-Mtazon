@@ -120,27 +120,36 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void signAnonymosly()
-    {
-        m_Auth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
+        private void signAnonymosly()
+        {
+            Log.e(TAG, "signAnonymosly >>");
+            m_Auth.signInAnonymously()
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                     {
-                        if (task.isSuccessful())
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
                         {
-                            Log.d(TAG, "signInAnonymously:success");
-                            FirebaseUser user = m_Auth.getCurrentUser();
+                            if (task.isSuccessful())
+                            {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInAnonymously:success");
+                                FirebaseUser user = m_Auth.getCurrentUser();
+                              //  updateUI(user);
+                            } else
+                            {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInAnonymously:failure", task.getException());
+                                Toast.makeText(MainActivity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                               // updateUI(null);
+                            }
+
+                            // ...
                         }
-                        else
-                        {
-                            Log.w(TAG, "signInAnonymously:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
+                    });
+            Log.e(TAG, "signAnonymosly <<");
+        }
+
 
     private void openDialog()
     {
@@ -151,6 +160,7 @@ public class MainActivity extends AppCompatActivity
     //////////////////////////////////////////////////////////////////
     private void signin()
     {
+        Log.e(TAG, "signin >>");
         final String passString = m_EtUserPassword.getText().toString().trim();
         final String emailString = m_EtUserEmail.getText().toString().trim();
         FirebaseAuth.getInstance().getCurrentUser().reload();
@@ -196,25 +206,31 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(MainActivity.this, "unverified email",
                     Toast.LENGTH_SHORT).show();
         }
+        Log.e(TAG, "signin <<");
     }
 
     ////////////////////////////////////////////////////////////
     private  void googleSignInBuilder()
     {
+        Log.e(TAG, "googleSignInBuilder >>");
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         m_GoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this,gso);
+        Log.e(TAG, "googleSignInBuilder <<");
     }
     private void googleSignIn()
     {
+        Log.e(TAG, "googleSignIn >>");
         Intent signInIntent = m_GoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 101);
+        Log.e(TAG, "googleSignIn <<");
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        Log.e(TAG, "onActivityResult >>");
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 101)
@@ -232,17 +248,20 @@ public class MainActivity extends AppCompatActivity
                 Log.w("Sign IN:", "Google sign in failed", e);
                 // ...
             }
+
         }
 
         m_CallbackManager.onActivityResult(requestCode, resultCode, data);
 
-
+        Log.e(TAG, "onActivityResult <<");
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount i_Account)
     {
+        Log.e(TAG, "firebaseAuthWithGoogle >>");
         Log.d(TAG, "firebaseAuthWithGoogle:" + i_Account.getId());
         firebaseAuthWithGoogleAndFacebook(GoogleAuthProvider.getCredential(i_Account.getIdToken(), null));
+        Log.e(TAG, "firebaseAuthWithGoogle <<");
     }
 
     /////////////////////////////////////////////////////
@@ -308,6 +327,8 @@ public class MainActivity extends AppCompatActivity
 
     private void firebaseAuthTaskCheck(Task<AuthResult> i_Task)
     {
+        Log.e(TAG, "firebaseAuthTaskCheck() >>");
+
         if (i_Task.isSuccessful())
         {
             // Sign in success, update UI with the signed-in user's information
@@ -325,11 +346,12 @@ public class MainActivity extends AppCompatActivity
             ;
             Log.w(TAG, "signInWithCredential:failure", i_Task.getException());
         }
-
+        Log.e(TAG, "firebaseAuthTaskCheck() <<");
     }
 
     private void firebaseAuthWithGoogleAndFacebook(AuthCredential i_Credential)
     {
+        Log.e(TAG, "firebaseAuthWithGoogleAndFacebook() >>");
         m_Auth.signInWithCredential(i_Credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                 {
@@ -339,6 +361,7 @@ public class MainActivity extends AppCompatActivity
                         firebaseAuthTaskCheck(task);
                     }
                 });
+        Log.e(TAG, "firebaseAuthWithGoogleAndFacebook() <<");
     }
 
 }
