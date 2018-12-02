@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +41,7 @@ public class MainActivity extends AppCompatActivity
     private CallbackManager                m_CallbackManager;
     private AccessTokenTracker             m_AccessTokenTracker;
     private LoginButton                    m_FacebookLogin_btn;
-    private Button                         m_SignUp_btn;
+    private TextView                       m_SignUp_tv;
     private Button                         mBtnSignin;
     private TextView                       m_EtUserEmail;
     private TextView                       tvRecoverPassword;
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         m_FacebookLogin_btn = (LoginButton) findViewById(R.id.login_button);
         m_CallbackManager = CallbackManager.Factory.create();
         m_GoogleSignInButton = (SignInButton) findViewById(R.id.googleSignInButton);
-        m_SignUp_btn = (Button) findViewById(R.id.btn_SignUp);
+        m_SignUp_tv = (TextView) findViewById(R.id.tvSignUp);
         mBtnSignin = (Button) findViewById(R.id.btn_SignIn);
         tvRecoverPassword = (TextView) findViewById(R.id.tvForgetPass);
         m_EtUserEmail = (TextView) findViewById(R.id.etEmail);
@@ -78,7 +76,7 @@ public class MainActivity extends AppCompatActivity
                 googleSignIn();
             }
         });
-        m_SignUp_btn.setOnClickListener(new View.OnClickListener()
+        m_SignUp_tv.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -134,7 +132,8 @@ public class MainActivity extends AppCompatActivity
                         {
                             Log.d(TAG, "signInAnonymously:success");
                             FirebaseUser user = m_Auth.getCurrentUser();
-                        } else
+                        }
+                        else
                         {
                             Log.w(TAG, "signInAnonymously:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();

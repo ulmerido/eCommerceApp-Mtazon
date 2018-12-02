@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background3"
     tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="match_parent"
+        android:layout_width="242dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="39dp"
         android:ems="10"
         android:hint="user email"
         android:inputType="textEmailAddress"
@@ -18,8 +23,12 @@
 
     <EditText
         android:id="@+id/et_UserPassword"
-        android:layout_width="match_parent"
+        android:layout_width="241dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etEmail"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="3dp"
         android:ems="10"
         android:hint="user password"
         android:inputType="textPassword"
@@ -27,45 +36,79 @@
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_width="246dp"
+        android:layout_height="32dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="195dp"
+        android:textAlignment="center">
     </com.google.android.gms.common.SignInButton>
 
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:id="@+id/btn_SignUp"
-        android:layout_width="match_parent"
+        android:layout_width="248dp"
         android:layout_height="wrap_content"
-        android:text="Sign up" />
+        android:layout_alignTop="@+id/googleSignInButton"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="42dp"
+        android:layout_marginEnd="92dp"
+        android:text="Sign in"
+        android:textAlignment="center"
+        tools:text="Sign in" />
 
     <Button
         android:id="@+id/btn_SignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sign In" />
+        android:layout_width="98dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="137dp"
+        android:backgroundTintMode="screen"
+        android:text="Sign-In"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/tvForgetPass"
-        android:layout_width="match_parent"
+        android:layout_width="144dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="136dp"
+        android:layout_marginBottom="408dp"
+        android:layout_alignBottom="@+id/btn_SignIn"
         android:text="Forget Password?"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSignUp"
+        android:layout_width="175dp"
+        android:layout_height="49dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="250dp"
+        android:text="Don't have an account? sign up for free!"
+        android:textColor="@color/com_facebook_button_background_color_pressed"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvAnonymous"
-        android:layout_width="match_parent"
+        android:layout_width="218dp"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvSignUp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="52dp"
         android:text="sign in anonymously"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp" />
 
-</LinearLayout>
+</RelativeLayout>
