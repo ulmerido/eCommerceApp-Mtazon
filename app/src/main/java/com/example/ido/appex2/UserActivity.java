@@ -62,11 +62,11 @@ public class UserActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), user.getProviderId(), Toast.LENGTH_SHORT).show();
 
 
-        if (user == null)
+        if (user.isAnonymous())
         {
-            m_Status.setText("SIGNED-OUT");
-            m_UserName.setText("NAME: " + details);
-            m_Email.setText("EMAIL: " + details);
+            m_Status.setText("Anonymous signed");
+            m_UserName.setText("Name: Anoni Mos");
+            m_Email.setText("email: mos@ano.ni" );
             m_ProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
         }
         else

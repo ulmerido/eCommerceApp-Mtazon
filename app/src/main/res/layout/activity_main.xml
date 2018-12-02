@@ -56,6 +56,16 @@
         android:id="@+id/tvForgetPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Forget Password?" />
+        android:text="Forget Password?"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvAnonymous"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="sign in anonymously"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
