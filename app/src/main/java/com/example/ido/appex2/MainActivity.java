@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,8 +48,7 @@ public class MainActivity extends AppCompatActivity
     private TextView                       m_EtUserEmail;
     private TextView                       tvRecoverPassword;
     private TextView                       m_EtUserPassword;
-    private TextView                       m_TvAnonymous;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -55,15 +56,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         m_Auth = FirebaseAuth.getInstance();
-        m_FacebookLogin_btn = (LoginButton) findViewById(R.id.login_button);
+        m_FacebookLogin_btn = (LoginButton)findViewById(R.id.login_button);
         m_CallbackManager = CallbackManager.Factory.create();
-        m_GoogleSignInButton = (SignInButton) findViewById(R.id.googleSignInButton);
+        m_GoogleSignInButton = (SignInButton)findViewById(R.id.googleSignInButton);
         m_SignUp_btn = (Button) findViewById(R.id.btn_SignUp);
         mBtnSignin = (Button) findViewById(R.id.btn_SignIn);
         tvRecoverPassword = (TextView) findViewById(R.id.tvForgetPass);
         m_EtUserEmail = (TextView) findViewById(R.id.etEmail);
         m_EtUserPassword = (TextView) findViewById(R.id.et_UserPassword);
-        m_TvAnonymous = (TextView) findViewById(R.id.tvAnonymous);
+
         googleSignInBuilder();
         facebookLoginInit();
 
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                recoverPassowrd();
+                openDialog();
+                //recoverPassowrd();
             }
         });
 
@@ -106,48 +108,15 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        m_TvAnonymous.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                signAnonymosly();
-                Intent intent_signAnonymos = new Intent(getApplicationContext(), UserActivity.class);
-                startActivity(intent_signAnonymos);
-                finish();
-            }
-        });
     }
 
-        private void signAnonymosly()
-        {
-            m_Auth.signInAnonymously()
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
-                        {
-                            if (task.isSuccessful())
-                            {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInAnonymously:success");
-                                FirebaseUser user = m_Auth.getCurrentUser();
-                              //  updateUI(user);
-                            } else
-                            {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInAnonymously:failure", task.getException());
-                                Toast.makeText(MainActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                               // updateUI(null);
-                            }
+    private void openDialog()
+    {
+        ForgotPasswordDialog fpDialog = new ForgotPasswordDialog();
+        fpDialog.show(getSupportFragmentManager(), "Forgot pass dialog");
+        Toast.makeText(MainActivity.this, "recovery email sent",Toast.LENGTH_SHORT).show();
 
-                            // ...
-                        }
-                    });
-        }
-
-
+    }
 
     //////////////////////////////////////////////////////////////////
     private void signin()
