@@ -36,7 +36,6 @@ public class GoogleSignIn extends AppCompatActivity
 
         m_Auth = FirebaseAuth.getInstance();
         googleSignInBuilder();
-
         m_SignInButton = (SignInButton)findViewById(R.id.googleSignInButton);
         m_SignInButton.setOnClickListener(new View.OnClickListener()
         {

@@ -28,6 +28,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.squareup.picasso.Picasso;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
 public class Login_FB_Activity extends AppCompatActivity {
 
@@ -46,7 +48,8 @@ public class Login_FB_Activity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login__fb_);
         mStatus = findViewById(R.id.tvStatusUser);
@@ -72,7 +75,8 @@ public class Login_FB_Activity extends AppCompatActivity {
 
     }
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
 
         Log.e(TAG, "onStart() >>");
 
@@ -85,7 +89,8 @@ public class Login_FB_Activity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
 
 
         Log.e(TAG, "onActivityResult () >>" );
@@ -96,7 +101,8 @@ public class Login_FB_Activity extends AppCompatActivity {
         Log.e(TAG, "onActivityResult () <<" );
     }
 
-    private void updateLoginStatus(String details) {
+    private void updateLoginStatus(String details)
+    {
 
         FirebaseUser user = mAuth.getCurrentUser();
 
@@ -125,9 +131,8 @@ public class Login_FB_Activity extends AppCompatActivity {
 
     }
 
-    private void facebookLoginInit() {
-
-
+    private void facebookLoginInit()
+    {
         Log.e(TAG, "facebookLoginInit() >>");
 
         mCallbackManager = CallbackManager.Factory.create();
@@ -135,14 +140,16 @@ public class Login_FB_Activity extends AppCompatActivity {
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(LoginResult loginResult)
+            {
                 Log.e(TAG, "facebook:onSuccess () >>" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.e(TAG, "facebook:onSuccess () <<");
             }
 
             @Override
-            public void onCancel() {
+            public void onCancel()
+            {
                 Log.e(TAG, "facebook:onCancel() >>");
                 updateLoginStatus("Facebook login canceled");
                 Log.e(TAG, "facebook:onCancel() <<");
@@ -150,34 +157,33 @@ public class Login_FB_Activity extends AppCompatActivity {
             }
 
             @Override
-            public void onError(FacebookException error) {
+            public void onError(FacebookException error)
+            {
                 Log.e(TAG, "facebook:onError () >>" + error.getMessage());
                 updateLoginStatus(error.getMessage());
                 Log.e(TAG, "facebook:onError <<");
             }
         });
 
-        accessTokenTracker = new AccessTokenTracker() {
+        accessTokenTracker = new AccessTokenTracker()
+        {
             @Override
-            protected void onCurrentAccessTokenChanged(
-                    AccessToken oldAccessToken,
-                    AccessToken currentAccessToken) {
-                if (currentAccessToken == null) {
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
+            {
+                if (currentAccessToken == null)
+                {
                     mAuth.signOut();
                     updateLoginStatus("Facebook signuout");
                 }
-                Log.e(TAG,"onCurrentAccessTokenChanged() >> currentAccessToken="+
-                        (currentAccessToken !=null ? currentAccessToken.getToken():"Null") +
-                        " ,oldAccessToken=" +
-                        (oldAccessToken != null ? oldAccessToken.getToken():"Null"));
-
+                Log.e(TAG,"onCurrentAccessTokenChanged() >> currentAccessToken="+ (currentAccessToken !=null ? currentAccessToken.getToken():"Null") + " ,oldAccessToken=" + (oldAccessToken != null ? oldAccessToken.getToken():"Null"));
 
             }
         };
         Log.e(TAG, "facebookLoginInit() <<");
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(AccessToken token)
+    {
 
         Log.e(TAG, "handleFacebookAccessToken () >>" + token.getToken());
 
