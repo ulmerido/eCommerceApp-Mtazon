@@ -1,5 +1,7 @@
 package com.example.ido.appex2;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     private TextView                       tvRecoverPassword;
     private TextView                       m_EtUserPassword;
     private TextView                       m_TvAnonymous;
+    private String                         m_EmailReset;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -92,8 +97,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                openDialog();
-                //recoverPassowrd();
+                openResetPasswordDialog();
             }
         });
 
@@ -120,44 +124,103 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-        private void signAnonymosly()
-        {
-            Log.e(TAG, "signAnonymosly >>");
-            m_Auth.signInAnonymously()
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                    {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task)
-                        {
-                            if (task.isSuccessful())
-                            {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInAnonymously:success");
-                                FirebaseUser user = m_Auth.getCurrentUser();
-                              //  updateUI(user);
-                            } else
-                            {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInAnonymously:failure", task.getException());
-                                Toast.makeText(MainActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                               // updateUI(null);
-                            }
-
-                            // ...
-                        }
-                    });
-            Log.e(TAG, "signAnonymosly <<");
-        }
-
-
-    private void openDialog()
+    private void signAnonymosly()
     {
-        ForgotPasswordDialog fpDialog = new ForgotPasswordDialog();
-        fpDialog.show(getSupportFragmentManager(), "Forgot pass dialog");
+        Log.e(TAG, "signAnonymosly >>");
+        m_Auth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInAnonymously:success");
+                            FirebaseUser user = m_Auth.getCurrentUser();
+                            //  updateUI(user);
+                        } else
+                        {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            // updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+        Log.e(TAG, "signAnonymosly <<");
     }
 
-    //////////////////////////////////////////////////////////////////
+    public void openResetPasswordDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.MyDialogTheme);
+
+        final EditText emailToReset = new EditText(this);
+        emailToReset.setHint("youremail@somthing.som");
+        builder.setView(emailToReset);
+        builder.setMessage("Please enter the email you signed up with");
+        builder.setTitle("Forgot Password");
+        builder.setIcon(android.R.drawable.ic_menu_revert);
+        builder.setCancelable(true);
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.cancel();
+            }
+        });
+
+        builder.setPositiveButton("Reset", new DialogInterface.OnClickListener()
+        {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                m_EmailReset = emailToReset.getText().toString();
+                recoverPassword();
+            }
+        });
+        builder.show();
+    }
+
+    private void recoverPassword()
+    {
+        try
+        {
+            if(m_Auth.getCurrentUser() == null)
+            {
+                m_Auth.sendPasswordResetEmail(m_EmailReset)
+                .addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            Toast.makeText(MainActivity.this, "Password reset request sent", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(MainActivity.this, "Failed to reset password", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this, "log out first", Toast.LENGTH_SHORT).show();
+            }
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     private void signin()
     {
         Log.e(TAG, "signin >>");
@@ -209,7 +272,6 @@ public class MainActivity extends AppCompatActivity
         Log.e(TAG, "signin <<");
     }
 
-    ////////////////////////////////////////////////////////////
     private  void googleSignInBuilder()
     {
         Log.e(TAG, "googleSignInBuilder >>");
@@ -220,6 +282,7 @@ public class MainActivity extends AppCompatActivity
         m_GoogleSignInClient = com.google.android.gms.auth.api.signin.GoogleSignIn.getClient(this,gso);
         Log.e(TAG, "googleSignInBuilder <<");
     }
+
     private void googleSignIn()
     {
         Log.e(TAG, "googleSignIn >>");
@@ -227,6 +290,7 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(signInIntent, 101);
         Log.e(TAG, "googleSignIn <<");
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -279,7 +343,6 @@ public class MainActivity extends AppCompatActivity
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.e(TAG, "facebook:onSuccess () <<");
             }
-
             @Override
             public void onCancel()
             {
@@ -316,13 +379,9 @@ public class MainActivity extends AppCompatActivity
 
     private void handleFacebookAccessToken(AccessToken token)
     {
-
         Log.e(TAG, "handleFacebookAccessToken () >>" + token.getToken());
-
         firebaseAuthWithGoogleAndFacebook(FacebookAuthProvider.getCredential(token.getToken()));
-
         Log.e(TAG, "handleFacebookAccessToken () <<");
-
     }
 
     private void firebaseAuthTaskCheck(Task<AuthResult> i_Task)
@@ -331,19 +390,15 @@ public class MainActivity extends AppCompatActivity
 
         if (i_Task.isSuccessful())
         {
-            // Sign in success, update UI with the signed-in user's information
             Log.d(TAG, "signInWithCredential:success");
             Intent intent_LogedIn = new Intent(getApplicationContext(), UserActivity.class);
             startActivity(intent_LogedIn);
             finish();
             Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
-            ;
         }
         else
         {
-            // If sign in fails, display a message to the user.
             Toast.makeText(getApplicationContext(), i_Task.getException().toString(), Toast.LENGTH_SHORT).show();
-            ;
             Log.w(TAG, "signInWithCredential:failure", i_Task.getException());
         }
         Log.e(TAG, "firebaseAuthTaskCheck() <<");
