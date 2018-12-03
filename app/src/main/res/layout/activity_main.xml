@@ -82,10 +82,12 @@
         android:layout_width="183dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_SignIn"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="19dp"
         android:text="Forget Password?"
         android:textAlignment="center"
+        android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold" />
 
