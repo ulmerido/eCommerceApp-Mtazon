@@ -60,7 +60,7 @@ public class UserActivity extends AppCompatActivity
 
         String profilePicUrl ="";
         FirebaseUser user = m_Auth.getCurrentUser();
-
+        m_UserName.setVisibility(View.VISIBLE);
         if (user == null || user.isAnonymous())
         {
 
@@ -83,10 +83,15 @@ public class UserActivity extends AppCompatActivity
                 {
                     profilePicUrl = user.getPhotoUrl().toString();
                 }
+                else
+                {
+                    m_UserName.setVisibility(View.GONE);
+                }
             }
-            m_Status.setText("SIGNED-IN");
-            m_UserName.setText("NAME: " + user.getDisplayName());
-            m_Email.setText("EMAIL: " + user.getEmail());
+
+            m_Status.setText("signed in");
+            m_UserName.setText("Name: " + user.getDisplayName());
+            m_Email.setText("email: " + user.getEmail());
             // if (mConfig.getBoolean("display_profile_image")) {
             Glide.with(this)
                     .load(profilePicUrl)
