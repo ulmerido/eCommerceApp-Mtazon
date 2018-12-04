@@ -128,7 +128,6 @@ public class Login_FB_Activity extends AppCompatActivity {
 
             }
 
-
     }
 
     private void facebookLoginInit()

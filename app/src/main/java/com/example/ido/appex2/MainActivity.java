@@ -6,7 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +37,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity
@@ -122,6 +128,73 @@ public class MainActivity extends AppCompatActivity
                 finish();
             }
         });
+
+
+        m_EtUserEmail.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                checkValidEmail();
+            }
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        m_EtUserPassword.addTextChangedListener(new TextWatcher()
+        {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                checkValidPassword();
+            }
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+    }
+
+
+    private boolean checkValidPassword()
+    {
+        Log.e(TAG, "checkValidPassword() >>");
+        boolean res = false;
+        String pass = m_EtUserPassword.getText().toString();
+
+        if (pass.length() < 6)
+        {
+            m_EtUserPassword.setError("Too Short: Mim 6");
+        }
+        else if (pass.length() > 20)
+        {
+            m_EtUserPassword.setError("Too Long: Max 20");
+        }
+        else
+        {
+            res = true;
+        }
+
+        Log.e(TAG, "checkValidPassword() <<");
+        return res;
+    }
+
+    private boolean checkValidEmail()
+    {
+        Log.e(TAG, "checkValidEmail() >>");
+        boolean res = true;
+        CharSequence csEmail = m_EtUserEmail.getText().toString();
+        if (TextUtils.isEmpty(csEmail) || !Patterns.EMAIL_ADDRESS.matcher(csEmail).matches())
+        {
+            m_EtUserEmail.setError("invalid email");
+            res = false;
+        }
+
+        Log.e(TAG, "checkValidEmail() <<");
+        return res;
     }
 
     private void signAnonymosly()
@@ -223,17 +296,19 @@ public class MainActivity extends AppCompatActivity
 
     private void signin()
     {
-        Log.e(TAG, "signin >>");
-        final String passString = m_EtUserPassword.getText().toString().trim();
-        final String emailString = m_EtUserEmail.getText().toString().trim();
-        //FirebaseAuth.getInstance().getCurrentUser().reload();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-       // if(user!= null)
-       //   user.reload();
+        if(checkValidEmail() && checkValidPassword())
+        {
+            Log.e(TAG, "signin >>");
+            final String passString = m_EtUserPassword.getText().toString().trim();
+            final String emailString = m_EtUserEmail.getText().toString().trim();
+            //FirebaseAuth.getInstance().getCurrentUser().reload();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            // if(user!= null)
+            //   user.reload();
 
-        //     Toast.makeText(MainActivity.this, String.valueOf(user.isEmailVerified()),
-        //             Toast.LENGTH_SHORT).show();
-      //  FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailString);
+            //     Toast.makeText(MainActivity.this, String.valueOf(user.isEmailVerified()),
+            //             Toast.LENGTH_SHORT).show();
+            //  FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailString);
 
 //        Firebase.auth().fetchProvidersForEmail(emailString)
 //                .then(providers => {
@@ -244,53 +319,63 @@ public class MainActivity extends AppCompatActivity
 //        }
 //});
 
-        m_Auth.signInWithEmailAndPassword(emailString, passString)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
+            m_Auth.signInWithEmailAndPassword(emailString, passString)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                     {
-                        if (task.isSuccessful())
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task)
                         {
-                            if(m_Auth.getCurrentUser().isEmailVerified())
-                            // if(true)
+                            if (task.isSuccessful())
                             {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "signInWithEmail:success");
-                                FirebaseUser user = m_Auth.getCurrentUser();
-                                Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-                                Intent intent_SignUp = new Intent(getApplicationContext(), UserActivity.class);
-                                startActivity(intent_SignUp);
-                                finish();
-                            }
-                            else
+                                if (m_Auth.getCurrentUser().isEmailVerified())
+                                // if(true)
+                                {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "signInWithEmail:success");
+                                    FirebaseUser user = m_Auth.getCurrentUser();
+                                    Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                                    Intent intent_SignUp = new Intent(getApplicationContext(), UserActivity.class);
+                                    startActivity(intent_SignUp);
+                                    finish();
+                                } else
+                                {
+                                    m_Auth.signOut();
+                                    Toast.makeText(MainActivity.this, "unverified email",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                                Log.e(TAG, "signin <<");
+
+
+                                //   updateUI(user);
+                            } else
                             {
-                                m_Auth.signOut();
-                                Toast.makeText(MainActivity.this, "unverified email",
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(MainActivity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
+                                //  updateUI(null);
                             }
-                            Log.e(TAG, "signin <<");
 
-
-
-                            //   updateUI(user);
+                            // ...
                         }
-                        else
-                        {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //  updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-
-
-
-
+                    });
+        }
+        else if (!checkValidPassword() && !checkValidEmail())
+        {
+            // fill in email and password to precede
+            Toast.makeText(MainActivity.this, "Please fill in email and password to continue",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if (!checkValidEmail())
+        {
+            Toast.makeText(MainActivity.this, "Please fill in email to continue",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else if(!checkValidPassword())
+        {
+            Toast.makeText(MainActivity.this, "Please fill in password to continue",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private  void googleSignInBuilder()
