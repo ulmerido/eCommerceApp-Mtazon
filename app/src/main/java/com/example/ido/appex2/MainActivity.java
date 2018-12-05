@@ -30,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -37,7 +38,10 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private TextView                       m_EtUserPassword;
     private TextView                       m_TvAnonymous;
     private String                         m_EmailReset;
+    private FirebaseRemoteConfig           m_RemoteConfig = FirebaseRemoteConfig.getInstance();
 
 
     @Override
@@ -64,6 +69,23 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        m_RemoteConfig.setConfigSettings(new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(true)
+                .build());
+        HashMap<String, Object> defaults = new HashMap<>();
+        defaults.put("show_anonymous", true);
+        m_RemoteConfig.setDefaults(defaults);
+        Task<Void> fetch = m_RemoteConfig.fetch(0);
+        fetch.addOnSuccessListener(this, new OnSuccessListener<Void>()
+        {
+            @Override
+            public void onSuccess(Void aVoid)
+            {
+                m_RemoteConfig.activateFetched();
+
+            }
+        });
 
         m_Auth = FirebaseAuth.getInstance();
         m_FacebookLogin_btn = (LoginButton) findViewById(R.id.login_button);
@@ -78,6 +100,8 @@ public class MainActivity extends AppCompatActivity
         googleSignInBuilder();
         facebookLoginInit();
 
+
+        showAnonymousLogin();
 
         m_GoogleSignInButton.setOnClickListener(new View.OnClickListener()
         {
@@ -199,6 +223,7 @@ public class MainActivity extends AppCompatActivity
 
     private void signAnonymosly()
     {
+
         Log.e(TAG, "signAnonymosly >>");
         m_Auth.signInAnonymously()
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
@@ -294,8 +319,24 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private  void showAnonymousLogin()
+    {
+        boolean show_anonymos = (boolean) m_RemoteConfig.getBoolean("show_anonymous");
+        if(show_anonymos)
+        {
+            m_TvAnonymous.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            m_TvAnonymous.setVisibility(View.GONE);
+        }
+
+    }
+
     private void signin()
     {
+
+
         if(checkValidEmail() && checkValidPassword())
         {
             Log.e(TAG, "signin >>");
@@ -318,7 +359,6 @@ public class MainActivity extends AppCompatActivity
 //            // has signed up
 //        }
 //});
-
             m_Auth.signInWithEmailAndPassword(emailString, passString)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                     {
