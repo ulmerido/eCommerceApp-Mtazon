@@ -136,7 +136,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-              //  FirebaseAuth.getInstance().getCurrentUser().reload();
                 signin();
             }
         });
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
-
 
     private boolean checkValidPassword()
     {
@@ -342,23 +340,6 @@ public class MainActivity extends AppCompatActivity
             Log.e(TAG, "signin >>");
             final String passString = m_EtUserPassword.getText().toString().trim();
             final String emailString = m_EtUserEmail.getText().toString().trim();
-            //FirebaseAuth.getInstance().getCurrentUser().reload();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            // if(user!= null)
-            //   user.reload();
-
-            //     Toast.makeText(MainActivity.this, String.valueOf(user.isEmailVerified()),
-            //             Toast.LENGTH_SHORT).show();
-            //  FirebaseAuth.getInstance().fetchSignInMethodsForEmail(emailString);
-
-//        Firebase.auth().fetchProvidersForEmail(emailString)
-//                .then(providers => {
-//        if (providers.length === 0) {
-//            // this email hasn't signed up yet
-//        } else {
-//            // has signed up
-//        }
-//});
             m_Auth.signInWithEmailAndPassword(emailString, passString)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
                     {
@@ -368,9 +349,7 @@ public class MainActivity extends AppCompatActivity
                             if (task.isSuccessful())
                             {
                                 if (m_Auth.getCurrentUser().isEmailVerified())
-                                // if(true)
                                 {
-                                    // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = m_Auth.getCurrentUser();
                                     Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
@@ -383,26 +362,19 @@ public class MainActivity extends AppCompatActivity
                                     Toast.makeText(MainActivity.this, "unverified email",
                                             Toast.LENGTH_SHORT).show();
                                 }
+
                                 Log.e(TAG, "signin <<");
-
-
-                                //   updateUI(user);
-                            } else
-                            {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(MainActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                                //  updateUI(null);
                             }
-
-                            // ...
+                            else
+                            {
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
         }
         else if (!checkValidPassword() && !checkValidEmail())
         {
-            // fill in email and password to precede
             Toast.makeText(MainActivity.this, "Please fill in email and password to continue",
                     Toast.LENGTH_SHORT).show();
         }
@@ -474,7 +446,6 @@ public class MainActivity extends AppCompatActivity
         Log.e(TAG, "firebaseAuthWithGoogle <<");
     }
 
-    /////////////////////////////////////////////////////
     private void facebookLoginInit()
     {
         Log.e(TAG, "facebookLoginInit() >>");
