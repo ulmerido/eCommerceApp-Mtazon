@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background7"
     android:orientation="vertical"
     tools:context=".SignUpActivity">
 
@@ -12,14 +13,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Full Name"
-        android:inputType="text" />
+        android:hint="User Name"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/roundet"
+        android:inputType="text"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/com_facebook_likeview_text_color"
+        android:drawableLeft="@android:drawable/ic_menu_slideshow" />
+
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/roundet"
+        android:backgroundTint="@color/com_facebook_likeview_text_color"
+        android:drawableLeft="@android:drawable/ic_dialog_email"
         android:ems="10"
+        android:layout_marginBottom="16dp"
         android:hint="Email"
         android:inputType="textEmailAddress" />
 
@@ -27,30 +38,58 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/roundet"
+        android:backgroundTint="@color/com_facebook_likeview_text_color"
+        android:drawableLeft="@android:drawable/ic_lock_idle_lock"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
 
     <ImageView
         android:id="@+id/ivUserImage"
-        android:layout_width="424dp"
-        android:layout_height="219dp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="24dp"
+       android:layout_marginLeft="110dp"
         android:paddingRight="50dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/btnUploadPic"
         android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/btnback"
         android:text="UPLOAD PICTUER" />
 
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        android:text="Sign Up" />
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="260dp"
+            android:background="@drawable/btnforword"
+                        android:layout_marginTop="16dp"
+
+            android:text="Sign Up" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btnSignUp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="@+id/btnSignUp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/btnforword"
+            android:text="Back" />
+    </RelativeLayout>
 
 
 </LinearLayout>

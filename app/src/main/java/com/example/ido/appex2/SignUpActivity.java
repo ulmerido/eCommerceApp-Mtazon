@@ -20,13 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity
 {
-    private EditText etPassword;
-    private EditText etEmail;
+    private EditText     etPassword;
+    private EditText     etEmail;
     private FirebaseAuth mAuth;
     private FirebaseUser mFirsebaseUser;
-
-    //buttons
-    private Button mBtnRegister;
+    private Button       m_btnBack;
+    private Button       mBtnRegister;
     public static final String TAG = "SignUpActivity";
 
 
@@ -39,9 +38,8 @@ public class SignUpActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
-        // findViewById(R.id.btnSignUp).setOnClickListener(this);
         mBtnRegister = (Button) findViewById(R.id.btnSignUp);
-
+        m_btnBack =(Button) findViewById(R.id.btnBack);
         mBtnRegister.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -50,9 +48,16 @@ public class SignUpActivity extends AppCompatActivity
                 registerUser();
             }
         });
+        m_btnBack.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickBackBtn();
+            }
+
+        });
     }
-
-
     private void registerUser()
     {
         Log.e(TAG, "registerUser() >>");
@@ -111,6 +116,7 @@ public class SignUpActivity extends AppCompatActivity
                 });
         Log.e(TAG, "registerUser() <<");
     }
+
     private void finishSignUp()
     {
         Log.e(TAG, "finishSignUp() >>");
@@ -120,6 +126,15 @@ public class SignUpActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), "Please verify email and then sign in", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "finishSignUp() <<");
 
+    }
+
+    private void onClickBackBtn()
+    {
+        Log.e(TAG, "onClickBackBtn() >>");
+        Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent_SignUp);
+        finish();
+        Log.e(TAG, "onClickBackBtn() <<");
     }
 
 
