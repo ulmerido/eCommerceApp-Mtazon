@@ -45,23 +45,6 @@
         android:hint="Password"
         android:inputType="textPassword" />
 
-    <ImageView
-        android:id="@+id/ivUserImage"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="24dp"
-       android:layout_marginLeft="110dp"
-        android:paddingRight="50dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <Button
-        android:id="@+id/btnUploadPic"
-        android:layout_width="match_parent"
-        android:layout_marginTop="16dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/btnback"
-        android:text="UPLOAD PICTUER" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

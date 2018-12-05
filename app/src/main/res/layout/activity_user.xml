@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/ivFacebook"
+        android:clickable="true"
         android:layout_width="373dp"
         android:layout_height="284dp"
         android:layout_margin="20dp"

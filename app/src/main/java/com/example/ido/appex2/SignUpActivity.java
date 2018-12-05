@@ -17,11 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity
 {
     private EditText     etPassword;
     private EditText     etEmail;
+    private EditText     m_etName;
     private FirebaseAuth mAuth;
     private FirebaseUser mFirsebaseUser;
     private Button       m_btnBack;
@@ -38,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
+        m_etName = findViewById(R.id.etUserName);
         mBtnRegister = (Button) findViewById(R.id.btnSignUp);
         m_btnBack =(Button) findViewById(R.id.btnBack);
         mBtnRegister.setOnClickListener(new View.OnClickListener()
@@ -63,7 +66,6 @@ public class SignUpActivity extends AppCompatActivity
         Log.e(TAG, "registerUser() >>");
         final String passString = etPassword.getText().toString().trim();
         final String emailString = etEmail.getText().toString().trim();
-
 
         mAuth.createUserWithEmailAndPassword(emailString, passString)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>()
@@ -120,9 +122,11 @@ public class SignUpActivity extends AppCompatActivity
     private void finishSignUp()
     {
         Log.e(TAG, "finishSignUp() >>");
+        updateUserNameInDB();
         Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent_SignUp);
         finish();
+        overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Toast.makeText(getApplicationContext(), "Please verify email and then sign in", Toast.LENGTH_SHORT).show();
         Log.e(TAG, "finishSignUp() <<");
 
@@ -134,10 +138,29 @@ public class SignUpActivity extends AppCompatActivity
         Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent_SignUp);
         finish();
+        overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "onClickBackBtn() <<");
     }
 
+    private void updateUserNameInDB()
+    {
+        final  String userName = m_etName.getText().toString().trim();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(userName).setPhotoUri(null).build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile name updated.");
+                        }
+                    }
+                });
+
+    }
 
 
 
