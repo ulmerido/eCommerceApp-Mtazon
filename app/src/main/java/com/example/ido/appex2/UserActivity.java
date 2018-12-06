@@ -49,7 +49,7 @@ public class UserActivity extends AppCompatActivity
     private TextView m_UserName;
     private Button m_Logout_btn;
 
-    //private Button M_Update_btn;
+    private Button m_Upload_btn;
 
     private Uri m_PhotoUri;
     private Uri filePath;
@@ -74,7 +74,7 @@ public class UserActivity extends AppCompatActivity
         m_Email =  findViewById(R.id.tvEmailFacebook);
         m_ProfileImage = findViewById(R.id.ivFacebook);
         m_Logout_btn = findViewById(R.id.btn_Logout);
-        //M_Update_btn = findViewById(R.id.btUpdatePhote);
+        m_Upload_btn = findViewById(R.id.btn_UploadPic);
         m_Logout_btn.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
@@ -84,6 +84,16 @@ public class UserActivity extends AppCompatActivity
                 Intent intent_LogedIn = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent_LogedIn);
                 finish();
+            }
+        });
+
+        m_Upload_btn.setOnClickListener(new OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                Log.v(TAG, " click Upload profile pic");
+                chooseAndUploadImage();
+                uploadImage();
             }
         });
 
@@ -122,7 +132,11 @@ public class UserActivity extends AppCompatActivity
                     if(user.getPhotoUrl() != null) {
                         profilePicUrl = user.getPhotoUrl().toString()
                                 + "picture?width=50&height=50";
-                        //m_UserName.setVisibility(View.GONE);
+                    }
+                        else {
+                            m_ProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
+                        }
+
                     }
                 }
             }
@@ -133,12 +147,12 @@ public class UserActivity extends AppCompatActivity
 
            if(user.getPhotoUrl() != null)
            {
-               m_ProfileImage.setOnClickListener(null);
-               Glide.with(this)
+               /*Glide.with(this)
                        .load(profilePicUrl)
-                       .into(m_ProfileImage);
+                       .into(m_ProfileImage);*/
+               updateProfilePicInTheActivityView(profilePicUrl);
            }
-           else {
+           /*else {
                m_ProfileImage.setImageResource(R.drawable.upload_icon_orange);
                m_ProfileImage.setOnClickListener(new View.OnClickListener() {
                    //@Override
@@ -148,12 +162,18 @@ public class UserActivity extends AppCompatActivity
                        uploadImage();
                    }
                });
-
            }
-
-        }
+           */
         Log.e(TAG, "updateLoginStatus() <<");
     }
+
+    private void updateProfilePicInTheActivityView(String i_ProfilePicURL)
+    {
+        Glide.with(this)
+                .load(i_ProfilePicURL)
+                .into(m_ProfileImage);
+    }
+
 
     private void chooseAndUploadImage() {
         Intent intent = new Intent();
@@ -206,14 +226,14 @@ public class UserActivity extends AppCompatActivity
                                 }
                             });
 
-                            // Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                             Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                              progressDialog.dismiss();
-                            //Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -229,7 +249,7 @@ public class UserActivity extends AppCompatActivity
 
     private void updateUserPhotoInDB(Uri uri)
     {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest
                 .Builder().setPhotoUri(uri).build();
@@ -240,8 +260,10 @@ public class UserActivity extends AppCompatActivity
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "User profile pic updated.");
-                            finish();
-                            startActivity(getIntent());
+                            String newPicURI = user.getPhotoUrl().toString();
+                            updateProfilePicInTheActivityView(newPicURI);
+                            //finish();
+                            //startActivity(getIntent());
                         }
                     }
                 });

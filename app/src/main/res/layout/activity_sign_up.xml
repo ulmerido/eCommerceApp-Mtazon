@@ -19,15 +19,15 @@
     <EditText
         android:id="@+id/etUserName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="User Name"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="24dp"
         android:background="@drawable/roundet"
-        android:inputType="text"
         android:backgroundTint="@color/com_facebook_likeview_text_color"
-        android:layout_alignParentTop="true"
-        android:drawableLeft="@android:drawable/ic_menu_slideshow" />
+        android:drawableLeft="@android:drawable/ic_menu_slideshow"
+        android:ems="10"
+        android:hint="Full Name"
+        android:inputType="text" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,10 +37,11 @@
         android:layout_marginTop="42dp"
 
         android:text="Enter your email:"></TextView>
+
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:background="@drawable/roundet"
         android:backgroundTint="@color/com_facebook_likeview_text_color"
         android:drawableLeft="@android:drawable/ic_dialog_email"
@@ -54,10 +55,11 @@
         android:id="@+id/textPassword"
         android:layout_marginTop="42dp"
         android:text="Enter a 6 characters password"></TextView>
+
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:background="@drawable/roundet"
         android:backgroundTint="@color/com_facebook_likeview_text_color"
         android:drawableLeft="@android:drawable/ic_lock_idle_lock"

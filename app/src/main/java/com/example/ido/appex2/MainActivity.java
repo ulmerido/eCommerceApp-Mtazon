@@ -142,8 +142,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        m_EtUserEmail.addTextChangedListener(new TextWatcher() {
+        ValidationChecker.CheckPassword(m_EtUserPassword);
+        ValidationChecker.CheckEmail(m_EtUserEmail);
+        /*m_EtUserEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -157,8 +158,9 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+*/
 
-        m_EtUserPassword.addTextChangedListener(new TextWatcher() {
+       /* m_EtUserPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -172,10 +174,11 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+*/
 
     }
 
-    private boolean checkValidPassword() {
+  /*  private boolean checkValidPassword() {
         Log.e(TAG, "checkValidPassword() >>");
         boolean res = false;
         String pass = m_EtUserPassword.getText().toString();
@@ -204,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "checkValidEmail() <<");
         return res;
     }
-
+*/
     private void signAnonymosly() {
 
         Log.e(TAG, "signAnonymosly >>");
@@ -294,7 +297,8 @@ public class MainActivity extends AppCompatActivity {
     private void signin() {
 
 
-        if (checkValidEmail() && checkValidPassword()) {
+        if (ValidationChecker.CheckValidEmail(m_EtUserEmail) &&
+                ValidationChecker.CheckValidPassword(m_EtUserPassword)) {
             Log.e(TAG, "signin >>");
             final String passString = m_EtUserPassword.getText().toString().trim();
             final String emailString = m_EtUserEmail.getText().toString().trim();
@@ -323,13 +327,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-        } else if (!checkValidPassword() && !checkValidEmail()) {
+        } else if (!ValidationChecker.CheckValidPassword(m_EtUserPassword) && !ValidationChecker.CheckValidEmail(m_EtUserEmail)) {
             Toast.makeText(MainActivity.this, "Please fill in email and password to continue",
                     Toast.LENGTH_SHORT).show();
-        } else if (!checkValidEmail()) {
+        } else if (!ValidationChecker.CheckValidEmail(m_EtUserEmail)) {
             Toast.makeText(MainActivity.this, "Please fill in email to continue",
                     Toast.LENGTH_SHORT).show();
-        } else if (!checkValidPassword()) {
+        } else if (!ValidationChecker.CheckValidPassword(m_EtUserPassword)) {
             Toast.makeText(MainActivity.this, "Please fill in password to continue",
                     Toast.LENGTH_SHORT).show();
         }
