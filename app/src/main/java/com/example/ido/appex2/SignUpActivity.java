@@ -46,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity
         mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!succsesfullValidation()) {
+                if(!successfullValidation()) {
                     Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 }
                 else {
@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity
 
     }
 
-    private boolean succsesfullValidation() {
+    private boolean successfullValidation() {
         if(!ValidationChecker.CheckValidEmail(etEmail) || !ValidationChecker.CheckValidName(m_etName) ||
                 !ValidationChecker.CheckValidPassword(etPassword)) {
             return false;
@@ -113,14 +113,11 @@ public class SignUpActivity extends AppCompatActivity
                                                         Toast.makeText(SignUpActivity.this, "Email sent to: " + mFirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
                                                         finishSignUp();
                                                     }
+                                                    else
+                                                    {
+                                                    }
                                                 }
                                             });
-                                    if (task.isSuccessful())
-                                    {
-                                    }
-                                    else
-                                    {
-                                    }
                                 }
                             });
                         }
