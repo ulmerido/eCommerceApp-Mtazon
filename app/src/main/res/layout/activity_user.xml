@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/ivFacebook"
-            android:layout_width="337dp"
-            android:layout_height="260dp"
+            android:layout_width="351dp"
+            android:layout_height="322dp"
             android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="48dp"
@@ -34,7 +34,7 @@
         android:id="@+id/tvStatusUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/roundet"
         android:backgroundTint="@color/com_facebook_button_background_color_disabled"
         android:fontFamily="@font/roboto_medium"
@@ -79,13 +79,13 @@
 
     <Button
         android:id="@+id/btn_UploadPic"
-        android:layout_width="206dp"
-        android:layout_height="58dp"
+        android:layout_width="196dp"
+        android:layout_height="wrap_content"
         android:layout_alignStart="@+id/btn_Logout"
         android:layout_alignParentBottom="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="89dp"
+        android:layout_marginBottom="57dp"
         android:background="@drawable/btnback"
         android:text="UPLOAD PROFILE IMAGE"
         android:textAlignment="center" />

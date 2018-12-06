@@ -43,7 +43,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.HashMap;
-import java.util.regex.Pattern;
+
 
 
 public class MainActivity extends AppCompatActivity {

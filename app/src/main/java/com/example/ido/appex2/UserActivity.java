@@ -1,7 +1,10 @@
 package com.example.ido.appex2;
 
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -16,7 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
+import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.ImageVideoBitmapDecoder;
+import com.bumptech.glide.load.resource.gif.GifResourceDecoder;
+import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResourceDecoder;
+import com.bumptech.glide.request.target.Target;
 import com.facebook.login.LoginManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,8 +42,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
-
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class UserActivity extends AppCompatActivity
@@ -57,6 +66,13 @@ public class UserActivity extends AppCompatActivity
 
     private FirebaseStorage m_Storage;
     private StorageReference m_StorageReference;
+
+
+    private File destination = null;
+    private InputStream inputStreamImg;
+    private String imgPath = null;
+    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -135,7 +151,6 @@ public class UserActivity extends AppCompatActivity
                         else {
                             m_ProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
                         }
-
                     }
                 }
             }
@@ -155,6 +170,10 @@ public class UserActivity extends AppCompatActivity
     {
         Glide.with(this)
                 .load(i_ProfilePicURL)
+                .thumbnail(Glide.with(this).load(R.drawable.loading_3))
+                .override(351, 322)
+                .centerCrop()
+                .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
                 .into(m_ProfileImage);
     }
 
@@ -180,11 +199,8 @@ public class UserActivity extends AppCompatActivity
             {
                 e.printStackTrace();
             }
-            //
-
         }
     }
-
     private void uploadImage() {
 
         if(m_FilePath != null)
@@ -208,8 +224,7 @@ public class UserActivity extends AppCompatActivity
                                     updateUserPhotoInDB(downloadUrl);
                                 }
                             });
-
-                             Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
