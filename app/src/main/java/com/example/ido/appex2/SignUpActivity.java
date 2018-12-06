@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,13 +19,13 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity
 {
-    private EditText     etPassword;
-    private EditText     etEmail;
+    private EditText m_etPassword;
+    private EditText m_etEmail;
     private EditText     m_etName;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mFirsebaseUser;
+    private FirebaseAuth m_Auth;
+    private FirebaseUser m_FirsebaseUser;
     private Button       m_btnBack;
-    private Button       mBtnRegister;
+    private Button m_btnRegister;
     public static final String TAG = "SignUpActivity";
 
 
@@ -37,13 +34,13 @@ public class SignUpActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        mAuth = FirebaseAuth.getInstance();
-        etPassword = findViewById(R.id.etPassword);
-        etEmail = findViewById(R.id.etEmail);
+        m_Auth = FirebaseAuth.getInstance();
+        m_etPassword = findViewById(R.id.etPassword);
+        m_etEmail = findViewById(R.id.etEmail);
         m_etName = findViewById(R.id.etUserName);
-        mBtnRegister = (Button) findViewById(R.id.btnSignUp);
+        m_btnRegister = (Button) findViewById(R.id.btnSignUp);
         m_btnBack = (Button) findViewById(R.id.btnBack);
-        mBtnRegister.setOnClickListener(new View.OnClickListener() {
+        m_btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!successfullValidation()) {
@@ -63,14 +60,14 @@ public class SignUpActivity extends AppCompatActivity
         });
 
         ValidationChecker.CheckFullName(m_etName);
-        ValidationChecker.CheckEmail(etEmail);
-        ValidationChecker.CheckPassword(etPassword);
+        ValidationChecker.CheckEmail(m_etEmail);
+        ValidationChecker.CheckPassword(m_etPassword);
 
     }
 
     private boolean successfullValidation() {
-        if(!ValidationChecker.CheckValidEmail(etEmail) || !ValidationChecker.CheckValidName(m_etName) ||
-                !ValidationChecker.CheckValidPassword(etPassword)) {
+        if(!ValidationChecker.CheckValidEmail(m_etEmail) || !ValidationChecker.CheckValidName(m_etName) ||
+                !ValidationChecker.CheckValidPassword(m_etPassword)) {
             return false;
         }
         return true;
@@ -79,10 +76,10 @@ public class SignUpActivity extends AppCompatActivity
     private void registerUser()
     {
         Log.e(TAG, "registerUser() >>");
-        final String passString = etPassword.getText().toString().trim();
-        final String emailString = etEmail.getText().toString().trim();
+        final String passString = m_etPassword.getText().toString().trim();
+        final String emailString = m_etEmail.getText().toString().trim();
 
-        mAuth.createUserWithEmailAndPassword(emailString, passString)
+        m_Auth.createUserWithEmailAndPassword(emailString, passString)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>()
                 {
                     @Override
@@ -99,9 +96,9 @@ public class SignUpActivity extends AppCompatActivity
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task)
                                 {
-                                    mAuth = FirebaseAuth.getInstance();
-                                    mFirsebaseUser = mAuth.getCurrentUser();
-                                    mFirsebaseUser.sendEmailVerification()
+                                    m_Auth = FirebaseAuth.getInstance();
+                                    m_FirsebaseUser = m_Auth.getCurrentUser();
+                                    m_FirsebaseUser.sendEmailVerification()
                                             .addOnCompleteListener(new OnCompleteListener<Void>()
                                             {
                                                 @Override
@@ -110,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity
                                                     if (task.isSuccessful())
                                                     {
                                                         Log.d(TAG, "Email sent.");
-                                                        Toast.makeText(SignUpActivity.this, "Email sent to: " + mFirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(SignUpActivity.this, "Email sent to: " + m_FirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
                                                         finishSignUp();
                                                     }
                                                     else

@@ -27,7 +27,6 @@ import com.google.android.gms.tasks.Task;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -52,12 +51,12 @@ public class UserActivity extends AppCompatActivity
     private Button m_Upload_btn;
 
     private Uri m_PhotoUri;
-    private Uri filePath;
+    private Uri m_FilePath;
     private final int PICK_IMAGE_REQUEST = 71;
     private boolean m_imagePicked = false;
 
-    private FirebaseStorage storage;
-    private StorageReference storageReference;
+    private FirebaseStorage m_Storage;
+    private StorageReference m_StorageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,8 +64,8 @@ public class UserActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        m_Storage = FirebaseStorage.getInstance();
+        m_StorageReference = m_Storage.getReference();
 
         m_Auth = FirebaseAuth.getInstance();
         m_Status = findViewById(R.id.tvStatusUser);
@@ -147,23 +146,8 @@ public class UserActivity extends AppCompatActivity
 
            if(user.getPhotoUrl() != null)
            {
-               /*Glide.with(this)
-                       .load(profilePicUrl)
-                       .into(m_ProfileImage);*/
                updateProfilePicInTheActivityView(profilePicUrl);
            }
-           /*else {
-               m_ProfileImage.setImageResource(R.drawable.upload_icon_orange);
-               m_ProfileImage.setOnClickListener(new View.OnClickListener() {
-                   //@Override
-                   public void onClick(View v) {
-                       Log.v(TAG, " click");
-                       chooseAndUploadImage();
-                       uploadImage();
-                   }
-               });
-           }
-           */
         Log.e(TAG, "updateLoginStatus() <<");
     }
 
@@ -187,9 +171,9 @@ public class UserActivity extends AppCompatActivity
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null )
         {
-            filePath = data.getData();
+            m_FilePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), m_FilePath);
                 uploadImage();
             }
             catch (IOException e)
@@ -203,14 +187,14 @@ public class UserActivity extends AppCompatActivity
 
     private void uploadImage() {
 
-        if(filePath != null)
+        if(m_FilePath != null)
         {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            Log.e(TAG, "-->>>>>>>>>filePath = "+ filePath.toString());
-            final StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
-            ref.putFile(filePath)
+            Log.e(TAG, "-->>>>>>>>>m_FilePath = "+ m_FilePath.toString());
+            final StorageReference ref = m_StorageReference.child("images/"+ UUID.randomUUID().toString());
+            ref.putFile(m_FilePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -261,8 +245,6 @@ public class UserActivity extends AppCompatActivity
                             Log.d(TAG, "User profile pic updated.");
                             String newPicURI = user.getPhotoUrl().toString();
                             updateProfilePicInTheActivityView(newPicURI);
-                            //finish();
-                            //startActivity(getIntent());
                         }
                     }
                 });

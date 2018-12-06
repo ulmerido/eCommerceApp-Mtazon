@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.nio.charset.Charset;

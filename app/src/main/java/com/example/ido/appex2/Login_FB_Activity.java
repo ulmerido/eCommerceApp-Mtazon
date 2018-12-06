@@ -1,6 +1,5 @@
 package com.example.ido.appex2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,7 +14,6 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,25 +24,23 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-import com.squareup.picasso.Picasso;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+
+import java.util.concurrent.ForkJoinTask;
 
 public class Login_FB_Activity extends AppCompatActivity {
 
     public static final String TAG = "FacebookAuthActivity";
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseRemoteConfig mConfig;
+    private FirebaseAuth m_Auth;
+    //private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseRemoteConfig m_Config;
 
-    private TextView mStatus;
-    private ImageView mProfileImage;
-    private TextView mFacebookEmail;
-    private TextView mFacebookUserName;
-    private CallbackManager mCallbackManager;
-    private AccessTokenTracker accessTokenTracker;
+    private TextView m_Status;
+    private ImageView m_ProfileImage;
+    private TextView m_Email;
+    private TextView m_UserFullName;
+    private CallbackManager m_CallbackManager;
+    private AccessTokenTracker m_AccessTokenTracker;
 
 
     @Override
@@ -52,21 +48,21 @@ public class Login_FB_Activity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login__fb_);
-        mStatus = findViewById(R.id.tvStatusUser);
-        mFacebookUserName = findViewById(R.id.tvUserNameFacebook);
-        mFacebookEmail =  findViewById(R.id.tvEmailFacebook);
-        mProfileImage = findViewById(R.id.ivFacebook);
-        mAuth = FirebaseAuth.getInstance();
-        mConfig = FirebaseRemoteConfig.getInstance();
+        m_Status = findViewById(R.id.tvStatusUser);
+        m_UserFullName = findViewById(R.id.tvUserNameFacebook);
+        m_Email =  findViewById(R.id.tvEmailFacebook);
+        m_ProfileImage = findViewById(R.id.ivFacebook);
+        m_Auth = FirebaseAuth.getInstance();
+        m_Config = FirebaseRemoteConfig.getInstance();
         //////////////////
 
         /////////////////
-        mConfig.fetch(3600).addOnCompleteListener(
+        m_Config.fetch(3600).addOnCompleteListener(
                 this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Log.e(TAG, "onComplete() Remote Config fetch isSuccessful=>>"+ task.isSuccessful());
-                        mConfig.activateFetched();
+                        m_Config.activateFetched();
 
                     }
                 });
@@ -91,36 +87,30 @@ public class Login_FB_Activity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-
-
         Log.e(TAG, "onActivityResult () >>" );
-
         super.onActivityResult(requestCode, resultCode, data);
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-
+        m_CallbackManager.onActivityResult(requestCode, resultCode, data);
         Log.e(TAG, "onActivityResult () <<" );
     }
 
     private void updateLoginStatus(String details)
     {
-
-        FirebaseUser user = mAuth.getCurrentUser();
-
+        FirebaseUser user = m_Auth.getCurrentUser();
         if (user == null) {
-            mStatus.setText("SIGNED-OUT");
-            mFacebookUserName.setText("NAME: " + details);
-            mFacebookEmail.setText("EMAIL: " + details);
-            mProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
+            m_Status.setText("SIGNED-OUT");
+            m_UserFullName.setText("NAME: " + details);
+            m_Email.setText("EMAIL: " + details);
+            m_ProfileImage.setImageResource(R.drawable.com_facebook_profile_picture_blank_portrait);
         } else
             {
-            mStatus.setText("SIGNED-IN");
-            mFacebookUserName.setText("NAME: " + user.getDisplayName());
-            mFacebookEmail.setText("EMAIL: " + user.getEmail());
+            m_Status.setText("SIGNED-IN");
+            m_UserFullName.setText("NAME: " + user.getDisplayName());
+            m_Email.setText("EMAIL: " + user.getEmail());
 
-           // if (mConfig.getBoolean("display_profile_image")) {
+           // if (m_Config.getBoolean("display_profile_image")) {
                 Glide.with(this)
                         .load(user.getPhotoUrl().toString() +"/picture?type=large")
-                        .into(mProfileImage);
+                        .into(m_ProfileImage);
           //  }
            // else {
              //   Log.e(TAG, "not pic !!!!!!!!!!!" );
@@ -134,10 +124,10 @@ public class Login_FB_Activity extends AppCompatActivity {
     {
         Log.e(TAG, "facebookLoginInit() >>");
 
-        mCallbackManager = CallbackManager.Factory.create();
+        m_CallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        loginButton.registerCallback(m_CallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult)
             {
@@ -164,14 +154,14 @@ public class Login_FB_Activity extends AppCompatActivity {
             }
         });
 
-        accessTokenTracker = new AccessTokenTracker()
+        m_AccessTokenTracker = new AccessTokenTracker()
         {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
             {
                 if (currentAccessToken == null)
                 {
-                    mAuth.signOut();
+                    m_Auth.signOut();
                     updateLoginStatus("Facebook signuout");
                 }
                 Log.e(TAG,"onCurrentAccessTokenChanged() >> currentAccessToken="+ (currentAccessToken !=null ? currentAccessToken.getToken():"Null") + " ,oldAccessToken=" + (oldAccessToken != null ? oldAccessToken.getToken():"Null"));
@@ -187,7 +177,7 @@ public class Login_FB_Activity extends AppCompatActivity {
         Log.e(TAG, "handleFacebookAccessToken () >>" + token.getToken());
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
+        m_Auth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
