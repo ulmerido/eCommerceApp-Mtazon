@@ -39,6 +39,14 @@
           }
         },
         {
+          "client_id": "232932737132-3fm1auu97ogkbeqgklak7d4u7er1ocj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ido.appex2",
+            "certificate_hash": "ed83f39d532d4751a763ee0ef7d540403868eb69"
+          }
+        },
+        {
           "client_id": "232932737132-t6rs0p4v5u07lbsvfkgbrv1989k1ng3s.apps.googleusercontent.com",
           "client_type": 3
         }

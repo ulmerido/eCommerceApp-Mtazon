@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,8 +33,7 @@ public class SignUpActivity extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -42,20 +42,16 @@ public class SignUpActivity extends AppCompatActivity
         etEmail = findViewById(R.id.etEmail);
         m_etName = findViewById(R.id.etUserName);
         mBtnRegister = (Button) findViewById(R.id.btnSignUp);
-        m_btnBack =(Button) findViewById(R.id.btnBack);
-        mBtnRegister.setOnClickListener(new View.OnClickListener()
-        {
+        m_btnBack = (Button) findViewById(R.id.btnBack);
+        mBtnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 registerUser();
             }
         });
-        m_btnBack.setOnClickListener(new View.OnClickListener()
-        {
+        m_btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onClickBackBtn();
             }
 

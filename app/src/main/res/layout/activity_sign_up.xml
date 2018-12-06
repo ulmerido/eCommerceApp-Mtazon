@@ -8,20 +8,35 @@
     android:orientation="vertical"
     tools:context=".SignUpActivity">
 
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@color/cardview_light_background"
+    android:id="@+id/textUser"
+    android:text="Enter uername:"></TextView>
+
     <EditText
         android:id="@+id/etUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="User Name"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/roundet"
         android:inputType="text"
-        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/com_facebook_likeview_text_color"
+        android:layout_alignParentTop="true"
         android:drawableLeft="@android:drawable/ic_menu_slideshow" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/cardview_light_background"
+        android:id="@+id/textUserEmail"
+        android:layout_marginTop="42dp"
 
+        android:text="Enter your email:"></TextView>
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
@@ -30,10 +45,15 @@
         android:backgroundTint="@color/com_facebook_likeview_text_color"
         android:drawableLeft="@android:drawable/ic_dialog_email"
         android:ems="10"
-        android:layout_marginBottom="16dp"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
 
+        android:inputType="textEmailAddress" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/cardview_light_background"
+        android:id="@+id/textPassword"
+        android:layout_marginTop="42dp"
+        android:text="Enter a 6 characters password"></TextView>
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
@@ -43,12 +63,12 @@
         android:drawableLeft="@android:drawable/ic_lock_idle_lock"
         android:ems="10"
         android:hint="Password"
+
         android:inputType="textPassword" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <Button
             android:id="@+id/btnSignUp"
             android:layout_width="114dp"
@@ -56,6 +76,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="297dp"
             android:layout_marginTop="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
             android:background="@drawable/btnforword"
 
             android:text="Sign Up" />
@@ -66,13 +88,15 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btnSignUp"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="@+id/btnSignUp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:background="@drawable/btnforword"
             android:text="Back" />
     </RelativeLayout>
+
+
 
 
 </LinearLayout>
