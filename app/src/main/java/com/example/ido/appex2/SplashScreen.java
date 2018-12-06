@@ -23,7 +23,7 @@ public class SplashScreen extends AppCompatActivity
                 //.withBackgroundColor(Color.parseColor("#074E72"))
                 .withBackgroundResource(R.drawable.background6)
                 .withLogo(R.mipmap.ic_launcher_round)
-                .withHeaderText("Welcome to our first App: Ex02")
+                .withHeaderText("Welcome to our App: Ex02")
                 .withFooterText("© HBU")
                 .withBeforeLogoText("MTA Class 2018A")
                 .withAfterLogoText("\nTeam members:\n\n   Ido Ulmer\n   Shai Nirel Hassan\n   Lior Ben-Yehuda");
