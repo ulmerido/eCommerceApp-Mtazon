@@ -174,7 +174,6 @@ public class UserActivity extends AppCompatActivity
                 .into(m_ProfileImage);
     }
 
-
     private void chooseAndUploadImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
