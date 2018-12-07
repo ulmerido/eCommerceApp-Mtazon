@@ -105,35 +105,45 @@ public class ValidationChecker {
 
         Log.e(TAG, "checkValidName() >>");
         String name = i_FullName.getText().toString();
-        boolean res = false;
+        boolean res = true;
 
         if (name.isEmpty())
         {
             i_FullName.setError("Name canot be Empty");
+            res = false;
         }
-        else
+
+
+        for (char ch : name.toCharArray())
         {
-            if (name.length() > 10)
+            if (ch < 'A' || ((ch < 'a') && (ch > 'Z')) || (ch > 'z'))
             {
-                i_FullName.setError("Too long: Max 10");
-            }
-            else if (name.length() < 1)
-            {
-                i_FullName.setError("Too short: Min 2");
-            }
-            else if (name.contains(" "))
-            {
-                i_FullName.setError("name cant have space in it");
-            }
-            else if (!Charset.forName("US-ASCII").newEncoder().canEncode(name))
-            {
-                i_FullName.setError("Use only Latin");
-            }
-            else
-            {
-                res = true;
+                i_FullName.setError("invalid letters, use latin.");
+                res = false;
             }
         }
+
+        if (name.length() > 10) {
+            i_FullName.setError("Too long: Max 10");
+            res = false;
+        }
+
+        if (name.length() <= 1) {
+            i_FullName.setError("Too short: Min 2");
+            res = false;
+        }
+
+        if (name.contains(" ")) {
+            i_FullName.setError("name cant have space in it");
+            res = false;
+        }
+
+        if (!Charset.forName("US-ASCII").newEncoder().canEncode(name))
+        {
+            i_FullName.setError("Use only Latin");
+            res = false;
+        }
+
 
         Log.e(TAG, "checkValidName() <<");
         return res;
