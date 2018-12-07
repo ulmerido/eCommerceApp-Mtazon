@@ -170,7 +170,7 @@ public class UserActivity extends AppCompatActivity
     {
         Glide.with(this)
                 .load(i_ProfilePicURL)
-                .thumbnail(Glide.with(this).load(R.drawable.loading_3))
+                //.thumbnail(Glide.with(this).load(R.drawable.loading_3))
                 .override(351, 322)
                 .centerCrop()
                 .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
