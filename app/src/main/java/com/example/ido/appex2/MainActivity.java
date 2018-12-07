@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 onClickAnonymos();
             }
         });
-
-
     }
 
     private void onClickAnonymos()
@@ -150,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void signAnonymosly() {
 
         Log.e(TAG, "signAnonymosly >>");
@@ -288,19 +285,28 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+
     private void ifLogedInGoToUserActivity()
     {
         Log.e(TAG, "ifLogedInGoToUserActivity >>");
-
-        if(m_Auth.getCurrentUser()!=null)
+        boolean userSignedIn = m_Auth.getCurrentUser() != null;
+        if(userSignedIn)
         {
-            Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
-            startActivity(intent_UserActivity);
-            finish();
+            boolean isFacebookUser = m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com");
+            boolean isAnonymous = m_Auth.getCurrentUser().isAnonymous();
+            boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
+            if(isFacebookUser ||isAnonymous || isEmailVerified)
+            {
+                Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
+                startActivity(intent_UserActivity);
+                finish();
+            }
         }
+
         Log.e(TAG, "ifLogedInGoToUserActivity <<");
 
     }
+
     private void googleSignInBuilder()
     {
         Log.e(TAG, "googleSignInBuilder >>");
