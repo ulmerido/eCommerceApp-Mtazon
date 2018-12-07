@@ -14,9 +14,6 @@ public class ValidationChecker {
     public static final String TAG = "ValidationChecker:";
 
 
-
-
-
     public static void CheckPassword(final TextView i_Password) {
         i_Password.addTextChangedListener(new TextWatcher() {
             @Override

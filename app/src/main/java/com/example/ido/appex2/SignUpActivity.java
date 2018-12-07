@@ -19,18 +19,19 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity
 {
-    private EditText m_etPassword;
-    private EditText m_etEmail;
+    private EditText     m_etPassword;
+    private EditText     m_etEmail;
     private EditText     m_etName;
     private FirebaseAuth m_Auth;
     private FirebaseUser m_FirsebaseUser;
     private Button       m_btnBack;
-    private Button m_btnRegister;
+    private Button       m_btnRegister;
     public static final String TAG = "SignUpActivity";
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -42,18 +43,15 @@ public class SignUpActivity extends AppCompatActivity
         m_btnBack = (Button) findViewById(R.id.btnBack);
         m_btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if(!successfullValidation()) {
-                    Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    registerUser();
-                }
+            public void onClick(View v)
+            {
+                onClickRegiser();
             }
         });
         m_btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 onClickBackBtn();
             }
 
@@ -73,8 +71,14 @@ public class SignUpActivity extends AppCompatActivity
         return true;
     }
 
-    private void registerUser()
+    private void onClickRegiser()
     {
+        if(!successfullValidation())
+        {
+            Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Log.e(TAG, "registerUser() >>");
         final String passString = m_etPassword.getText().toString().trim();
         final String emailString = m_etEmail.getText().toString().trim();

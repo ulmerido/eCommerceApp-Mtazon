@@ -1,10 +1,7 @@
 package com.example.ido.appex2;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -18,21 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
-
-import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.ImageVideoBitmapDecoder;
-import com.bumptech.glide.load.resource.gif.GifResourceDecoder;
-import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResourceDecoder;
-import com.bumptech.glide.request.target.Target;
 import com.facebook.login.LoginManager;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -40,39 +28,24 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 public class UserActivity extends AppCompatActivity
 {
-    public static final String             TAG ="User Activity:";
-    private FirebaseAuth m_Auth;
-    private TextView m_Status;
-    private ImageView m_ProfileImage;
-    private TextView m_Email;
-    private TextView m_UserName;
-    private Button m_Logout_btn;
-
-    private Button m_Upload_btn;
-
-    private Uri m_PhotoUri;
-    private Uri m_FilePath;
-    private final int PICK_IMAGE_REQUEST = 71;
-    private boolean m_imagePicked = false;
-
-    private FirebaseStorage m_Storage;
-    private StorageReference m_StorageReference;
-
-
-    private File destination = null;
-    private InputStream inputStreamImg;
-    private String imgPath = null;
-    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
-
+    public static final String   TAG ="User Activity:";
+    private FirebaseAuth         m_Auth;
+    private TextView             m_Status;
+    private ImageView            m_ProfileImage;
+    private TextView             m_Email;
+    private TextView             m_UserName;
+    private Button               m_Logout_btn;
+    private Button               m_Upload_btn;
+    private Uri                  m_FilePath;
+    private final int            PICK_IMAGE_REQUEST = 71;
+    private FirebaseStorage      m_Storage;
+    private StorageReference     m_StorageReference;
+    private TextView             m_tvRemoveAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -82,41 +55,62 @@ public class UserActivity extends AppCompatActivity
 
         m_Storage = FirebaseStorage.getInstance();
         m_StorageReference = m_Storage.getReference();
-
         m_Auth = FirebaseAuth.getInstance();
         m_Status = findViewById(R.id.tvStatusUser);
         m_UserName = findViewById(R.id.tvUserNameFacebook);
         m_Email =  findViewById(R.id.tvEmailFacebook);
         m_ProfileImage = findViewById(R.id.ivFacebook);
         m_Logout_btn = findViewById(R.id.btn_Logout);
+        m_tvRemoveAccount = findViewById(R.id.tv_remove);
         m_Upload_btn = findViewById(R.id.btn_UploadPic);
         m_Logout_btn.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                m_Auth.signOut();
-                LoginManager.getInstance().logOut();
-                Intent intent_LogedIn = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent_LogedIn);
-                finish();
+                onClickLogOut();
             }
         });
-
+        m_tvRemoveAccount.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickRemoveAccount();
+            }
+        });
         m_Upload_btn.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                Log.v(TAG, " click Upload profile pic");
-                chooseAndUploadImage();
-                uploadImage();
+                onClickUploadbtn();
             }
         });
 
-        updateLoginStatus("kaki");
+        updateLoginStatus();
 
     }
-    
-    private void updateLoginStatus(String details)
+    private void onClickLogOut()
+    {
+        m_Auth.signOut();
+        LoginManager.getInstance().logOut();
+        Intent intent_Back = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent_Back);
+        finish();
+    }
+
+    private void onClickUploadbtn()
+    {
+        Log.v(TAG, " click Upload profile pic");
+        chooseAndUploadImage();
+        uploadImage();
+    }
+    private void onClickRemoveAccount()
+    {
+        m_Auth.getCurrentUser().delete();
+        onClickLogOut();
+    }
+
+    private void updateLoginStatus()
     {
         String profilePicUrl ="";
         FirebaseUser user = m_Auth.getCurrentUser();
@@ -132,7 +126,6 @@ public class UserActivity extends AppCompatActivity
         {
             for(String a: user.getProviders() )
             {
-                Toast.makeText(getApplicationContext(), a, Toast.LENGTH_SHORT).show();
                 if (a.contains("facebook"))
                 {
                     profilePicUrl = user.getPhotoUrl().toString() + "/picture?type=large";
@@ -165,7 +158,6 @@ public class UserActivity extends AppCompatActivity
            }
         Log.e(TAG, "updateLoginStatus() <<");
     }
-
     private void updateProfilePicInTheActivityView(String i_ProfilePicURL)
     {
         Glide.with(this)
@@ -176,7 +168,6 @@ public class UserActivity extends AppCompatActivity
                 .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
                 .into(m_ProfileImage);
     }
-
     private void chooseAndUploadImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -201,6 +192,7 @@ public class UserActivity extends AppCompatActivity
             }
         }
     }
+
     private void uploadImage() {
 
         if(m_FilePath != null)
@@ -224,7 +216,6 @@ public class UserActivity extends AppCompatActivity
                                     updateUserPhotoInDB(downloadUrl);
                                 }
                             });
-                            // Toast.makeText(getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -263,7 +254,6 @@ public class UserActivity extends AppCompatActivity
                         }
                     }
                 });
-
     }
 
 
