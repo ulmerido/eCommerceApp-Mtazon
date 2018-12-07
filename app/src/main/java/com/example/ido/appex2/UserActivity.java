@@ -1,9 +1,14 @@
 package com.example.ido.appex2;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -28,8 +33,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+
 
 public class UserActivity extends AppCompatActivity
 {
@@ -43,10 +52,11 @@ public class UserActivity extends AppCompatActivity
     private Button               m_Upload_btn;
     private Uri                  m_FilePath;
     private final int            PICK_IMAGE_REQUEST = 71;
+    private final int            MAX_BYTES_FOR_UPLOADED_PIC = 8000000;
     private FirebaseStorage      m_Storage;
     private StorageReference     m_StorageReference;
     private TextView             m_tvRemoveAccount;
-
+    private boolean              m_IsUploadingProsses;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -63,11 +73,18 @@ public class UserActivity extends AppCompatActivity
         m_Logout_btn = findViewById(R.id.btn_Logout);
         m_tvRemoveAccount = findViewById(R.id.tv_remove);
         m_Upload_btn = findViewById(R.id.btn_UploadPic);
+        m_IsUploadingProsses = false;
         m_Logout_btn.setOnClickListener(new OnClickListener()
         {
             public void onClick(View v)
             {
-                onClickLogOut();
+                if(!m_IsUploadingProsses) {
+                    onClickLogOut();
+                }
+                else
+                {
+                    displayBlockButtonToast();
+                }
             }
         });
         m_tvRemoveAccount.setOnClickListener(new OnClickListener()
@@ -75,7 +92,12 @@ public class UserActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                onClickRemoveAccount();
+                if(!m_IsUploadingProsses) {
+                    onClickRemoveAccount();
+                }
+                else{
+                    displayBlockButtonToast();
+                }
             }
         });
         m_Upload_btn.setOnClickListener(new OnClickListener()
@@ -98,11 +120,17 @@ public class UserActivity extends AppCompatActivity
         finish();
     }
 
+    private void displayBlockButtonToast()
+    {
+        Toast.makeText(getApplicationContext(),
+                "Please wait until the upload will finish"
+                , Toast.LENGTH_LONG).show();
+    }
     private void onClickUploadbtn()
     {
         Log.v(TAG, " click Upload profile pic");
         chooseAndUploadImage();
-        uploadImage();
+        //uploadImage();
     }
     private void onClickRemoveAccount()
     {
@@ -162,7 +190,7 @@ public class UserActivity extends AppCompatActivity
     {
         Glide.with(this)
                 .load(i_ProfilePicURL)
-                //.thumbnail(Glide.with(this).load(R.drawable.loading_3))
+                .thumbnail(Glide.with(this).load(R.drawable.loading_3))
                 .override(351, 322)
                 .centerCrop()
                 .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
@@ -184,7 +212,16 @@ public class UserActivity extends AppCompatActivity
             m_FilePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), m_FilePath);
-                uploadImage();
+                if(sizeOf(bitmap) < MAX_BYTES_FOR_UPLOADED_PIC) {
+                    Log.e(TAG, "-->>>>>>>>>Image bitmap size = " +
+                            sizeOf(bitmap));
+                    uploadImage();
+                }
+                else {
+                    Log.e(TAG, "-->>>>>>>>>Image bitmap size= "+ sizeOf(bitmap));
+                    Toast.makeText(getApplicationContext(),
+                            "Pleas choose image les then 8MB", Toast.LENGTH_SHORT).show();
+                }
             }
             catch (IOException e)
             {
@@ -192,6 +229,17 @@ public class UserActivity extends AppCompatActivity
             }
         }
     }
+
+    private long sizeOf(Bitmap data) {
+        Bitmap bitmap = data;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] imageInByte = stream.toByteArray();
+        long lengthbmp = imageInByte.length;
+        return  lengthbmp;
+    }
+
+
 
     private void uploadImage() {
 
@@ -201,6 +249,7 @@ public class UserActivity extends AppCompatActivity
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
             Log.e(TAG, "-->>>>>>>>>m_FilePath = "+ m_FilePath.toString());
+
             final StorageReference ref = m_StorageReference.child("images/"+ UUID.randomUUID().toString());
             ref.putFile(m_FilePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -214,6 +263,7 @@ public class UserActivity extends AppCompatActivity
                                     final Uri downloadUrl = uri;
                                     Log.d(TAG, "onSuccess: uri= "+ uri.toString());
                                     updateUserPhotoInDB(downloadUrl);
+                                    m_IsUploadingProsses = false;
                                 }
                             });
                         }
@@ -223,11 +273,14 @@ public class UserActivity extends AppCompatActivity
                         public void onFailure(@NonNull Exception e) {
                              progressDialog.dismiss();
                             Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            m_IsUploadingProsses = false;
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            m_IsUploadingProsses = true;
+
                             double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
                                     .getTotalByteCount());
                              progressDialog.setMessage("Uploaded "+(int)progress+"%");
