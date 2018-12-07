@@ -106,7 +106,6 @@ public class SignUpActivity extends AppCompatActivity
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task)
                                 {
-                                    m_Auth = FirebaseAuth.getInstance();
                                     m_FirsebaseUser = m_Auth.getCurrentUser();
                                     m_FirsebaseUser.sendEmailVerification()
                                             .addOnCompleteListener(new OnCompleteListener<Void>()
@@ -120,15 +119,11 @@ public class SignUpActivity extends AppCompatActivity
                                                         Toast.makeText(SignUpActivity.this, "Email sent to: " + m_FirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
                                                         finishSignUp();
                                                     }
-                                                    else
-                                                    {
-                                                    }
                                                 }
                                             });
                                 }
                             });
                         }
-
                         else
                         {
                             Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -142,12 +137,13 @@ public class SignUpActivity extends AppCompatActivity
     {
         Log.e(TAG, "finishSignUp() >>");
         updateUserNameInDB();
+        m_Auth.signOut();
         Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent_SignUp);
         finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Toast.makeText(getApplicationContext(), "Please verify email and then sign in", Toast.LENGTH_SHORT).show();
-        m_Auth.signOut();
+
         Log.e(TAG, "finishSignUp() <<");
 
     }
@@ -155,8 +151,9 @@ public class SignUpActivity extends AppCompatActivity
     private void onClickBackBtn()
     {
         Log.e(TAG, "onClickBackBtn() >>");
-        Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent_SignUp);
+        Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        m_Auth.signOut();
         finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "onClickBackBtn() <<");
@@ -166,7 +163,7 @@ public class SignUpActivity extends AppCompatActivity
     {
         Log.e(TAG, "updateUserNameInDB() >>");
 
-        final  String userName = m_etFirstName.getText().toString().trim() + m_etLastName.getText().toString();
+        final  String userName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
