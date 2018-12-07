@@ -113,17 +113,17 @@ public class ValidationChecker {
         }
         else
         {
-            if (name.length() > 20)
+            if (name.length() > 10)
             {
-                i_FullName.setError("Too long: Max 20");
+                i_FullName.setError("Too long: Max 10");
             }
-            else if (name.length() < 3)
+            else if (name.length() < 1)
             {
-                i_FullName.setError("To short: Min 3");
+                i_FullName.setError("Too short: Min 2");
             }
-            else if (!name.contains(" "))
+            else if (name.contains(" "))
             {
-                i_FullName.setError("Name has to be from 2 words");
+                i_FullName.setError("name cant have space in it");
             }
             else if (!Charset.forName("US-ASCII").newEncoder().canEncode(name))
             {

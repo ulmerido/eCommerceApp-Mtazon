@@ -21,7 +21,8 @@ public class SignUpActivity extends AppCompatActivity
 {
     private EditText     m_etPassword;
     private EditText     m_etEmail;
-    private EditText     m_etName;
+    private EditText     m_etFirstName;
+    private EditText     m_etLastName;
     private FirebaseAuth m_Auth;
     private FirebaseUser m_FirsebaseUser;
     private Button       m_btnBack;
@@ -38,7 +39,7 @@ public class SignUpActivity extends AppCompatActivity
         m_Auth = FirebaseAuth.getInstance();
         m_etPassword = findViewById(R.id.etPassword);
         m_etEmail = findViewById(R.id.etEmail);
-        m_etName = findViewById(R.id.etUserName);
+        m_etFirstName = findViewById(R.id.etFname);
         m_btnRegister = (Button) findViewById(R.id.btnSignUp);
         m_btnBack = (Button) findViewById(R.id.btnBack);
         m_btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -57,17 +58,20 @@ public class SignUpActivity extends AppCompatActivity
 
         });
 
-        ValidationChecker.CheckFullName(m_etName);
+        ValidationChecker.CheckFullName(m_etFirstName);
+        ValidationChecker.CheckFullName(m_etLastName);
         ValidationChecker.CheckEmail(m_etEmail);
         ValidationChecker.CheckPassword(m_etPassword);
 
     }
 
-    private boolean successfullValidation() {
-        if(!ValidationChecker.CheckValidEmail(m_etEmail) || !ValidationChecker.CheckValidName(m_etName) ||
-                !ValidationChecker.CheckValidPassword(m_etPassword)) {
+    private boolean successfullValidation()
+    {
+        if(!ValidationChecker.CheckValidEmail(m_etEmail)||!ValidationChecker.CheckValidName(m_etLastName) || !ValidationChecker.CheckValidName(m_etFirstName) || !ValidationChecker.CheckValidPassword(m_etPassword))
+        {
             return false;
         }
+
         return true;
     }
 
@@ -122,7 +126,7 @@ public class SignUpActivity extends AppCompatActivity
                                 }
                             });
                         }
-                        //display a failure message{
+
                         else
                         {
                             Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -141,6 +145,7 @@ public class SignUpActivity extends AppCompatActivity
         finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Toast.makeText(getApplicationContext(), "Please verify email and then sign in", Toast.LENGTH_SHORT).show();
+        m_Auth.signOut();
         Log.e(TAG, "finishSignUp() <<");
 
     }
@@ -157,7 +162,9 @@ public class SignUpActivity extends AppCompatActivity
 
     private void updateUserNameInDB()
     {
-        final  String userName = m_etName.getText().toString().trim();
+        Log.e(TAG, "updateUserNameInDB() >>");
+
+        final  String userName = m_etFirstName.getText().toString().trim() + m_etLastName.getText().toString();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
@@ -172,6 +179,7 @@ public class SignUpActivity extends AppCompatActivity
                         }
                     }
                 });
+        Log.e(TAG, "updateUserNameInDB() <<");
 
     }
 

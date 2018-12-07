@@ -7,26 +7,43 @@
     android:background="@drawable/background7"
     android:orientation="vertical"
     tools:context=".SignUpActivity">
-
-
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="@color/cardview_light_background"
-    android:id="@+id/textUser"
-    android:text="Enter uername:"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/cardview_light_background"
+        android:id="@+id/tvFName"
+        android:text="Enter First name:"></TextView>
 
     <EditText
-        android:id="@+id/etUserName"
+        android:id="@+id/etFname"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="24dp"
         android:background="@drawable/roundet"
         android:backgroundTint="@color/com_facebook_likeview_text_color"
-        android:drawableLeft="@android:drawable/ic_menu_slideshow"
         android:ems="10"
-        android:hint="Full Name"
+        android:hint="First name"
+        android:inputType="text" />
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textColor="@color/cardview_light_background"
+    android:id="@+id/tvLNAme"
+    android:text="Enter last name:"></TextView>
+
+    <EditText
+        android:id="@+id/etLname"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/roundet"
+        android:backgroundTint="@color/com_facebook_likeview_text_color"
+        android:ems="10"
+        android:hint="Last name"
         android:inputType="text" />
 
     <TextView
