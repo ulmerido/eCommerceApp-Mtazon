@@ -41,21 +41,22 @@ import java.util.HashMap;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
     public static final String TAG = "Main Activity:";
-    private FirebaseAuth        m_Auth;
-    private GoogleSignInClient  m_GoogleSignInClient;
-    private SignInButton        m_GoogleSignInButton;
-    private CallbackManager     m_CallbackManager;
-    private AccessTokenTracker  m_AccessTokenTracker;
-    private LoginButton         m_FacebookLogin_btn;
-    private TextView            m_SignUp_tv;
-    private Button              m_BtnSignin;
-    private TextView            m_EtUserEmail;
-    private TextView            m_tvRecoverPassword;
-    private TextView            m_EtUserPassword;
-    private TextView            m_TvAnonymous;
-    private String              m_EmailReset;
+    private FirebaseAuth m_Auth;
+    private GoogleSignInClient m_GoogleSignInClient;
+    private SignInButton m_GoogleSignInButton;
+    private CallbackManager m_CallbackManager;
+    private AccessTokenTracker m_AccessTokenTracker;
+    private LoginButton m_FacebookLogin_btn;
+    private TextView m_SignUp_tv;
+    private Button m_BtnSignin;
+    private TextView m_EtUserEmail;
+    private TextView m_tvRecoverPassword;
+    private TextView m_EtUserPassword;
+    private TextView m_TvAnonymous;
+    private String m_EmailReset;
     private FirebaseRemoteConfig m_RemoteConfig;
 
     @Override
@@ -84,35 +85,45 @@ public class MainActivity extends AppCompatActivity {
         setRemoteConfig();
         showAnonymousLogin();
 
-        m_GoogleSignInButton.setOnClickListener(new View.OnClickListener() {
+        m_GoogleSignInButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 googleSignIn();
             }
         });
-        m_SignUp_tv.setOnClickListener(new View.OnClickListener() {
+        m_SignUp_tv.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 onClickSignup();
             }
         });
-        m_tvRecoverPassword.setOnClickListener(new View.OnClickListener() {
+        m_tvRecoverPassword.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 openResetPasswordDialog();
             }
         });
 
-        m_BtnSignin.setOnClickListener(new View.OnClickListener() {
+        m_BtnSignin.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 onClickSignin();
             }
         });
 
-        m_TvAnonymous.setOnClickListener(new View.OnClickListener() {
+        m_TvAnonymous.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 onClickAnonymos();
             }
         });
@@ -120,19 +131,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClickAnonymos()
     {
+        Log.e(TAG, "onClickAnonymos >>");
         signAnonymosly();
         ifLogedInGoToUserActivity();
+        Log.e(TAG, "onClickAnonymos <<");
     }
 
     private void onClickSignup()
     {
+        Log.e(TAG, "onClickSignup >>");
         Intent intent_SignUp = new Intent(getApplicationContext(), SignUpActivity.class);
         startActivity(intent_SignUp);
         slideUpToNewActivity();
+        Log.e(TAG, "onClickSignup <<");
     }
 
     private void setRemoteConfig()
     {
+        Log.e(TAG, "setRemoteConfig >>");
         m_RemoteConfig.setConfigSettings(new FirebaseRemoteConfigSettings.Builder()
                 .setDeveloperModeEnabled(true)
                 .build());
@@ -140,27 +156,34 @@ public class MainActivity extends AppCompatActivity {
         defaults.put("show_anonymous", true);
         m_RemoteConfig.setDefaults(defaults);
         Task<Void> fetch = m_RemoteConfig.fetch(0);
-        fetch.addOnSuccessListener(this, new OnSuccessListener<Void>() {
+        fetch.addOnSuccessListener(this, new OnSuccessListener<Void>()
+        {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(Void aVoid)
+            {
                 m_RemoteConfig.activateFetched();
 
             }
         });
+        Log.e(TAG, "setRemoteConfig <<");
     }
-    private void signAnonymosly() {
+
+    private void signAnonymosly()
+    {
 
         Log.e(TAG, "signAnonymosly >>");
         m_Auth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+                {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
+                    public void onComplete(@NonNull Task<AuthResult> task)
+                    {
+                        if (task.isSuccessful())
+                        {
                             Log.d(TAG, "signInAnonymously:success");
                             FirebaseUser user = m_Auth.getCurrentUser();
-                        }
-                        else
-                            {
+                        } else
+                        {
                             Log.w(TAG, "signInAnonymously:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
@@ -173,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void openResetPasswordDialog()
     {
+        Log.e(TAG, "openResetPasswordDialog >>");
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
-
         final EditText emailToReset = new EditText(this);
         emailToReset.setHint("youremail@somthing.som");
         builder.setView(emailToReset);
@@ -182,108 +205,126 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Forgot Password");
         builder.setIcon(android.R.drawable.ic_menu_revert);
         builder.setCancelable(true);
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener()
+        {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
                 dialog.cancel();
             }
         });
 
-        builder.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Reset", new DialogInterface.OnClickListener()
+        {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which)
+            {
                 m_EmailReset = emailToReset.getText().toString();
                 recoverPassword();
             }
         });
 
         builder.show();
+        Log.e(TAG, "openResetPasswordDialog <<");
     }
 
-    private void recoverPassword() {
-        try {
-            if (m_Auth.getCurrentUser() == null) {
+    private void recoverPassword()
+    {
+        Log.e(TAG, "recoverPassword >>");
+        try
+        {
+            if (m_Auth.getCurrentUser() == null)
+            {
                 m_Auth.sendPasswordResetEmail(m_EmailReset)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        .addOnCompleteListener(new OnCompleteListener<Void>()
+                        {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
+                            public void onComplete(@NonNull Task<Void> task)
+                            {
+                                if (task.isSuccessful())
+                                {
                                     Toast.makeText(MainActivity.this, "Password reset request sent", Toast.LENGTH_SHORT).show();
-                                } else {
+                                } else
+                                {
                                     Toast.makeText(MainActivity.this, "Failed to reset password", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
-            } else {
+            } else
+            {
                 Toast.makeText(MainActivity.this, "log out first", Toast.LENGTH_SHORT).show();
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
         }
-
+        Log.e(TAG, "recoverPassword <<");
     }
 
-    private void showAnonymousLogin() {
+    private void showAnonymousLogin()
+    {
+        Log.e(TAG, "showAnonymousLogin >>");
         boolean show_anonymos = (boolean) m_RemoteConfig.getBoolean("show_anonymous");
-        if (show_anonymos) {
+        if (show_anonymos)
+        {
             m_TvAnonymous.setVisibility(View.VISIBLE);
-        } else {
+        } else
+        {
             m_TvAnonymous.setVisibility(View.GONE);
         }
-
+        Log.e(TAG, "showAnonymousLogin <<");
     }
 
     private void onClickSignin()
     {
+        Log.e(TAG, "onClickSignin >>");
         if (ValidationChecker.CheckValidEmail(m_EtUserEmail) && ValidationChecker.CheckValidPassword(m_EtUserPassword))
         {
-            Log.e(TAG, "onClickSignin >>");
             final String passString = m_EtUserPassword.getText().toString().trim();
             final String emailString = m_EtUserEmail.getText().toString().trim();
             m_Auth.signInWithEmailAndPassword(emailString, passString)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+                    {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
                             if (task.isSuccessful())
                             {
-                                if (m_Auth.getCurrentUser().isEmailVerified()) {
+                                if (m_Auth.getCurrentUser().isEmailVerified())
+                                {
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = m_Auth.getCurrentUser();
                                     Toast.makeText(MainActivity.this, "Success!", Toast.LENGTH_SHORT).show();
                                     ifLogedInGoToUserActivity();
-                                }
-                                else
-                                    {
+                                } else
+                                {
                                     m_Auth.signOut();
                                     Toast.makeText(MainActivity.this, "unverified email",
                                             Toast.LENGTH_SHORT).show();
                                 }
 
                                 Log.e(TAG, "signin <<");
-                            }
-                            else
+                            } else
                             {
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
                                 Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-        }
-        else if (!ValidationChecker.CheckValidPassword(m_EtUserPassword) && !ValidationChecker.CheckValidEmail(m_EtUserEmail))
+        } else if (!ValidationChecker.CheckValidPassword(m_EtUserPassword) && !ValidationChecker.CheckValidEmail(m_EtUserEmail))
         {
             Toast.makeText(MainActivity.this, "Please fill in email and password to continue",
                     Toast.LENGTH_SHORT).show();
-        }
-        else if (!ValidationChecker.CheckValidEmail(m_EtUserEmail))
+        } else if (!ValidationChecker.CheckValidEmail(m_EtUserEmail))
         {
             Toast.makeText(MainActivity.this, "Please fill in email to continue",
                     Toast.LENGTH_SHORT).show();
-        }
-        else if (!ValidationChecker.CheckValidPassword(m_EtUserPassword))
+        } else if (!ValidationChecker.CheckValidPassword(m_EtUserPassword))
         {
             Toast.makeText(MainActivity.this, "Please fill in password to continue",
                     Toast.LENGTH_SHORT).show();
         }
+        Log.e(TAG, "onClickSignin <<");
     }
 
     private void ifLogedInGoToUserActivity()
@@ -324,7 +365,8 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "googleSignInBuilder <<");
     }
 
-    private void googleSignIn() {
+    private void googleSignIn()
+    {
         Log.e(TAG, "googleSignIn >>");
         Intent signInIntent = m_GoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 101);
@@ -332,67 +374,77 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         Log.e(TAG, "onActivityResult >>");
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 101) {
+        if (requestCode == 101)
+        {
             Task<GoogleSignInAccount> task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
+            try
+            {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
+            } catch (ApiException e)
+            {
                 // Google Sign In failed, update UI appropriately
                 Log.w("Sign IN:", "Google sign in failed", e);
                 // ...
             }
-
         }
-
         m_CallbackManager.onActivityResult(requestCode, resultCode, data);
-
         Log.e(TAG, "onActivityResult <<");
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount i_Account) {
+    private void firebaseAuthWithGoogle(GoogleSignInAccount i_Account)
+    {
         Log.e(TAG, "firebaseAuthWithGoogle >>");
         Log.d(TAG, "firebaseAuthWithGoogle:" + i_Account.getId());
         firebaseAuthWithGoogleAndFacebook(GoogleAuthProvider.getCredential(i_Account.getIdToken(), null));
         Log.e(TAG, "firebaseAuthWithGoogle <<");
     }
 
-    private void facebookLoginInit() {
+    private void facebookLoginInit()
+    {
         Log.e(TAG, "facebookLoginInit() >>");
 
         m_FacebookLogin_btn.setReadPermissions("email", "public_profile");
-        m_FacebookLogin_btn.registerCallback(m_CallbackManager, new FacebookCallback<LoginResult>() {
+        m_FacebookLogin_btn.registerCallback(m_CallbackManager, new FacebookCallback<LoginResult>()
+        {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(LoginResult loginResult)
+            {
                 Log.e(TAG, "facebook:onSuccess () >>" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.e(TAG, "facebook:onSuccess () <<");
             }
 
             @Override
-            public void onCancel() {
+            public void onCancel()
+            {
                 Log.e(TAG, "facebook:onCancel() >>");
                 Log.e(TAG, "facebook:onCancel() <<");
             }
 
             @Override
-            public void onError(FacebookException error) {
+            public void onError(FacebookException error)
+            {
                 Log.e(TAG, "facebook:onError () >>" + error.getMessage());
                 Log.e(TAG, "facebook:onError <<");
             }
         });
 
-        m_AccessTokenTracker = new AccessTokenTracker() {
+        m_AccessTokenTracker = new AccessTokenTracker()
+        {
             @Override
             protected void onCurrentAccessTokenChanged(
                     AccessToken oldAccessToken,
-                    AccessToken currentAccessToken) {
-                if (currentAccessToken == null) {
+                    AccessToken currentAccessToken)
+            {
+                if (currentAccessToken == null)
+                {
                     m_Auth.signOut();
                 }
 
@@ -403,40 +455,50 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "facebookLoginInit() <<");
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    private void handleFacebookAccessToken(AccessToken token)
+    {
         Log.e(TAG, "handleFacebookAccessToken () >>" + token.getToken());
         firebaseAuthWithGoogleAndFacebook(FacebookAuthProvider.getCredential(token.getToken()));
         Log.e(TAG, "handleFacebookAccessToken () <<");
     }
 
-    private void firebaseAuthTaskCheck(Task<AuthResult> i_Task) {
+    private void firebaseAuthTaskCheck(Task<AuthResult> i_Task)
+    {
         Log.e(TAG, "firebaseAuthTaskCheck() >>");
 
-        if (i_Task.isSuccessful()) {
+        if (i_Task.isSuccessful())
+        {
             Log.d(TAG, "signInWithCredential:success");
             ifLogedInGoToUserActivity();
             Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
-        } else {
+        } else
+        {
             Toast.makeText(getApplicationContext(), i_Task.getException().toString(), Toast.LENGTH_SHORT).show();
             Log.w(TAG, "signInWithCredential:failure", i_Task.getException());
         }
         Log.e(TAG, "firebaseAuthTaskCheck() <<");
     }
 
-    private void firebaseAuthWithGoogleAndFacebook(AuthCredential i_Credential) {
+    private void firebaseAuthWithGoogleAndFacebook(AuthCredential i_Credential)
+    {
         Log.e(TAG, "firebaseAuthWithGoogleAndFacebook() >>");
         m_Auth.signInWithCredential(i_Credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>()
+                {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task)
+                    {
                         firebaseAuthTaskCheck(task);
                     }
                 });
         Log.e(TAG, "firebaseAuthWithGoogleAndFacebook() <<");
     }
 
-    private void slideUpToNewActivity() {
+    private void slideUpToNewActivity()
+    {
+        Log.e(TAG, "slideUpToNewActivity() >>");
         finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
+        Log.e(TAG, "slideUpToNewActivity() <<");
     }
 }

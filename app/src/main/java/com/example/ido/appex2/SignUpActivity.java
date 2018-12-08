@@ -19,20 +19,21 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity
 {
-    private EditText     m_etPassword;
-    private EditText     m_etEmail;
-    private EditText     m_etFirstName;
-    private EditText     m_etLastName;
+    private EditText m_etPassword;
+    private EditText m_etEmail;
+    private EditText m_etFirstName;
+    private EditText m_etLastName;
     private FirebaseAuth m_Auth;
     private FirebaseUser m_FirsebaseUser;
-    private Button       m_btnBack;
-    private Button       m_btnRegister;
+    private Button m_btnBack;
+    private Button m_btnRegister;
     public static final String TAG = "SignUpActivity";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.e(TAG, "registerUser() >>");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -44,14 +45,16 @@ public class SignUpActivity extends AppCompatActivity
 
         m_btnRegister = (Button) findViewById(R.id.btnSignUp);
         m_btnBack = (Button) findViewById(R.id.btnBack);
-        m_btnRegister.setOnClickListener(new View.OnClickListener() {
+        m_btnRegister.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
                 onClickRegiser();
             }
         });
-        m_btnBack.setOnClickListener(new View.OnClickListener() {
+        m_btnBack.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
@@ -64,28 +67,30 @@ public class SignUpActivity extends AppCompatActivity
         ValidationChecker.CheckFullName(m_etLastName);
         ValidationChecker.CheckEmail(m_etEmail);
         ValidationChecker.CheckPassword(m_etPassword);
-
+        Log.e(TAG, "onCreate() <<");
     }
 
     private boolean successfullValidation()
     {
-        if(!ValidationChecker.CheckValidEmail(m_etEmail)||!ValidationChecker.CheckValidName(m_etLastName) || !ValidationChecker.CheckValidName(m_etFirstName) || !ValidationChecker.CheckValidPassword(m_etPassword))
+        Log.e(TAG, "successfullValidation() >>");
+        boolean res;
+        if (!ValidationChecker.CheckValidEmail(m_etEmail) || !ValidationChecker.CheckValidName(m_etLastName) || !ValidationChecker.CheckValidName(m_etFirstName) || !ValidationChecker.CheckValidPassword(m_etPassword))
         {
-            return false;
+            res =  false;
         }
-
-        return true;
+        res =  true;
+        Log.e(TAG, "successfullValidation() <<");
+        return  res;
     }
 
     private void onClickRegiser()
     {
-        if(!successfullValidation())
+        Log.e(TAG, "registerUser() >>");
+        if (!successfullValidation())
         {
             Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        Log.e(TAG, "registerUser() >>");
         final String passString = m_etPassword.getText().toString().trim();
         final String emailString = m_etEmail.getText().toString().trim();
 
@@ -123,8 +128,7 @@ public class SignUpActivity extends AppCompatActivity
                                             });
                                 }
                             });
-                        }
-                        else
+                        } else
                         {
                             Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -143,15 +147,13 @@ public class SignUpActivity extends AppCompatActivity
         finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Toast.makeText(getApplicationContext(), "Please verify email and then sign in", Toast.LENGTH_SHORT).show();
-
         Log.e(TAG, "finishSignUp() <<");
-
     }
 
     private void onClickBackBtn()
     {
         Log.e(TAG, "onClickBackBtn() >>");
-        Intent intent= new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
         m_Auth.signOut();
         finish();
@@ -163,17 +165,20 @@ public class SignUpActivity extends AppCompatActivity
     {
         Log.e(TAG, "updateUserNameInDB() >>");
 
-        final  String userName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
+        final String userName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(userName).setPhotoUri(null).build();
 
         user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(new OnCompleteListener<Void>()
+                {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
                             Log.d(TAG, "User profile name updated.");
                         }
                     }
@@ -181,6 +186,4 @@ public class SignUpActivity extends AppCompatActivity
         Log.e(TAG, "updateUserNameInDB() <<");
 
     }
-
-
 }
