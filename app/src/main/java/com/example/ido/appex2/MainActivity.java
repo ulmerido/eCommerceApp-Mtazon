@@ -290,20 +290,26 @@ public class MainActivity extends AppCompatActivity {
     {
         Log.e(TAG, "ifLogedInGoToUserActivity >>");
         boolean userSignedIn = m_Auth.getCurrentUser() != null;
-        if(userSignedIn)
-        {
-            boolean isFacebookUser = m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com");
-            boolean isAnonymous = m_Auth.getCurrentUser().isAnonymous();
-            boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
-            if(isFacebookUser ||isAnonymous || isEmailVerified)
+        try {
+            if (userSignedIn)
             {
-                Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
-                startActivity(intent_UserActivity);
-                finish();
-            }
-        }
+                boolean isAnonymous = m_Auth.getCurrentUser().isAnonymous();
+                boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
 
-        Log.e(TAG, "ifLogedInGoToUserActivity <<");
+                if (isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com"))
+                {
+                    Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
+                    startActivity(intent_UserActivity);
+                    finish();
+                }
+            }
+
+            Log.e(TAG, "ifLogedInGoToUserActivity <<");
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG);
+        }
 
     }
 
