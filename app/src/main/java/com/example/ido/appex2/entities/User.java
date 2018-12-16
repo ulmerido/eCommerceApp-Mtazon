@@ -9,6 +9,7 @@ import java.util.List;
 public class User implements Parcelable {
 
     private String email;
+    private String fullName;
     private String password;
     private String profilePicURL;
     private int totalPurchase;
@@ -17,8 +18,9 @@ public class User implements Parcelable {
     public User() {
     }
 
-    public User(String email, String password, String profilePicURL, int totalPurchase, List<String> myAudioBooks) {
+    public User(String email, String fullName, String password, String profilePicURL, int totalPurchase, List<String> myAudioBooks) {
         this.email = email;
+        this.fullName = fullName;
         this.password = password;
         this.profilePicURL = profilePicURL;
         this.totalPurchase = totalPurchase;
@@ -49,6 +51,14 @@ public class User implements Parcelable {
         this.totalPurchase += newPurcahsePrice;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public List<String> getMyAudioBooks() {
         return myAudioBooks;
     }
@@ -62,6 +72,7 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(email);
+        parcel.writeString(fullName);
         parcel.writeString(password);
         parcel.writeList(myAudioBooks);
         parcel.writeString(profilePicURL);//maybe not needed
@@ -70,6 +81,9 @@ public class User implements Parcelable {
 
     public User(Parcel in) {
         this.email = in.readString();
+        this.fullName = in.readString();
+        this.password = in.readString();
+        this.profilePicURL = in.readString();
         in.readList(myAudioBooks,String.class.getClassLoader());
     }
 
