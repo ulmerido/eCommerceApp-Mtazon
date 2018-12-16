@@ -88,30 +88,30 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
     {
 
         @BindView(R.id.item_book_genre)
-        private TextView m_tvGenre;
+        public TextView m_tvGenre;
 
         @BindView(R.id.item_book_image)
-        private ImageView m_ivImage;
+        public ImageView m_ivImage;
 
         @BindView(R.id.item_book_name)
-        private TextView m_tvName;
+        public TextView m_tvName;
 
         @BindView(R.id.item_book_price)
-        private TextView m_tvPrice;
+        public TextView m_tvPrice;
 
         @BindView(R.id.item_book_rating)
-        private RatingBar m_rbRating;
+        public RatingBar m_rbRating;
 
         @BindView(R.id.item_book_review_count)
-        private TextView m_tvReviewCount;
+        public TextView m_tvReviewCount;
 
         @BindView(R.id.item_book_auther)
-        private TextView m_tvAuther;
+        public TextView m_tvAuther;
 
         @BindView(R.id.item_card_view_book)
-        private CardView m_cvViewBook;
+        public CardView m_cvViewBook;
 
-        private Context m_Context;
+        public Context m_Context;
 
         public AudioBookHolder(Context i_Context, View itemView)
         {

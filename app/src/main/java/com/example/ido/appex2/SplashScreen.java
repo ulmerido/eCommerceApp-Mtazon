@@ -1,9 +1,8 @@
 package com.example.ido.appex2;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
@@ -28,7 +27,7 @@ public class SplashScreen extends AppCompatActivity
         super.onCreate(savedInstanceState);
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this)
                 .withFullScreen()
-                .withTargetActivity(MainActivity.class)
+                .withTargetActivity(AllProductsActivity.class)
                 .withSplashTimeOut(3000)
                 .withBackgroundResource(R.drawable.background6)
                 .withLogo(R.drawable.loading_logo_android)
