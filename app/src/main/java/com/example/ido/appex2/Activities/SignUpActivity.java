@@ -45,7 +45,6 @@ public class SignUpActivity extends AppCompatActivity
         m_etEmail = findViewById(R.id.etEmail);
         m_etFirstName = findViewById(R.id.etFname);
         m_etLastName = findViewById(R.id.etLname);
-
         m_btnRegister = (Button) findViewById(R.id.btnSignUp);
         m_btnBack = (Button) findViewById(R.id.btnBack);
         m_btnRegister.setOnClickListener(new View.OnClickListener()
