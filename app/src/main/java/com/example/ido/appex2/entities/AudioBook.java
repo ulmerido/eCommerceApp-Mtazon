@@ -17,7 +17,6 @@ public class AudioBook implements Parcelable {
     private String genre;
     private String file;
     private String thumbImage;
-    private String description;
     private int price;
     private int rating;
     private int reviewsCount;
@@ -30,14 +29,13 @@ public class AudioBook implements Parcelable {
     public  AudioBook(){
     }
 
-    public AudioBook(String name, String author, String genre, String file, String thumbImage, String description,
+    public AudioBook(String name, String author, String genre, String file, String thumbImage,
                      int price, int rating, int reviewsCount, Map<String, Review> reviews) {
         this.name = name;
         this.author = author;
         this.genre = genre;
         this.file = file;
         this.thumbImage = thumbImage;
-        this.description = description;
         this.price = price;
         this.rating = rating;
         this.reviewsCount = reviewsCount;
@@ -110,13 +108,6 @@ public class AudioBook implements Parcelable {
         this.reviews = reviews;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Override
     public int describeContents() {
@@ -130,7 +121,6 @@ public class AudioBook implements Parcelable {
         parcel.writeString(genre);
         parcel.writeString(file);
         parcel.writeString(thumbImage);
-        parcel.writeString(description);
         parcel.writeInt(price);
         parcel.writeInt(rating);
         parcel.writeInt(reviewsCount);
@@ -141,7 +131,6 @@ public class AudioBook implements Parcelable {
         this.author = in.readString();
         this.genre = in.readString();
         this.file = in.readString();
-        this.description = in.readString();
         this.thumbImage = in.readString();
         this.price = in.readInt();
         this.rating = in.readInt();
