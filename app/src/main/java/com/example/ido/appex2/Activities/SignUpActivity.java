@@ -1,4 +1,4 @@
-package com.example.ido.appex2;
+package com.example.ido.appex2.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ido.appex2.R;
+import com.example.ido.appex2.ValidationChecker;
 import com.example.ido.appex2.entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 public class SignUpActivity extends AppCompatActivity
@@ -107,34 +108,34 @@ public class SignUpActivity extends AppCompatActivity
                             User user = new User();
                             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
                             if (user == null) {
-                                     Log.e(TAG, "createNewUser() << Error user is null");
-                                     return; }
+                                Log.e(TAG, "createNewUser() << Error user is null");
+                                return; }
                             //FirebaseDatabase.getInstance().getReference("Users")
-                                 userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName,
+                            userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName,
                                     passString, null,
                                     0,null))
                                     .addOnCompleteListener(new OnCompleteListener<Void>()
-                            {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task)
-                                {
-                                    m_FirsebaseUser = m_Auth.getCurrentUser();
-                                    m_FirsebaseUser.sendEmailVerification()
-                                            .addOnCompleteListener(new OnCompleteListener<Void>()
-                                            {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task)
-                                                {
-                                                    if (task.isSuccessful())
+                                    {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task)
+                                        {
+                                            m_FirsebaseUser = m_Auth.getCurrentUser();
+                                            m_FirsebaseUser.sendEmailVerification()
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>()
                                                     {
-                                                        Log.d(TAG, "Email sent.");
-                                                        Toast.makeText(SignUpActivity.this, "Email sent to: " + m_FirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
-                                                        finishSignUp();
-                                                    }
-                                                }
-                                            });
-                                }
-                            });
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task)
+                                                        {
+                                                            if (task.isSuccessful())
+                                                            {
+                                                                Log.d(TAG, "Email sent.");
+                                                                Toast.makeText(SignUpActivity.this, "Email sent to: " + m_FirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
+                                                                finishSignUp();
+                                                            }
+                                                        }
+                                                    });
+                                        }
+                                    });
                         } else
                         {
                             Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -167,51 +168,4 @@ public class SignUpActivity extends AppCompatActivity
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "onClickBackBtn() <<");
     }
-
-//    private void updateUserNameInDB()
-//    {
-//        Log.e(TAG, "updateUserNameInDB() >>");
-//
-//        final String userName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-//                .setDisplayName(userName).setPhotoUri(null).build();
-//
-//        user.updateProfile(profileUpdates)
-//                .addOnCompleteListener(new OnCompleteListener<Void>()
-//                {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task)
-//                    {
-//                        if (task.isSuccessful())
-//                        {
-//                            Log.d(TAG, "User profile name updated.");
-//                            m_FullName = userName;
-//                        }
-//                    }
-//                });
-//        Log.e(TAG, "updateUserNameInDB() <<");
-//
-//    }
-
-//    private void setNewUser() {
-//
-//        Log.e(TAG, "createNewUser() >>");
-//
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-//
-//        if (user == null) {
-//            Log.e(TAG, "createNewUser() << Error user is null");
-//            return;
-//        }
-//        Log.e(TAG,"NAME --------->>>>>>>>" + m_FullName);
-//        userRef.child(user.getUid()FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(user.getEmail(), m_FullName,
-//                m_etPassword.getText().toString(), null,
-//                0,null));
-//
-//        Log.e(TAG, "createNewUser() <<");
-//    }
-
 }
