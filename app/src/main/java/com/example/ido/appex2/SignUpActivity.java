@@ -95,7 +95,7 @@ public class SignUpActivity extends AppCompatActivity
         }
         final String passString = m_etPassword.getText().toString().trim();
         final String emailString = m_etEmail.getText().toString().trim();
-
+        final String fullName =  m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
         m_Auth.createUserWithEmailAndPassword(emailString, passString)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>()
                 {
@@ -104,11 +104,16 @@ public class SignUpActivity extends AppCompatActivity
                     {
                         if (task.isSuccessful())
                         {
-                            //User user = new User(emailString, passString);
-                            FirebaseDatabase.getInstance().getReference("email")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(emailString).addOnCompleteListener(new OnCompleteListener<Void>()
-
+                            User user = new User();
+                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                            if (user == null) {
+                                     Log.e(TAG, "createNewUser() << Error user is null");
+                                     return; }
+                            //FirebaseDatabase.getInstance().getReference("Users")
+                                 userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName,
+                                    passString, null,
+                                    0,null))
+                                    .addOnCompleteListener(new OnCompleteListener<Void>()
                             {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task)
@@ -142,8 +147,7 @@ public class SignUpActivity extends AppCompatActivity
     private void finishSignUp()
     {
         Log.e(TAG, "finishSignUp() >>");
-        updateUserNameInDB();
-        MainActivity.createNewUser();
+        //updateUserNameInDB();
         m_Auth.signOut();
         Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent_SignUp);
@@ -164,32 +168,50 @@ public class SignUpActivity extends AppCompatActivity
         Log.e(TAG, "onClickBackBtn() <<");
     }
 
-    private void updateUserNameInDB()
-    {
-        Log.e(TAG, "updateUserNameInDB() >>");
+//    private void updateUserNameInDB()
+//    {
+//        Log.e(TAG, "updateUserNameInDB() >>");
+//
+//        final String userName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                .setDisplayName(userName).setPhotoUri(null).build();
+//
+//        user.updateProfile(profileUpdates)
+//                .addOnCompleteListener(new OnCompleteListener<Void>()
+//                {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task)
+//                    {
+//                        if (task.isSuccessful())
+//                        {
+//                            Log.d(TAG, "User profile name updated.");
+//                            m_FullName = userName;
+//                        }
+//                    }
+//                });
+//        Log.e(TAG, "updateUserNameInDB() <<");
+//
+//    }
 
-        final String userName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(userName).setPhotoUri(null).build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task)
-                    {
-                        if (task.isSuccessful())
-                        {
-                            Log.d(TAG, "User profile name updated.");
-                        }
-                    }
-                });
-        Log.e(TAG, "updateUserNameInDB() <<");
-
-    }
-
-
+//    private void setNewUser() {
+//
+//        Log.e(TAG, "createNewUser() >>");
+//
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+//
+//        if (user == null) {
+//            Log.e(TAG, "createNewUser() << Error user is null");
+//            return;
+//        }
+//        Log.e(TAG,"NAME --------->>>>>>>>" + m_FullName);
+//        userRef.child(user.getUid()FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(user.getEmail(), m_FullName,
+//                m_etPassword.getText().toString(), null,
+//                0,null));
+//
+//        Log.e(TAG, "createNewUser() <<");
+//    }
 
 }

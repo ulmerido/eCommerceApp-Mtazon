@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.User;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -29,19 +30,23 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.HashMap;
-
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -290,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
                     Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
+                    Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<");
+                    createNewUserFacebookAndGoogle();
+                    createNewBook();
                     startActivity(intent_UserActivity);
                     finish();
                 }
@@ -317,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
         Intent signInIntent = m_GoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 101);
         Log.e(TAG, "googleSignIn <<");
+
     }
 
     @Override
@@ -330,6 +339,7 @@ public class MainActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -418,6 +428,7 @@ public class MainActivity extends AppCompatActivity {
                         firebaseAuthTaskCheck(task);
                     }
                 });
+        //isExistInDB();
         Log.e(TAG, "firebaseAuthWithGoogleAndFacebook() <<");
     }
 
@@ -428,23 +439,55 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "slideUpToNewActivity() <<");
     }
 
-    protected static void createNewUser() {
+   /* private void isExistInDB()
+    {
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        String userEmail= FirebaseAuth.getInstance().getCurrentUser().getEmail() ;
+        mDatabase.child("users").child("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot != null && dataSnapshot.getChildren() != null &&
+                        dataSnapshot.getChildren().iterator().hasNext()){
+                    //Username exists
+                }else {
+                    createNewUser();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }*/
+
+    private void createNewUserFacebookAndGoogle() {
 
         Log.e(TAG, "createNewUser() >>");
 
-        FirebaseUser user = m_Auth.getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
 
         if (user == null) {
             Log.e(TAG, "createNewUser() << Error user is null");
             return;
         }
-
         userRef.child(user.getUid()).setValue(new User(user.getEmail(), user.getDisplayName(),
-                null, user.getPhotoUrl().toString(),
+                "", user.getPhotoUrl().toString(),
                 0,null));
 
         Log.e(TAG, "createNewUser() <<");
     }
 
+   protected static void createNewBook() {
+
+        Log.e(TAG, "createNewUser() >>");
+
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("AudioBooks");
+        //User user = new User();
+        userRef.child(UUID.randomUUID().toString()).setValue(new AudioBook("Harry Poter", "J.K Rolling",
+                "Fantasy", "1.mp3", "", 100, 5, 7, null));
+
+        Log.e(TAG, "createNewUser() <<");
+    }
 }
