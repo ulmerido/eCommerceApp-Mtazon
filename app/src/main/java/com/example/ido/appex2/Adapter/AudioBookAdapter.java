@@ -52,25 +52,24 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
 
         AudioBook book = m_BooksList.get(position).getAudioBook();
         String songKey = m_BooksList.get(position).getKey();
-        holder.populate(holder.getContext(), book);
+        holder.populate(book);
 
 
-        if (book.getReviewsCount() >0)
-        {
-            holder.getReviewCount().setText("("+book.getReviewsCount()+")");
-            holder.getRating().setRating((float)(book.getRating() / book.getReviewsCount()));
-        }
+
+        //holder.getRating().setRating((float)(book.getRating() / book.getReviewsCount()));
+
         //Check if the user already purchased the song if set the text to Play
         //If not to BUY $X
-        holder.getPrice().setText("$"+book.getPrice());
-
-        Iterator i = m_User.getMyAudioBooks().iterator();
-        while (i.hasNext())
+        if(m_User!=null)
         {
-            if (i.next().equals(songKey))
+            Iterator i = m_User.getMyAudioBooks().iterator();
+            while (i.hasNext())
             {
-                holder.getPrice().setTextColor(0xffaabb);
-                break;
+                if (i.next().equals(songKey))
+                {
+                    holder.getPrice().setTextColor(0xffaabb);
+                    break;
+                }
             }
         }
 
@@ -119,6 +118,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             ButterKnife.bind(this,itemView);
             this.m_Context = i_Context;
 
+
             m_cvViewBook.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -137,19 +137,18 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
 
 
 
-
-        public void populate(Context context, AudioBook i_audiobook)
+        public void populate(AudioBook i_audiobook)
         {
+            Log.e(TAG,"populate() >> ");
             itemView.setTag(i_audiobook);
             m_tvName.setText(i_audiobook.getName());
             m_tvGenre.setText(i_audiobook.getGenre());
             m_tvAuther.setText(i_audiobook.getAuthor());
-            m_tvReviewCount.setText(i_audiobook.getReviewsCount());
-            m_tvPrice.setText(i_audiobook.getPrice());
-            //m_cvViewBook
-            //m_rbRating
+            m_tvReviewCount.setText("(" + Integer.toString(i_audiobook.getReviewsCount()) + ")");
+            m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
 
-            Picasso.with(context)
+
+            Picasso.with(this.getContext())
                     .load(i_audiobook.getThumbImage())
                     .into(m_ivImage, new Callback()
                     {
@@ -158,7 +157,6 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
                         {
                             // put a progress bar
                             // visibility on
-
                         }
 
                         @Override
@@ -167,6 +165,9 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
 
                         }
                     });
+            Log.e(TAG,"populate() << ");
+            Log.e(TAG,"Hello World "+ i_audiobook.getThumbImage());
+
         }
 
         public TextView getGenre()
