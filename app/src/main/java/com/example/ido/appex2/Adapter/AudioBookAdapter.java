@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.User;
@@ -148,24 +150,35 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
 
 
-            Picasso.with(this.getContext())
+
+            Log.e(TAG, "updateProfilePicInTheActivityView() >>");
+            Glide.with(this.getContext())
                     .load(i_audiobook.getThumbImage())
-                    .into(m_ivImage, new Callback()
-                    {
-                        @Override
-                        public void onSuccess()
-                        {
-                            // put a progress bar
-                            // visibility on
-                        }
+                    .thumbnail(Glide.with(this.getContext()).load(R.drawable.sppiner_loading))
+                    .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
+                    .into(m_ivImage);
+            Log.e(TAG, "updateProfilePicInTheActivityView() <<");
 
-                        @Override
-                        public void onError()
-                        {
 
-                        }
-                    });
-            Log.e(TAG,"populate() << ");
+
+//            Picasso.with(this.getContext())
+//                    .load(i_audiobook.getThumbImage())
+//                    .into(m_ivImage, new Callback()
+//                    {
+//                        @Override
+//                        public void onSuccess()
+//                        {
+//                            // put a progress bar
+//                            // visibility on
+//                        }
+//
+//                        @Override
+//                        public void onError()
+//                        {
+//
+//                        }
+//                    });
+//            Log.e(TAG,"populate() << ");
             Log.e(TAG,"Hello World "+ i_audiobook.getThumbImage());
 
         }
