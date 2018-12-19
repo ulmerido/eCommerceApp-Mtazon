@@ -8,6 +8,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.ido.appex2.Adapter.AudioBookAdapter;
@@ -22,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -200,6 +204,68 @@ public class AllProductsActivity extends AppCompatActivity
         });
 
         Log.e(TAG, "getAllBooksUsingChildListenrs <<");
+
+    }
+
+
+    public void onSearchButtonClick(View v)
+    {
+
+        String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
+        Query searchBook;
+
+        Log.e(TAG, "onSearchButtonClick() >> searchString=" + searchString);
+
+        m_BooksList.clear();
+
+        if (searchString != null && !searchString.isEmpty())
+        {
+            searchBook = mAllBooksRef.orderByChild("name").startAt(searchString).endAt(searchString + "\uf8ff");
+        }
+        else
+        {
+            searchBook = mAllBooksRef.orderByChild("name");
+        }
+
+
+        searchBook.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot snapshot)
+            {
+
+                Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
+
+                updateSongsList(snapshot);
+
+                Log.e(TAG, "onDataChange(Query) <<");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+
+                Log.e(TAG, "onCancelled() >>" + databaseError.getMessage());
+            }
+
+        });
+        Log.e(TAG, "onSearchButtonClick() <<");
+    }
+
+
+    private void updateSongsList(DataSnapshot snapshot)
+    {
+
+
+        for (DataSnapshot dataSnapshot : snapshot.getChildren())
+        {
+            AudioBook book = dataSnapshot.getValue(AudioBook.class);
+            Log.e(TAG, "updateSongList() >> adding song: " + book.getName());
+            String key = dataSnapshot.getKey();
+            m_BooksList.add(new AudioBookWithKey(key, book));
+        }
+        mRecyclerView.getAdapter().notifyDataSetChanged();
 
     }
 }
