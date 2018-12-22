@@ -8,7 +8,7 @@
     android:layout_height="wrap_content">
 
     <FrameLayout
-        android:id="@+id/filter_bar_container"
+        android:id="@+id/details__search_bar_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -16,14 +16,13 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/my_recycler_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <android.support.v7.widget.CardView
-            android:id="@+id/filter_bar"
+            android:id="@+id/details_filter_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -35,7 +34,7 @@
                 android:gravity="center_vertical">
 
                 <EditText
-                    android:id="@+id/et_details_searchBook"
+                    android:id="@+id/details_searchBook"
                     android:layout_width="0dp"
                     android:layout_height="43dp"
                     android:layout_marginStart="8dp"
@@ -44,8 +43,6 @@
                     android:ems="10"
                     android:hint="Audio Book Name"
                     android:inputType="text|textPersonName"
-                    app:layout_constraintBottom_toTopOf="@+id/radioButtonByPrice"
-                    app:layout_constraintEnd_toStartOf="@+id/button_search"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +58,7 @@
                     android:text="Search"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_searchBook"
+                    app:layout_constraintStart_toEndOf="@+id/details_searchBook"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
@@ -100,7 +97,7 @@
                 android:layout_marginBottom="92dp"
                 android:text="[4.4]"
                 app:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="@+id/item_book_genre"
+                card_view:layout_constraintEnd_toEndOf="@+id/details_genre"
                 card_view:layout_constraintHorizontal_bias="0.0"
                 card_view:layout_constraintStart_toEndOf="@+id/details_book_image"
                 card_view:layout_constraintTop_toBottomOf="@+id/details_genre"
@@ -180,12 +177,12 @@
                 android:layout_marginBottom="124dp"
                 android:text="[13]"
                 app:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintStart_toEndOf="@+id/ratingstar_iv"
+                card_view:layout_constraintStart_toEndOf="@+id/details_ratingstar_iv"
                 card_view:layout_constraintTop_toBottomOf="@+id/details_genre"
                 card_view:layout_constraintVertical_bias="0.0" />
 
             <ImageView
-                android:id="@+id/ratingstar_iv"
+                android:id="@+id/details_ratingstar_iv"
                 android:layout_width="27dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="16dp"
@@ -237,7 +234,7 @@
 
 
     <FrameLayout
-        android:id="@+id/addReviewContainer"
+        android:id="@+id/details_addReviewContainer"
         android:layout_width="match_parent"
         android:layout_height="212dp"
         android:layout_marginBottom="8dp"
@@ -246,65 +243,56 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/my_recycler_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <android.support.v7.widget.CardView
-            android:id="@+id/addReviewContainer_bar"
+            android:id="@+id/details_addReviewContainer_bar"
             android:layout_width="376dp"
             android:layout_height="188dp"
             android:layout_marginTop="12dp"
-            android:clickable="true">
-
+            android:clickable="false">
             <android.support.constraint.ConstraintLayout
                 android:layout_width="361dp"
                 android:layout_height="match_parent"
-
                 android:gravity="center_vertical">
 
                 <EditText
-                    android:id="@+id/te_details_ReviewHeader"
+                    android:id="@+id/details_ReviewHeader"
                     android:layout_width="270dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
                     android:ems="10"
                     android:hint="Review Header"
-                    android:inputType="text|textPersonName"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/te_details_ReviewBody"
-                    android:layout_width="269dp"
+                    android:id="@+id/details_ReviewBody"
+                    android:layout_width="272dp"
                     android:layout_height="118dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="4dp"
                     android:layout_marginTop="52dp"
                     android:background="#f8f7e5"
-                    android:ems="10"
                     android:hint="Review Body"
-                    android:inputType="text|textPersonName"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    card_view:layout_constraintTop_toTopOf="@+id/te_details_ReviewHeader" />
+                    card_view:layout_constraintTop_toBottomOf="@+id/details_ReviewHeader" />
 
                 <Button
-                    android:id="@+id/details_btn_addAReview"
-                    android:layout_width="76dp"
-                    android:layout_height="74dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="8dp"
+                    android:id="@+id/details_AddNewReview"
+                    android:layout_width="87dp"
                     android:background="#fcad2e"
-                    android:onClick="onSearchButtonClick"
-                    android:text="Add Review"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    card_view:layout_constraintVertical_bias="0.543" />
+                    android:layout_height="69dp"
+                    android:layout_marginStart="272dp"
+                    android:layout_marginTop="68dp"
+                    android:text="Button"
+                    card_view:layout_constraintStart_toStartOf="@+id/details_ReviewBody"
+                    card_view:layout_constraintTop_toTopOf="@+id/details_ReviewHeader" />
+
 
             </android.support.constraint.ConstraintLayout>
 

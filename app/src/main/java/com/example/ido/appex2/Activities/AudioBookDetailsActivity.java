@@ -50,9 +50,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_book_details);
 
-            m_etSearch = findViewById(R.id.et_details_searchBook);
-            m_etReviewHeader = findViewById(R.id.te_details_ReviewHeader);
-            m_etReviewBody = findViewById(R.id.te_details_ReviewBody);
+            m_etSearch = findViewById(R.id.details_searchBook);
+            m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
+            m_etReviewBody = findViewById(R.id.details_ReviewBody);
 
             m_tvBookName = findViewById(R.id.details_book_name);
             m_tvBookAuther = findViewById(R.id.details_auther);
@@ -64,7 +64,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
 
             m_btnSearch = findViewById(R.id.details_button_search);
             m_btnPlay = findViewById(R.id.details_Play);
-            m_addReview = findViewById(R.id.details_btn_addAReview);
+            m_addReview = findViewById(R.id.details_AddNewReview);
             m_Buy = findViewById(R.id.details_buy);
 
         }
