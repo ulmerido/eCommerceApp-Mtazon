@@ -54,6 +54,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
 
         AudioBook book = m_BooksList.get(position).getAudioBook();
         String songKey = m_BooksList.get(position).getKey();
+        //holder.getRating().setRating(book.getRating());
         holder.populate(book);
 
 
@@ -100,8 +101,8 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
         @BindView(R.id.item_book_price)
         public TextView m_tvPrice;
 
-        @BindView(R.id.item_book_rating)
-        public RatingBar m_rbRating;
+        @BindView(R.id.rating_review_tv)
+        public TextView m_tvRating;
 
         @BindView(R.id.item_book_review_count)
         public TextView m_tvReviewCount;
@@ -148,6 +149,8 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             m_tvAuther.setText(i_audiobook.getAuthor());
             m_tvReviewCount.setText("(" + Integer.toString(i_audiobook.getReviewsCount()) + ")");
             m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
+           
+
 
 
 
@@ -203,9 +206,9 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             return m_tvPrice;
         }
 
-        public RatingBar getRating()
+        public TextView getRating()
         {
-            return m_rbRating;
+            return m_tvRating;
         }
 
         public TextView getReviewCount()
@@ -227,8 +230,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
         {
             return m_Context;
         }
+
+
     }
-
-
-
 }

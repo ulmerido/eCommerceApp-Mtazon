@@ -212,19 +212,21 @@ public class AllProductsActivity extends AppCompatActivity
     {
 
         String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
+        String orderBy = ((RadioButton) findViewById(R.id.radioButtonByReviews)).isChecked() ? "reviewCount" : "price";
         Query searchBook;
 
-        Log.e(TAG, "onSearchButtonClick() >> searchString=" + searchString);
+        Log.e(TAG, "onSearchButtonClick() >> searchString=" + searchString + ",orderBy=" + orderBy);
 
         m_BooksList.clear();
 
         if (searchString != null && !searchString.isEmpty())
         {
             searchBook = mAllBooksRef.orderByChild("name").startAt(searchString).endAt(searchString + "\uf8ff");
+
         }
         else
         {
-            searchBook = mAllBooksRef.orderByChild("name");
+            searchBook = mAllBooksRef.orderByChild(orderBy);
         }
 
 
@@ -267,5 +269,18 @@ public class AllProductsActivity extends AppCompatActivity
         }
         mRecyclerView.getAdapter().notifyDataSetChanged();
 
+    }
+
+    public void onRadioButtonCLick(View v)
+    {
+        switch (v.getId())
+        {
+            case R.id.radioButtonByPrice:
+                ((RadioButton) findViewById(R.id.radioButtonByReviews)).setChecked(false);
+                break;
+            case R.id.radioButtonByReviews:
+                ((RadioButton) findViewById(R.id.radioButtonByPrice)).setChecked(false);
+                break;
+        }
     }
 }
