@@ -1,9 +1,8 @@
 package com.example.ido.appex2.Activities;
 
-import android.support.v4.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.example.ido.appex2.Adapter.AudioBookAdapter;
 import com.example.ido.appex2.Adapter.AudioBookWithKey;
@@ -34,16 +32,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AllProductsActivity extends AppCompatActivity
+
+public class AllProductsActivity extends AppCompatActivity  implements Interface_OnClickAudioBookCard
 {
     public static final String TAG = "AllProductsActivity";
     private AudioBookAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
     @BindView(R.id.my_recycler_view)
     public RecyclerView mRecyclerView;
-
-
     private DatabaseReference mAllBooksRef;
     private DatabaseReference mMyUserRef;
     private List<AudioBookWithKey> m_BooksList = new ArrayList<>();;
@@ -59,62 +55,51 @@ public class AllProductsActivity extends AppCompatActivity
         setContentView(R.layout.activity_all_products);
 
 
-        try
+        ButterKnife.bind(this);
+        mRecyclerView = findViewById(R.id.my_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (fbUser != null)
         {
-
-            ButterKnife.bind(this);
-            mRecyclerView = findViewById(R.id.my_recycler_view);
-            mRecyclerView.setHasFixedSize(true);
-            mLayoutManager = new LinearLayoutManager(this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-
-            FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
-
-            if (fbUser != null)
+            mMyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + fbUser.getUid());
+            mMyUserRef.addValueEventListener(new ValueEventListener()
             {
-                mMyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + fbUser.getUid());
-                mMyUserRef.addValueEventListener(new ValueEventListener()
+                @Override
+                public void onDataChange(DataSnapshot snapshot)
                 {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot)
-                    {
 
-                        Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
-                        mUser = snapshot.getValue(User.class);
-                        getAllBooks();
-                        Log.e(TAG, "onDataChange(User) <<");
+                    Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
+                    mUser = snapshot.getValue(User.class);
+                    getAllBooks();
+                    Log.e(TAG, "onDataChange(User) <<");
+                }
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError)
-                    {
-                        Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
-                    }
-                });
-
-                Log.e(TAG, "onCreate() <<");
-            }
-            else
-            {
-                getAllBooks();
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError)
+                {
+                    Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
+                }
+            });
+            Log.e(TAG, "onCreate() <<");
         }
-        catch(Exception e)
+        else
         {
-            Log.e(TAG, "Fuck: ) >>" + e.toString());
-            Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_LONG).show();
+            getAllBooks();
         }
+
     }
+
 
     private void getAllBooks()
     {
         Log.e(TAG, "getAllBooks() >>");
 
         m_BooksList.clear();
-        mAdapter = new AudioBookAdapter(m_BooksList, mUser);
+        mAdapter = new AudioBookAdapter(m_BooksList, mUser,this);
         mRecyclerView.setAdapter(mAdapter);
         getAllBooksUsingChildListenrs();
         Log.e(TAG, "getAllBooks <<");
@@ -201,7 +186,10 @@ public class AllProductsActivity extends AppCompatActivity
             {
                 Log.e(TAG, "onCancelled(Songs) >>" + databaseError.getMessage());
             }
+
         });
+
+
 
         Log.e(TAG, "getAllBooksUsingChildListenrs <<");
 
@@ -258,8 +246,6 @@ public class AllProductsActivity extends AppCompatActivity
 
     private void updateSongsList(DataSnapshot snapshot)
     {
-
-
         for (DataSnapshot dataSnapshot : snapshot.getChildren())
         {
             AudioBook book = dataSnapshot.getValue(AudioBook.class);
@@ -283,4 +269,20 @@ public class AllProductsActivity extends AppCompatActivity
                 break;
         }
     }
+
+    @Override
+    public void onAudioBookCardClick(AudioBookWithKey i_book)
+    {
+        Log.e(TAG, "onAudioBookCardClick >>");
+        Intent intent = new Intent(this, AudioBookDetailsActivity.class);
+        intent.putExtra("Key", i_book.getKey());
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("AudioBook", i_book.getAudioBook());
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
+        Log.e(TAG, "onAudioBookCardClick <<");
+    }
+
+
 }

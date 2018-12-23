@@ -19,7 +19,7 @@ android {
     }
 }
 
-def BUTTER_KNIFE_VERSION="8.5.1"
+def BUTTER_KNIFE_VERSION = "8.5.1"
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible

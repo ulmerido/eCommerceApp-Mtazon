@@ -20,18 +20,21 @@ import java.util.Iterator;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.example.ido.appex2.Activities.*;
 
 public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.AudioBookHolder>
 {
     private final String           TAG = "AudioBookAdapter";
     private List<AudioBookWithKey> m_BooksList;
     private User                   m_User;
+    private int m_possition;
     private LayoutInflater         m_inflater;
-
-    public AudioBookAdapter(List<AudioBookWithKey> i_Books, User i_User)
+    public Interface_OnClickAudioBookCard  m_AudioBookCardClick;
+    public AudioBookAdapter(List<AudioBookWithKey> i_Books, User i_User,Interface_OnClickAudioBookCard i_AudioBookCardClick)
     {
         this.m_BooksList = i_Books;
         this.m_User = i_User;
+        this.m_AudioBookCardClick = i_AudioBookCardClick;
     }
 
     @Override
@@ -46,23 +49,30 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
         return new AudioBookHolder(parent.getContext(), itemView);
     }
 
+
+
     @Override
-    public void onBindViewHolder(AudioBookHolder holder, int position)
+    public void onBindViewHolder(final AudioBookHolder holder, int position)
     {
-
         Log.e(TAG,"onBindViewHolder() >> " + position);
-
+        m_possition =position;
+        AudioBookWithKey bookWithKey = m_BooksList.get(position);
         AudioBook book = m_BooksList.get(position).getAudioBook();
         String songKey = m_BooksList.get(position).getKey();
         //holder.getRating().setRating(book.getRating());
         holder.populate(book);
 
+       holder.m_cvViewBook.setOnClickListener(new View.OnClickListener()
+       {
+           @Override
+           public void onClick(View v)
+           {
+               AudioBookWithKey bookWithKey = m_BooksList.get(m_possition);
+               m_AudioBookCardClick.onAudioBookCardClick(bookWithKey);
+           }
+       });
 
 
-        //holder.getRating().setRating((float)(book.getRating() / book.getReviewsCount()));
-
-        //Check if the user already purchased the song if set the text to Play
-        //If not to BUY $X
         if(m_User!=null)
         {
             Iterator i = m_User.getMyAudioBooks().iterator();
@@ -149,8 +159,6 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             m_tvAuther.setText(i_audiobook.getAuthor());
             m_tvReviewCount.setText("(" + Integer.toString(i_audiobook.getReviewsCount()) + ")");
             m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
-           
-
 
 
 
@@ -161,27 +169,6 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
                     .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
                     .into(m_ivImage);
             Log.e(TAG, "updateProfilePicInTheActivityView() <<");
-
-
-
-//            Picasso.with(this.getContext())
-//                    .load(i_audiobook.getThumbImage())
-//                    .into(m_ivImage, new Callback()
-//                    {
-//                        @Override
-//                        public void onSuccess()
-//                        {
-//                            // put a progress bar
-//                            // visibility on
-//                        }
-//
-//                        @Override
-//                        public void onError()
-//                        {
-//
-//                        }
-//                    });
-//            Log.e(TAG,"populate() << ");
             Log.e(TAG,"Hello World "+ i_audiobook.getThumbImage());
 
         }
