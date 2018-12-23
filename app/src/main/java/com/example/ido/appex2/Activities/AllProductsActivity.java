@@ -8,9 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ido.appex2.Adapter.AudioBookAdapter;
@@ -47,10 +49,30 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private List<AudioBookWithKey> m_BooksList = new ArrayList<>();
     private User mUser;
 
+    /// xml buttons
+    private Button m_userInfo_btn;
+    private Button m_product_btn;
+    private EditText m_et_searchBook;
+    private Button m_button_search;
+    private RadioButton m_radioButtonByPrice;
+    private RadioButton m_radioButtonByReviews;
+    private Spinner m_search_spinner;
+    private TextView m_orderby_label;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
+        m_userInfo_btn = (Button)findViewById(R.id.userInfo_btn);
+        m_product_btn = (Button)findViewById(R.id.product_btn);
+        m_et_searchBook =(EditText)findViewById(R.id.et_searchBook);
+        m_button_search =(Button)findViewById(R.id.button_search);
+        m_radioButtonByPrice =(RadioButton)findViewById(R.id.radioButtonByPrice);
+        m_radioButtonByReviews = (RadioButton)findViewById(R.id.radioButtonByRating);
+        m_search_spinner =(Spinner)findViewById(R.id.search_spinner);
+        m_orderby_label =(TextView )findViewById(R.id.orderby_label);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_products);
         ButterKnife.bind(this);
@@ -194,37 +216,22 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     }
 
 
+
+
+
+
+
+
     public void onSearchButtonClick(View v)
     {
-        String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
-        String orderBy = ((RadioButton) findViewById(R.id.radioButtonByReviews)).isChecked() ? "reviewCount" : "price";
+       // String searchString = mSearch_text.getText().toString();
+        String orderBy = ((RadioButton) findViewById(R.id.radioButtonByRating)).isChecked() ? "rating" : "price";
         Query searchBook;
-        Spinner mySpinner = (Spinner) findViewById(R.id.search_spinner);
-        String spiner_text = mySpinner.getSelectedItem().toString();
-
         //Toast.makeText(AllProductsActivity.this, spiner_text, Toast.LENGTH_SHORT).show();
-
-
-        Log.e(TAG, "onSearchButtonClick() >> searchString=" + searchString + ",orderBy=" + orderBy);
-
         m_BooksList.clear();
 
-        if (searchString != null && !searchString.isEmpty())
-        {
-            if(spiner_text.equals("Book name"))
-            {
-                searchBook = mAllBooksRef.orderByChild("name").startAt(searchString).endAt(searchString + "\uf8ff");
-            }
-            else // when we search by author
-            {
-                searchBook = mAllBooksRef.orderByChild("author").startAt(searchString).endAt(searchString + "\uf8ff");
-            }
-        }
-        else
-        {
-            searchBook = mAllBooksRef.orderByChild(orderBy);
-        }
 
+        searchBook = mAllBooksRef.orderByChild(orderBy);
         searchBook.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -253,15 +260,39 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     private void updateSongsList(DataSnapshot snapshot)
     {
-        for (DataSnapshot dataSnapshot : snapshot.getChildren())
-        {
-            AudioBook book = dataSnapshot.getValue(AudioBook.class);
-            Log.e(TAG, "updateSongList() >> adding song: " + book.getName());
-            String key = dataSnapshot.getKey();
-            m_BooksList.add(new AudioBookWithKey(key, book));
-        }
-        mRecyclerView.getAdapter().notifyDataSetChanged();
 
+        boolean isAutor = false;
+        Spinner mySpinner = (Spinner) findViewById(R.id.search_spinner);
+        String spiner_text = mySpinner.getSelectedItem().toString();
+        String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
+
+        if (searchString != null && !searchString.isEmpty())
+        {
+            if (spiner_text.equals("Author"))
+            {
+                isAutor = true;
+            }
+            for (DataSnapshot dataSnapshot : snapshot.getChildren())
+            {
+                AudioBook book = dataSnapshot.getValue(AudioBook.class);
+                Log.e(TAG, "updateSongList() >> adding song: " + book.getName());
+                String key = dataSnapshot.getKey();
+                if (isAutor)
+                {
+                    if (book.getAuthor().startsWith(searchString))
+                    {
+                        m_BooksList.add(new AudioBookWithKey(key, book));
+                    }
+                } else
+                {
+                    if (book.getName().startsWith(searchString))
+                    {
+                        m_BooksList.add(new AudioBookWithKey(key, book));
+                    }
+                }
+            }
+            mRecyclerView.getAdapter().notifyDataSetChanged();
+        }
     }
 
     public void onRadioButtonCLick(View v)
@@ -269,9 +300,9 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         switch (v.getId())
         {
             case R.id.radioButtonByPrice:
-                ((RadioButton) findViewById(R.id.radioButtonByReviews)).setChecked(false);
+                ((RadioButton) findViewById(R.id.radioButtonByRating)).setChecked(false);
                 break;
-            case R.id.radioButtonByReviews:
+            case R.id.radioButtonByRating:
                 ((RadioButton) findViewById(R.id.radioButtonByPrice)).setChecked(false);
                 break;
         }
