@@ -164,6 +164,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             m_tvAuther.setText(i_audiobook.getAuthor());
             m_tvReviewCount.setText("(" + Integer.toString(i_audiobook.getReviewsCount()) + ")");
             m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
+            m_tvRating.setText("[" + Double.toString(i_audiobook.getRating()) + "]");
 
 
 

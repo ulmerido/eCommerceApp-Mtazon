@@ -18,7 +18,7 @@ public class AudioBook implements Parcelable {
     private String file;
     private String thumbImage;
     private int price;
-    private int rating;
+    private double rating;
     private int reviewsCount;
 
     private Map<String,Review> reviews;
@@ -84,11 +84,11 @@ public class AudioBook implements Parcelable {
         this.price = price;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 
@@ -122,7 +122,7 @@ public class AudioBook implements Parcelable {
         parcel.writeString(file);
         parcel.writeString(thumbImage);
         parcel.writeInt(price);
-        parcel.writeInt(rating);
+        parcel.writeDouble(rating);
         parcel.writeInt(reviewsCount);
     }
 
@@ -133,7 +133,7 @@ public class AudioBook implements Parcelable {
         this.file = in.readString();
         this.thumbImage = in.readString();
         this.price = in.readInt();
-        this.rating = in.readInt();
+        this.rating = in.readDouble();
         this.reviewsCount = in.readInt();
     }
 

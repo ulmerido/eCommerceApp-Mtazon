@@ -84,7 +84,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_AudioBook = getIntent().getParcelableExtra("AudioBook");
 
 
-        m_etSearch = findViewById(R.id.details_searchBook);
+        //m_etSearch = findViewById(R.id.details_searchBook);
         m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
         m_etReviewBody = findViewById(R.id.details_ReviewBody);
 
@@ -96,7 +96,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_tvBookReviewAvg = findViewById(R.id.details_ReviewAvg);
         m_tvPlaySample = findViewById(R.id.details_playSampleText);
         m_ivBookImage =findViewById(R.id.details_book_image);
-        m_btnSearch = findViewById(R.id.details_button_search);
+        //m_btnSearch = findViewById(R.id.details_button_search);
         m_btnPlay = findViewById(R.id.details_Play);
         m_addReview = findViewById(R.id.details_AddNewReview);
         m_Buy = findViewById(R.id.details_buy);
@@ -143,7 +143,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_tvBookAuther.setText(m_AudioBook.getAuthor());
         m_tvBookReviewCount.setText("(" + Integer.toString(m_AudioBook.getReviewsCount()) + ")");
         m_tvBookPrice.setText(Integer.toString(m_AudioBook.getPrice()) +"$");
-        m_tvBookReviewAvg.setText("[" + Integer.toString(m_AudioBook.getRating()) + "]");
+        m_tvBookReviewAvg.setText("[" + Double.toString(m_AudioBook.getRating()) + "]");
 
 
 
