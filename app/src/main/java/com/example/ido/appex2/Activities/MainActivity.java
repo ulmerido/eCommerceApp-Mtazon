@@ -38,8 +38,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
@@ -293,7 +296,9 @@ public class MainActivity extends AppCompatActivity {
                 if (isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
                     Intent intent_AllProductsActivity = new Intent(getApplicationContext(), AllProductsActivity.class);
                     Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<");
-                    createNewUserFacebookAndGoogle();
+
+                    checkIfUserExists();
+                    //createNewUserFacebookAndGoogle();
                     //createNewBook();
                     startActivity(intent_AllProductsActivity);
                     slideUpToNewActivity();
@@ -307,6 +312,30 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    private void checkIfUserExists()
+    {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference uidRef = rootRef.child("Users").child(uid);
+        Log.e(TAG, "********** uidRef" + uidRef.toString());
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()) {
+                    Log.e(TAG, "********** uidRef Not exists <<----" );
+                    createNewUserFacebookAndGoogle();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        };
+        uidRef.addListenerForSingleValueEvent(eventListener);
+    }
+
+
+
 
     private void googleSignInBuilder() {
         Log.e(TAG, "googleSignInBuilder >>");

@@ -38,6 +38,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AudioBookDetailsActivity extends AppCompatActivity
@@ -94,16 +95,24 @@ public class AudioBookDetailsActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot snapshot)
             {
-
                 Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
                 Log.e(TAG, "onDataChange(User) >> " + snapshot.getValue(User.class).toString());
                 Toast.makeText(getApplicationContext(), "Welcome : " +
                                 snapshot.getValue(User.class).toString()
                         , Toast.LENGTH_SHORT).show();
                 m_User = snapshot.getValue(User.class);
-                Log.e(TAG, "onDataChange(User) After--->>> "
-                        + m_User.getFullName());
+                Log.e(TAG, "onDataChange(User) After--->>> " + m_User.getFullName());
                 Log.e(TAG, "onDataChange(User) <<");
+
+                m_Buy.setText("BUY $" + m_AudioBook.getPrice());
+                Iterator i = m_User.getMyAudioBooks().iterator();
+                while (i.hasNext()) {
+                    if (i.next().equals(m_Key)) {
+                        m_AudioBookWasPurchased = true;
+                        m_Buy.setText("PLAY");
+                        break;
+                    }
+                }
             }
 
             @Override
@@ -135,15 +144,39 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_btBack = findViewById(R.id.btBack);
         populate();
 
-        m_btBack.setOnClickListener(new View.OnClickListener()
-        {
+        m_Buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
+
+                if (m_AudioBookWasPurchased) {
+                    Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
+                    //User purchased the song so he can play it
+                    //playCurrentSong(song.getFile());
+
+                } else {
+                    //Purchase the song.
+                    Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
+                    m_User.getMyAudioBooks().add(m_Key);
+                    m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
+                    m_AudioBookWasPurchased = true;
+                    m_Buy.setText("PLAY");
+                }
+                Log.e(TAG, "playSong.onClick() <<");
+            }
+        });
+
+        m_btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 onBackPressed();
             }
         });
-       m_addReview.setOnClickListener(new View.OnClickListener()
+        m_addReview.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -161,6 +194,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
             }
         });
     }
+
 
     @Override
     public void onBackPressed()
