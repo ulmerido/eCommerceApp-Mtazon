@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.ido.appex2.Adapter.AudioBookAdapter;
 import com.example.ido.appex2.Adapter.AudioBookWithKey;
@@ -46,15 +48,11 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private User mUser;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_products);
-
-
         ButterKnife.bind(this);
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -198,10 +196,14 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     public void onSearchButtonClick(View v)
     {
-
         String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
         String orderBy = ((RadioButton) findViewById(R.id.radioButtonByReviews)).isChecked() ? "reviewCount" : "price";
         Query searchBook;
+        Spinner mySpinner = (Spinner) findViewById(R.id.search_spinner);
+        String spiner_text = mySpinner.getSelectedItem().toString();
+
+        //Toast.makeText(AllProductsActivity.this, spiner_text, Toast.LENGTH_SHORT).show();
+
 
         Log.e(TAG, "onSearchButtonClick() >> searchString=" + searchString + ",orderBy=" + orderBy);
 
@@ -209,14 +211,19 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
         if (searchString != null && !searchString.isEmpty())
         {
-            searchBook = mAllBooksRef.orderByChild("name").startAt(searchString).endAt(searchString + "\uf8ff");
-
+            if(spiner_text.equals("Book name"))
+            {
+                searchBook = mAllBooksRef.orderByChild("name").startAt(searchString).endAt(searchString + "\uf8ff");
+            }
+            else // when we search by author
+            {
+                searchBook = mAllBooksRef.orderByChild("author").startAt(searchString).endAt(searchString + "\uf8ff");
+            }
         }
         else
         {
             searchBook = mAllBooksRef.orderByChild(orderBy);
         }
-
 
         searchBook.addValueEventListener(new ValueEventListener()
         {
@@ -284,10 +291,5 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         startActivity(intent);
         //finish();
         Log.e(TAG, "onAudioBookCardClick <<");
-
-
-
     }
-
-
 }

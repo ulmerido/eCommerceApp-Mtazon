@@ -3,5 +3,12 @@
     <string name="facebook_app_id">259405121418679</string>
     <string name="fb_login_protocol_scheme">fb259405121418679</string>
 
+    <string name="searchOption">"Choose a search option"</string>
+
+    <string-array name="searchBy">
+        <item>Book name</item>
+        <item>Author</item>
+    </string-array>
+
 
 </resources>

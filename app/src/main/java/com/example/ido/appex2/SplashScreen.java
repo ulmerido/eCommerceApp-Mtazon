@@ -29,7 +29,7 @@ public class SplashScreen extends AppCompatActivity
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this)
                 .withFullScreen()
                 .withTargetActivity(AllProductsActivity.class)
-                .withSplashTimeOut(3000)
+                .withSplashTimeOut(100)
                 .withBackgroundResource(R.drawable.background6)
                 .withLogo(R.drawable.loading_logo_android)
                 .withHeaderText("Welcome to our App: Ex02")

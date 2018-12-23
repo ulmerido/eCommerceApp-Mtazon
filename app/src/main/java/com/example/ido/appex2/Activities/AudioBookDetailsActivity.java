@@ -145,9 +145,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_tvBookPrice.setText(Integer.toString(m_AudioBook.getPrice()) +"$");
         m_tvBookReviewAvg.setText("[" + Double.toString(m_AudioBook.getRating()) + "]");
 
-
-
-
         Log.e(TAG, "updateProfilePicInTheActivityView() >>");
 
 

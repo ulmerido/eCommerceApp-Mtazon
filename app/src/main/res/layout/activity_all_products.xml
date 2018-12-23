@@ -16,6 +16,7 @@
         android:paddingRight="12dp"
         android:paddingBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/my_recycler_view"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,67 +32,123 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical">
-
-                <EditText
-                    android:id="@+id/et_searchBook"
-                    android:layout_width="0dp"
-                    android:layout_height="43dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="7dp"
-                    android:ems="10"
-                    android:hint="Song Name"
-                    android:inputType="text|textPersonName"
-                    app:layout_constraintBottom_toTopOf="@+id/radioButtonByPrice"
-                    app:layout_constraintEnd_toStartOf="@+id/button_search"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toTopOf="@+id/button_search"
+                app:layout_constraintTop_toTopOf="@+id/button_search">
 
                 <Button
-                    android:id="@+id/button_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:id="@+id/userInfo_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
 
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
                     android:onClick="onSearchButtonClick"
-                    android:text="Search"
+                    android:text="U"
+                    android:textSize="8sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/et_searchBook"
+                    app:layout_constraintHorizontal_bias="0.695"
+                    app:layout_constraintStart_toEndOf="@+id/product_btn"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
+                <Button
+                    android:id="@+id/product_btn"
+                    android:layout_width="47dp"
+                    android:layout_height="34dp"
+
+                    android:layout_marginBottom="8dp"
+                    android:onClick="onSearchButtonClick"
+                    android:text="P"
+                    android:textSize="8sp"
+                    app:layout_constraintBottom_toTopOf="@+id/search_spinner"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.472"
+                    app:layout_constraintStart_toEndOf="@+id/et_searchBook"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.048" />
+
+                <EditText
+                    android:id="@+id/et_searchBook"
+                    android:layout_width="159dp"
+                    android:layout_height="37dp"
+                    android:layout_marginEnd="14dp"
+                    android:ems="10"
+                    android:hint="Type for search"
+                    android:inputType="text|textPersonName"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toTopOf="@+id/radioButtonByPrice"
+                    app:layout_constraintEnd_toStartOf="@+id/search_spinner"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <Button
+                    android:id="@+id/button_search"
+                    android:layout_width="33dp"
+                    android:layout_height="50dp"
+
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:onClick="onSearchButtonClick"
+                    android:text="Search"
+                    android:textSize="5sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/search_spinner"
+                    app:layout_constraintTop_toBottomOf="@+id/userInfo_btn" />
+
                 <RadioButton
                     android:id="@+id/radioButtonByPrice"
-                    android:layout_width="152dp"
-                    android:layout_height="0dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_width="77dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="104dp"
+                    android:layout_marginBottom="8dp"
                     android:buttonTint="@color/radioBoxColor"
                     android:checked="true"
-                    android:text="Order by price"
+                    android:onClick="onRadioButtonCLick"
+                    android:text="price"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    android:onClick="onRadioButtonCLick"/>
+                    app:layout_constraintLeft_toLeftOf="parent" />
 
                 <RadioButton
                     android:id="@+id/radioButtonByReviews"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="88dp"
+                    android:layout_height="22dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="8dp"
                     android:buttonTint="@color/radioBoxColor"
-                    android:text="Order by reviews  "
+                    android:onClick="onRadioButtonCLick"
+                    android:text="reviews  "
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/radioButtonByPrice"
-                    android:onClick="onRadioButtonCLick"/>
+                    app:layout_constraintHorizontal_bias="0.738"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Spinner
+                    android:id="@+id/search_spinner"
+                    android:layout_width="152dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginBottom="36dp"
+                    android:entries="@array/searchBy"
+                    android:prompt="@string/searchOption"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <TextView
+                    android:id="@+id/orderby_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Order By:"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.864" />
 
             </android.support.constraint.ConstraintLayout>
 
