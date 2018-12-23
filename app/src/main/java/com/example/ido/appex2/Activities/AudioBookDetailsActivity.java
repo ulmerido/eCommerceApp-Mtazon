@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ido.appex2.Adapter.AudioBookWithKey;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.Review;
@@ -25,9 +26,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
@@ -45,6 +48,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
     private AudioBook m_AudioBook;
     private String m_Key;
     private User m_User;
+    private FirebaseAuth m_Auth;
     private DatabaseReference m_MyUserRef;
 
     private EditText m_etSearch;
@@ -61,15 +65,15 @@ public class AudioBookDetailsActivity extends AppCompatActivity
 
     private ImageView m_ivBookImage;
     private ImageView m_ivRatingImage;
-    private Button    m_btnSearch;
-    private Button    m_btnPlay;
-    private Button    m_addReview;
-    private Button    m_Buy;
-    private Button    m_btBack;
+    private Button m_btnSearch;
+    private Button m_btnPlay;
+    private Button m_addReview;
+    private Button m_Buy;
+    private Button m_btBack;
 
     private DatabaseReference m_AudioBookReviewsRef;
 
-    private List<Review> reviewsList =  new ArrayList<>();
+    private List<Review> reviewsList = new ArrayList<>();
 
     private boolean m_AudioBookWasPurchased;
 
@@ -78,6 +82,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
+        m_Auth = FirebaseAuth.getInstance();
         FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
         //m_User = getIntent().getParcelableExtra("User");
@@ -114,7 +119,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         //m_etSearch = findViewById(R.id.details_searchBook);
         m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
         m_etReviewBody = findViewById(R.id.details_ReviewBody);
-
+        m_ivRatingImage =findViewById(R.id.details_ratingstar_iv);
         m_tvBookName = findViewById(R.id.details_book_name);
         m_tvBookAuther = findViewById(R.id.details_auther);
         m_tvBookGenre = findViewById(R.id.details_genre);
@@ -122,7 +127,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_tvBookReviewCount = findViewById(R.id.details_ReviewCount);
         m_tvBookReviewAvg = findViewById(R.id.details_ReviewAvg);
         m_tvPlaySample = findViewById(R.id.details_playSampleText);
-        m_ivBookImage =findViewById(R.id.details_book_image);
+        m_ivBookImage = findViewById(R.id.details_book_image);
         //m_btnSearch = findViewById(R.id.details_button_search);
         m_btnPlay = findViewById(R.id.details_Play);
         m_addReview = findViewById(R.id.details_AddNewReview);
@@ -130,36 +135,38 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_btBack = findViewById(R.id.btBack);
         populate();
 
-        m_btBack.setOnClickListener(new View.OnClickListener() {
+        m_btBack.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 onBackPressed();
             }
         });
-//        try
-//        {
-//           // Intent intent =
-//            Bundle bundle = getIntent().getParcelableExtra("Bundle");
-//            if (bundle != null)
-//            {
-//                m_User = bundle.getParcelable("User");
-//                Log.e(TAG, " User : " + m_User.getFullName());
-//            }
-//
-//            //populate();
-//        }
-//        catch (Exception e)
-//        {
-//            Log.e(TAG,e.getMessage());
-//       }
+       m_addReview.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickAddReview();
+            }
+        });
 
+        m_ivRatingImage.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickRating();
+            }
+        });
     }
 
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
         super.onBackPressed();
     }
-
 
 
     private void populate()
@@ -169,7 +176,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_tvBookGenre.setText(m_AudioBook.getGenre());
         m_tvBookAuther.setText(m_AudioBook.getAuthor());
         m_tvBookReviewCount.setText("(" + Integer.toString(m_AudioBook.getReviewsCount()) + ")");
-        m_tvBookPrice.setText(Integer.toString(m_AudioBook.getPrice()) +"$");
+        m_tvBookPrice.setText(Integer.toString(m_AudioBook.getPrice()) + "$");
         m_tvBookReviewAvg.setText("[" + Double.toString(m_AudioBook.getRating()) + "]");
 
         Log.e(TAG, "updateProfilePicInTheActivityView() >>");
@@ -183,9 +190,47 @@ public class AudioBookDetailsActivity extends AppCompatActivity
 
 
         Log.e(TAG, "updateProfilePicInTheActivityView() <<");
-        Log.e(TAG,"Hello World "+ m_AudioBook.getThumbImage());
+        Log.e(TAG, "Hello World " + m_AudioBook.getThumbImage());
 
         Log.e(TAG, "populate<<");
 
+    }
+
+
+    public void onClickAddReview()
+    {
+        Log.e(TAG, "onClickAddReview>>");
+
+        String header = m_etReviewHeader.getText().toString();
+        String body = m_etReviewBody.getText().toString();
+        FirebaseUser user = m_Auth.getCurrentUser();
+        int rating = 3;
+
+        if (checkReviewParams(header, body, rating))
+        {
+
+            Review review = new Review(header, body, rating, user.getEmail().toString(), user.getUid(),m_Key );
+            //DatabaseReference reviewsRef = ref.child("Reviews");
+            DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference();
+            reviewRef.child("Review").push().setValue(review);
+        }
+        Log.e(TAG, "onClickAddReview<<");
+
+    }
+
+    public boolean checkReviewParams(String i_Header, String i_Body, int rating)
+    {
+        return true;
+    }
+
+    public void onClickRating()
+    {
+
+       Log.e(TAG, "onClickRating >> " );
+        Intent intent = new Intent(this, AllReviewsActivity.class);
+        intent.putExtra("Key", m_Key);
+        startActivity(intent);
+        //finish();
+        Log.e(TAG, "onClickRating <<");
     }
 }

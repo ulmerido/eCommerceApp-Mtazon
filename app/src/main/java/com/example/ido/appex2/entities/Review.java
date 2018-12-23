@@ -1,47 +1,89 @@
 package com.example.ido.appex2.entities;
 
-import com.google.firebase.database.Exclude;
-import com.google.firebase.database.IgnoreExtraProperties;
+public class Review
+{
 
-import java.util.HashMap;
-import java.util.Map;
+    private String m_ReviewHedaer;
+    private String m_ReviewBody;
+    private int m_Rating;
+    private String m_UserEmail;
+    private String m_UserID;
+    private String m_BookID;
 
-@IgnoreExtraProperties
-public class Review {
-    private String userReview;
-    private int userRating;
-    private String userEmail;
-
-    public Review(String userReview, int userRating, String userEmail) {
-        this.userReview = userReview;
-        this.userRating = userRating;
-        this.userEmail = userEmail;
+    public String getBookID()
+    {
+        return m_BookID;
     }
 
-    public Review() {
+    public void setBookID(String bookID)
+    {
+        m_BookID = bookID;
     }
 
-    public String getUserReview() {
-        return userReview;
+    public Review(String i_ReviewHedaer, String i_ReviewBody, int i_Rating, String i_UserEmail, String i_UserKey, String i_BookID)
+    {
+        this.m_ReviewHedaer = i_ReviewHedaer;
+        this.m_ReviewBody = i_ReviewBody;
+        this.m_Rating = i_Rating;
+        this.m_UserEmail = i_UserEmail;
+        this.m_UserID = i_UserKey;
+        this.m_BookID =i_BookID;
     }
 
-    public int getUserRating() {
-        return userRating;
+    public Review()
+    {
+
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getReviewHedaer()
+    {
+        return m_ReviewHedaer;
     }
 
+    public void setReviewHedaer(String i_ReviewHedaer)
+    {
+        this.m_ReviewHedaer = i_ReviewHedaer;
+    }
 
-    @Exclude
-    public Map<String, Object> toMap() {
+    public String getReviewBody()
+    {
+        return m_ReviewBody;
+    }
 
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("userReview", userReview);
-        result.put("userRating", userRating);
-        result.put("userEmail", userEmail);
-        return result;
+    public void setReviewBody(String i_ReviewBody)
+    {
+        this.m_ReviewBody = i_ReviewBody;
+    }
+
+    public int getRating()
+    {
+        return m_Rating;
+    }
+
+    public void setRating(int i_Rating)
+    {
+        this.m_Rating = i_Rating;
+    }
+
+    public String getUserEmail()
+    {
+        return m_UserEmail;
+    }
+
+    public void setUserEmail(String i_UserEmail)
+    {
+        this.m_UserEmail = i_UserEmail;
+    }
+
+    public String getUserKey()
+    {
+        return m_UserID;
+    }
+
+    public void setUserKey(String i_UserKey)
+    {
+        this.m_UserID = i_UserKey;
     }
 
 }
+

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.ido.appex2.Activities.AllProductsActivity;
+import com.example.ido.appex2.Activities.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import gr.net.maroulis.library.EasySplashScreen;
@@ -28,8 +29,8 @@ public class SplashScreen extends AppCompatActivity
         super.onCreate(savedInstanceState);
         EasySplashScreen config = new EasySplashScreen(SplashScreen.this)
                 .withFullScreen()
-                .withTargetActivity(AllProductsActivity.class)
-                .withSplashTimeOut(100)
+                .withTargetActivity(MainActivity.class)
+                .withSplashTimeOut(50)
                 .withBackgroundResource(R.drawable.background6)
                 .withLogo(R.drawable.loading_logo_android)
                 .withHeaderText("Welcome to our App: Ex02")

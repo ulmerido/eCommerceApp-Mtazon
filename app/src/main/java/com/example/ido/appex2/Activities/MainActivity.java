@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
     private String m_EmailReset;
     private FirebaseRemoteConfig m_RemoteConfig;
 
-
-    //private User m_User;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -434,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void slideUpToNewActivity() {
         Log.e(TAG, "slideUpToNewActivity() >>");
-        //finish();
+        finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "slideUpToNewActivity() <<");
     }

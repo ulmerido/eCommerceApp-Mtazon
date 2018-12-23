@@ -51,6 +51,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.AudioBookDetailsActivity"></activity>
+
+        <activity android:name=".Activities.AllReviewsActivity"></activity>
     </application>
 
 </manifest>
