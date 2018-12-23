@@ -49,7 +49,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "Main Activity:";
-    private static FirebaseAuth m_Auth;
+    private FirebaseAuth m_Auth;
     private GoogleSignInClient m_GoogleSignInClient;
     private SignInButton m_GoogleSignInButton;
     private CallbackManager m_CallbackManager;
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private String m_EmailReset;
     private FirebaseRemoteConfig m_RemoteConfig;
 
+
+    //private User m_User;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ifLogedInGoToUserActivity() {
-        Log.e(TAG, "ifLogedInGoToUserActivity >>");
+        //Log.e(TAG, "ifLogedInGoToUserActivity >>" + m_Auth.getCurrentUser().getDisplayName());
         boolean userSignedIn = m_Auth.getCurrentUser() != null;
         try {
             if (userSignedIn) {
@@ -291,12 +293,13 @@ public class MainActivity extends AppCompatActivity {
                 boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
 
                 if (isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
-                    Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
+                    Intent intent_AllProductsActivity = new Intent(getApplicationContext(), AllProductsActivity.class);
                     Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<");
                     createNewUserFacebookAndGoogle();
-                    createNewBook();
-                    startActivity(intent_UserActivity);
-                    finish();
+                    //createNewBook();
+                    startActivity(intent_AllProductsActivity);
+                    slideUpToNewActivity();
+                    //finish();
                 }
             }
 
@@ -431,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void slideUpToNewActivity() {
         Log.e(TAG, "slideUpToNewActivity() >>");
-        finish();
+        //finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "slideUpToNewActivity() <<");
     }

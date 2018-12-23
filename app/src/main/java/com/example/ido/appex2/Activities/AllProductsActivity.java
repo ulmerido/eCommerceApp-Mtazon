@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.ido.appex2.Adapter.AudioBookAdapter;
 import com.example.ido.appex2.Adapter.AudioBookWithKey;
+import com.example.ido.appex2.Adapter.UserReference;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.User;
@@ -47,7 +48,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private DatabaseReference mAllBooksRef;
     private DatabaseReference mMyUserRef;
     private List<AudioBookWithKey> m_BooksList = new ArrayList<>();
-    private User mUser;
+    private User mUser = null;
 
     /// xml buttons
     private Button m_userInfo_btn;
@@ -93,7 +94,13 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 {
 
                     Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
+                    Log.e(TAG, "onDataChange(User) >> " + snapshot.getValue(User.class).toString());
+                    Toast.makeText(getApplicationContext(), "Welcome : " +
+                            snapshot.getValue(User.class).toString()
+                            , Toast.LENGTH_SHORT).show();
                     mUser = snapshot.getValue(User.class);
+                    Log.e(TAG, "onDataChange(User) After "
+                            + mUser.getFullName());
                     getAllBooks();
                     Log.e(TAG, "onDataChange(User) <<");
                 }
@@ -110,9 +117,16 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         {
             getAllBooks();
         }
+       Toast.makeText(getApplicationContext(), "Welcome : "
+                , Toast.LENGTH_SHORT).show();
+        ButterKnife.bind(this);
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     private void getAllBooks()
     {
@@ -314,11 +328,13 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         Log.e(TAG, "onAudioBookCardClick >> " + i_book.getAudioBook().getName());
         Intent intent = new Intent(this, AudioBookDetailsActivity.class);
         intent.putExtra("Key", i_book.getKey());
-        intent.putExtra("User", mUser);
+        //intent.putExtra("User", i_UserRef.getUser());
+
         intent.putExtra("AudioBook", i_book.getAudioBook());
-        //Bundle bundle = new Bundle();
-        //bundle.putParcelable("AudioBook", i_book.getAudioBook());
-        //intent.putExtras(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("User", i_User);
+//        intent.putExtra("Bundle", bundle);
+        //Log.e(TAG, ">>>>>>>>>>>>>##" + i_UserRef.getUser().getFullName());
         startActivity(intent);
         //finish();
         Log.e(TAG, "onAudioBookCardClick <<");

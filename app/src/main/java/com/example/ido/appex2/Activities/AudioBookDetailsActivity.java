@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ido.appex2.R;
@@ -23,7 +24,12 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -39,6 +45,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
     private AudioBook m_AudioBook;
     private String m_Key;
     private User m_User;
+    private DatabaseReference m_MyUserRef;
 
     private EditText m_etSearch;
     private EditText m_etReviewHeader;
@@ -66,23 +73,43 @@ public class AudioBookDetailsActivity extends AppCompatActivity
 
     private boolean m_AudioBookWasPurchased;
 
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
-
+        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
-        m_User = getIntent().getParcelableExtra("User");
+        //m_User = getIntent().getParcelableExtra("User");
         m_AudioBook = getIntent().getParcelableExtra("AudioBook");
 
+        m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + fbUser.getUid());
+        m_MyUserRef.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot snapshot)
+            {
+
+                Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
+                Log.e(TAG, "onDataChange(User) >> " + snapshot.getValue(User.class).toString());
+                Toast.makeText(getApplicationContext(), "Welcome : " +
+                                snapshot.getValue(User.class).toString()
+                        , Toast.LENGTH_SHORT).show();
+                m_User = snapshot.getValue(User.class);
+                Log.e(TAG, "onDataChange(User) After--->>> "
+                        + m_User.getFullName());
+                Log.e(TAG, "onDataChange(User) <<");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+                Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
+            }
+        });
+
+        //Log.e(TAG, " Key : " + m_Key);
+        //Log.e(TAG, " AudioBook Name: " + m_AudioBook.getName());
 
         //m_etSearch = findViewById(R.id.details_searchBook);
         m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
@@ -111,20 +138,20 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         });
 //        try
 //        {
-//            Intent intent = getIntent();
-//            Bundle bundle = intent.getExtras();
+//           // Intent intent =
+//            Bundle bundle = getIntent().getParcelableExtra("Bundle");
 //            if (bundle != null)
 //            {
-//                m_AudioBook = bundle.getParcelable("AudioBook");
-//
+//                m_User = bundle.getParcelable("User");
+//                Log.e(TAG, " User : " + m_User.getFullName());
 //            }
 //
-//            populate();
+//            //populate();
 //        }
 //        catch (Exception e)
 //        {
-//            Log.e(TAG,e.getMessage().toString());
-//        }
+//            Log.e(TAG,e.getMessage());
+//       }
 
     }
 
