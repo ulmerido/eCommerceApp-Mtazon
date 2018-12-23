@@ -220,7 +220,7 @@
     <FrameLayout
         android:id="@+id/details_addReviewContainer"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="189dp"
         android:layout_marginBottom="8dp"
 
         android:background="#0f0f0f"
@@ -261,7 +261,7 @@
                 <EditText
                     android:id="@+id/details_ReviewBody"
                     android:layout_width="272dp"
-                    android:layout_height="118dp"
+                    android:layout_height="76dp"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="64dp"
                     android:background="#f8f7e5"
@@ -287,6 +287,12 @@
 
 
     </FrameLayout>
+
+    <Button
+        android:id="@+id/btBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go Back" />
 
 
 </LinearLayout>

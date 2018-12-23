@@ -27,8 +27,9 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
     private final String           TAG = "AudioBookAdapter";
     private List<AudioBookWithKey> m_BooksList;
     private User                   m_User;
-    private int m_possition;
+    private int                    m_possition;
     private LayoutInflater         m_inflater;
+    private AudioBookWithKey       m_CurrentBookWithKey;
     public Interface_OnClickAudioBookCard  m_AudioBookCardClick;
     public AudioBookAdapter(List<AudioBookWithKey> i_Books, User i_User,Interface_OnClickAudioBookCard i_AudioBookCardClick)
     {
@@ -55,8 +56,9 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
     public void onBindViewHolder(final AudioBookHolder holder, int position)
     {
         Log.e(TAG,"onBindViewHolder() >> " + position);
-        m_possition =position;
-        AudioBookWithKey bookWithKey = m_BooksList.get(position);
+        m_possition = position;
+        final AudioBookWithKey bookWithKeyy = m_BooksList.get(position);
+        //m_CurrentBookWithKey = m_BooksList.get(position);
         AudioBook book = m_BooksList.get(position).getAudioBook();
         String songKey = m_BooksList.get(position).getKey();
         //holder.getRating().setRating(book.getRating());
@@ -67,7 +69,10 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
            @Override
            public void onClick(View v)
            {
-               AudioBookWithKey bookWithKey = m_BooksList.get(m_possition);
+               Log.e(TAG,"onBindViewHolder() bookWithKeyy>> " + bookWithKeyy.getAudioBook().getName());
+               final AudioBookWithKey bookWithKey = bookWithKeyy; //m_BooksList.get(m_possition);
+
+               Log.e(TAG,"onBindViewHolder()After >> " + bookWithKey.getAudioBook().getName());
                m_AudioBookCardClick.onAudioBookCardClick(bookWithKey);
            }
        });
@@ -139,11 +144,11 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
                 {
 
                     Context context = view.getContext();
-                    //Intent intent = new Intent(context, SongDetailsActivity.class);
-                    //intent.putExtra("song", selectedSong);
-                    //intent.putExtra("key", selectedSongKey);
-                    //intent.putExtra("user",user);
-                    //context.startActivity(intent);
+//                    Intent intent = new Intent(context, SongDetailsActivity.class);
+//                    intent.putExtra("song", selectedSong);
+//                    intent.putExtra("key", selectedSongKey);
+//                    intent.putExtra("user",user);
+//                    context.startActivity(intent);
                 }
             });
         }

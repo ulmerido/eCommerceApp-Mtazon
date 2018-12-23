@@ -42,7 +42,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     public RecyclerView mRecyclerView;
     private DatabaseReference mAllBooksRef;
     private DatabaseReference mMyUserRef;
-    private List<AudioBookWithKey> m_BooksList = new ArrayList<>();;
+    private List<AudioBookWithKey> m_BooksList = new ArrayList<>();
     private User mUser;
 
 
@@ -273,15 +273,20 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     @Override
     public void onAudioBookCardClick(AudioBookWithKey i_book)
     {
-        Log.e(TAG, "onAudioBookCardClick >>");
+        Log.e(TAG, "onAudioBookCardClick >> " + i_book.getAudioBook().getName());
         Intent intent = new Intent(this, AudioBookDetailsActivity.class);
         intent.putExtra("Key", i_book.getKey());
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("AudioBook", i_book.getAudioBook());
-        intent.putExtras(bundle);
+        intent.putExtra("User", mUser);
+        intent.putExtra("AudioBook", i_book.getAudioBook());
+        //Bundle bundle = new Bundle();
+        //bundle.putParcelable("AudioBook", i_book.getAudioBook());
+        //intent.putExtras(bundle);
         startActivity(intent);
-        finish();
+        //finish();
         Log.e(TAG, "onAudioBookCardClick <<");
+
+
+
     }
 
 
