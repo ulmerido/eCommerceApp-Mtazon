@@ -30,7 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import butterknife.BindView;
@@ -229,12 +231,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     }
 
 
-
-
-
-
-
-
     public void onSearchButtonClick(View v)
     {
        // String searchString = mSearch_text.getText().toString();
@@ -273,13 +269,17 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     private void updateSongsList(DataSnapshot snapshot)
     {
-
-        boolean isAutor = false;
+        boolean isAutor = false, isPrice = false;
         Spinner mySpinner = (Spinner) findViewById(R.id.search_spinner);
         String spiner_text = mySpinner.getSelectedItem().toString();
         String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
-
-        if (searchString != null && !searchString.isEmpty())
+        Deque<AudioBookWithKey> stack = new ArrayDeque<AudioBookWithKey>();
+        String orderBy = ((RadioButton) findViewById(R.id.radioButtonByRating)).isChecked() ? "rating" : "price";
+        if(orderBy.equals("price"))
+        {
+            isPrice = true;
+        }
+        if (searchString != null)
         {
             if (spiner_text.equals("Author"))
             {
@@ -294,15 +294,34 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 {
                     if (book.getAuthor().startsWith(searchString))
                     {
-                        m_BooksList.add(new AudioBookWithKey(key, book));
+                        if(isPrice)
+                        {
+                            m_BooksList.add(new AudioBookWithKey(key, book));
+                        }
+                        else
+                        {
+                            stack.push(new AudioBookWithKey(key, book));
+                        }
                     }
-                } else
+                }
+                else
                 {
                     if (book.getName().startsWith(searchString))
                     {
-                        m_BooksList.add(new AudioBookWithKey(key, book));
+                        if(isPrice)
+                        {
+                            m_BooksList.add(new AudioBookWithKey(key, book));
+                        }
+                        else
+                        {
+                            stack.push(new AudioBookWithKey(key, book));
+                        }
                     }
                 }
+            }
+            while(!stack.isEmpty())
+            {
+                m_BooksList.add(stack.pop());
             }
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
