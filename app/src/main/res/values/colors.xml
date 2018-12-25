@@ -163,4 +163,5 @@
     <color name="primary_light">#cc9999</color>
     <color name="radioBoxColor">#e75748</color>
     <color name="rating_star">#e75748</color>
+    <color name="myPrimaryColor">#660033</color>
 </resources>

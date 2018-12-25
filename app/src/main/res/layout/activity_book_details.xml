@@ -304,6 +304,7 @@
 
                 <SeekBar
                     android:id="@+id/seekBar"
+                    style="@android:style/Widget.Material.SeekBar"
                     android:layout_width="343dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="8dp"
@@ -311,7 +312,14 @@
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button3" />
+                    app:layout_constraintTop_toBottomOf="@+id/button3"
+                    android:gravity="center"
+                    android:max="25"
+                    android:minHeight="10dp"
+                    android:progress="10"
+                    android:progressDrawable="@drawable/progress"
+                    android:thumb="@drawable/custom_thumb"
+                    />
 
 
                 <TextView

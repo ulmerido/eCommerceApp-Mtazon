@@ -282,6 +282,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity
 
                 seekbar = (SeekBar)findViewById(R.id.seekBar);
                 seekbar.setClickable(false);
+
+
         b2.setEnabled(false);
 
         b3.setOnClickListener(new View.OnClickListener() {
