@@ -236,7 +236,7 @@ public class UserActivity extends AppCompatActivity
                 {
                     Log.e(TAG, "-->>>>>>>>>Image bitmap size= " + sizeOf(bitmap));
                     Toast.makeText(getApplicationContext(),
-                            "Pleas choose image les then 8MB", Toast.LENGTH_SHORT).show();
+                            "Pleas choose image less then 8MB", Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e)
             {

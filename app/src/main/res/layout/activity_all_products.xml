@@ -38,105 +38,104 @@
 
                 <Button
                     android:id="@+id/userInfo_btn"
-                    android:layout_width="50dp"
-                    android:layout_height="35dp"
-
+                    android:layout_width="44dp"
+                    android:layout_height="33dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginBottom="8dp"
-                    android:onClick="onSearchButtonClick"
-                    android:text="U"
+                    android:onClick="onUserClick"
+                    android:text="user"
+                    android:textAllCaps="false"
                     android:textSize="8sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/product_btn"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.695"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/product_btn"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <Button
                     android:id="@+id/product_btn"
-                    android:layout_width="47dp"
+                    android:layout_width="63dp"
                     android:layout_height="34dp"
-
+                    android:layout_marginStart="80dp"
                     android:layout_marginBottom="8dp"
-                    android:onClick="onSearchButtonClick"
-                    android:text="P"
+                    android:onClick="onMyProductButtonClick"
+                    android:text="products"
+                    android:textAllCaps="false"
                     android:textSize="8sp"
                     app:layout_constraintBottom_toTopOf="@+id/search_spinner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.472"
                     app:layout_constraintStart_toEndOf="@+id/et_searchBook"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.048" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <EditText
                     android:id="@+id/et_searchBook"
                     android:layout_width="159dp"
-                    android:layout_height="37dp"
-                    android:layout_marginEnd="14dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
                     android:ems="10"
                     android:hint="Type for search"
                     android:inputType="text|textPersonName"
                     android:textSize="12sp"
-                    app:layout_constraintBottom_toTopOf="@+id/radioButtonByPrice"
+                    app:layout_constraintBottom_toTopOf="@+id/orderby_label"
                     app:layout_constraintEnd_toStartOf="@+id/search_spinner"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="0.666" />
 
                 <Button
                     android:id="@+id/button_search"
-                    android:layout_width="33dp"
-                    android:layout_height="50dp"
+                    android:layout_width="77dp"
 
+                    android:layout_height="35dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="10dp"
                     android:onClick="onSearchButtonClick"
                     android:text="Search"
-                    android:textSize="5sp"
+                    android:textAllCaps="false"
+                    android:textSize="9sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/search_spinner"
-                    app:layout_constraintTop_toBottomOf="@+id/userInfo_btn" />
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/radioButtonByRating"
+                    app:layout_constraintTop_toBottomOf="@+id/search_spinner" />
 
                 <RadioButton
                     android:id="@+id/radioButtonByPrice"
                     android:layout_width="77dp"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="104dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginBottom="4dp"
                     android:buttonTint="@color/radioBoxColor"
                     android:checked="true"
                     android:onClick="onRadioButtonCLick"
                     android:text="price"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/orderby_label" />
 
                 <RadioButton
                     android:id="@+id/radioButtonByRating"
-                    android:layout_width="88dp"
-                    android:layout_height="22dp"
+                    android:layout_width="91dp"
+                    android:layout_height="25dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:buttonTint="@color/radioBoxColor"
                     android:onClick="onRadioButtonCLick"
                     android:text="rating"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.738"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/radioButtonByPrice" />
 
                 <Spinner
                     android:id="@+id/search_spinner"
-                    android:layout_width="152dp"
-                    android:layout_height="25dp"
-                    android:layout_marginEnd="48dp"
-                    android:layout_marginBottom="36dp"
+                    android:layout_width="155dp"
+                    android:layout_height="29dp"
+                    android:layout_marginEnd="28dp"
+                    android:layout_marginBottom="8dp"
                     android:entries="@array/searchBy"
                     android:prompt="@string/searchOption"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/radioButtonByRating"
                     app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
@@ -144,11 +143,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginBottom="8dp"
                     android:text="Order By:"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.864" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
 

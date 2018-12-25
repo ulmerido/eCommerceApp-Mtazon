@@ -50,7 +50,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private DatabaseReference mMyUserRef;
     private List<AudioBookWithKey> m_BooksList = new ArrayList<>();
     private User mUser = null;
-
+    private String m_Key;
     /// xml buttons
     private Button m_userInfo_btn;
     private Button m_product_btn;
@@ -121,6 +121,9 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
        Toast.makeText(getApplicationContext(), "Welcome : "
                 , Toast.LENGTH_SHORT).show();
         ButterKnife.bind(this);
+
+        m_Key = getIntent().getStringExtra("Key");
+
 
     }
 
@@ -355,4 +358,18 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         //finish();
         Log.e(TAG, "onAudioBookCardClick <<");
     }
+
+    public void onUserClick(View v)
+    {
+        Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
+        startActivity(intent_UserActivity);
+    }
+    public void onMyProductButtonClick(View v)
+    {
+        Intent intent_UserActivity = new Intent(getApplicationContext(), AllUserPurchase.class);
+        intent_UserActivity.putExtra("Key", m_Key);
+
+        startActivity(intent_UserActivity);
+    }
+
 }

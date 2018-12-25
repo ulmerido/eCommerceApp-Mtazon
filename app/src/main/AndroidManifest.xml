@@ -53,6 +53,8 @@
         <activity android:name=".Activities.AudioBookDetailsActivity"></activity>
 
         <activity android:name=".Activities.AllReviewsActivity"></activity>
+
+        <activity android:name=".Activities.AllUserPurchase"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.ido.appex2.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -81,13 +82,13 @@ public class AllReviewsActivity extends AppCompatActivity
 
     private void getAllReviews()
     {
-        Log.e(TAG, "getAllBooks() >>");
+        Log.e(TAG, "getAllReviews() >>");
 
         m_ReviewList.clear();
         mAdapter = new ReviewAdapter(m_ReviewList, m_User);
         mRecyclerView.setAdapter(mAdapter);
         getAllBooksUsingChildListenrs();
-        Log.e(TAG, "getAllBooks <<");
+        Log.e(TAG, "getAllReviews <<");
 
     }
 
@@ -196,7 +197,6 @@ public class AllReviewsActivity extends AppCompatActivity
         Log.e(TAG, "getAllBooksUsingChildListenrs <<");
 
     }
-
 
 }
 
