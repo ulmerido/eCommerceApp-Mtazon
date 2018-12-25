@@ -96,6 +96,10 @@ public class AudioBook implements Parcelable {
         return reviewsCount;
     }
 
+    public void incrementReviewCount() { reviewsCount++;}
+
+    public void incrementRating(int newRating) { rating+=newRating;}
+
     public void setReviewsCount(int reviewsCount) {
         this.reviewsCount = reviewsCount;
     }

@@ -17,7 +17,15 @@
         <item name="colorControlActivated">@color/radioBoxColor</item>
     </style>
 
+    <style name="RatingBar2"
+        parent="android:style/Widget.Material.RatingBar.Small">
+        <item name="colorControlNormal">@color/primary_light</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+    </style>
 
-
+    <style name="DialogeTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/DimGray</item>
+        <item name="colorAccent">@android:color/holo_red_dark</item>
+    </style>
 
 </resources>

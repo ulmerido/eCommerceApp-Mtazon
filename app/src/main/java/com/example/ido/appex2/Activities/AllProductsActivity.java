@@ -1,6 +1,8 @@
 package com.example.ido.appex2.Activities;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,9 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.core.SnapshotHolder;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Deque;
 import java.util.List;
 
@@ -60,7 +64,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private RadioButton m_radioButtonByReviews;
     private Spinner m_search_spinner;
     private TextView m_orderby_label;
-
+    FirebaseUser m_fbUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,36 +87,32 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (fbUser != null)
-        {
-            mMyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + fbUser.getUid());
-            mMyUserRef.addValueEventListener(new ValueEventListener()
-            {
-                @Override
-                public void onDataChange(DataSnapshot snapshot)
-                {
+        if (m_fbUser != null) {
+            getAllBooks();
+            //deleteAllReviewsAndRating();
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    mMyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_fbUser.getUid());
+                    mMyUserRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
 
-                    Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
-                    Log.e(TAG, "onDataChange(User) >> " + snapshot.getValue(User.class).toString());
-                    Toast.makeText(getApplicationContext(), "Welcome : " +
-                            snapshot.getValue(User.class).toString()
-                            , Toast.LENGTH_SHORT).show();
-                    mUser = snapshot.getValue(User.class);
-                    Log.e(TAG, "onDataChange(User) After "
-                            + mUser.getFullName());
-                    getAllBooks();
-                    Log.e(TAG, "onDataChange(User) <<");
+                            Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
+                            mUser = snapshot.getValue(User.class);
+                            Log.e(TAG, "onDataChange(User) After "
+                                    + mUser.getFullName());
+                            Log.e(TAG, "onDataChange(User) <<");
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
+                        }
+                    });
+                    Log.e(TAG, "onCreate() <<");
                 }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError)
-                {
-                    Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
-                }
-            });
-            Log.e(TAG, "onCreate() <<");
+            }, 2000);
         }
         else
         {
@@ -126,6 +126,28 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
 
     }
+
+
+    private void deleteAllReviewsAndRating()
+    {
+        FirebaseDatabase.getInstance().getReference().child("AudioBooks")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot book : dataSnapshot.getChildren()) {
+                            book.child("reviewCount").getRef().setValue(0);
+                            book.child("rating").getRef().setValue(0.0);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+
+    }
+
+
 
     @Override
     public void onBackPressed() {

@@ -5,6 +5,12 @@
 
     <string name="searchOption">"Choose a search option"</string>
 
+    <string name="back"><![CDATA[>]]></string>
+    <string name="rewind"><![CDATA[<<]]></string>
+    <string name="forward"><![CDATA[>>]]></string>
+    <string name="pause">||</string>
+
+
     <string-array name="searchBy">
         <item>Book name</item>
         <item>Author</item>

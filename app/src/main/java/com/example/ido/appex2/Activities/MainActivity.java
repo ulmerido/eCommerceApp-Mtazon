@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-
+                //ifLogedInGoToUserActivity();
 
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
@@ -461,31 +461,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void slideUpToNewActivity() {
         Log.e(TAG, "slideUpToNewActivity() >>");
-        finish();
+        //finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "slideUpToNewActivity() <<");
     }
 
-   /* private void isExistInDB()
-    {
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        String userEmail= FirebaseAuth.getInstance().getCurrentUser().getEmail() ;
-        mDatabase.child("users").child("email").equalTo(userEmail).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot != null && dataSnapshot.getChildren() != null &&
-                        dataSnapshot.getChildren().iterator().hasNext()){
-                    //Username exists
-                }else {
-                    createNewUser();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
     private void createNewUserFacebookAndGoogle() {
 

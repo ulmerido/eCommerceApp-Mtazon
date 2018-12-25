@@ -30,7 +30,8 @@
                 android:layout_height="149dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:src="@color/colorAccent"
+                android:src="@drawable/ic_launcher_background"
+                android:background="@drawable/border_image"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +42,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="[BOOK NAME]"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/DarkBlue"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 card_view:layout_constraintStart_toEndOf="@+id/details_book_image"
@@ -158,7 +159,7 @@
     <FrameLayout
         android:id="@+id/details_addReviewContainer"
         android:layout_width="match_parent"
-        android:layout_height="189dp"
+        android:layout_height="426dp"
         android:layout_marginBottom="8dp"
 
         android:background="#0f0f0f"
@@ -173,64 +174,203 @@
         <android.support.v7.widget.CardView
             android:id="@+id/details_addReviewContainer_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:clickable="false">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical">
+                android:layout_height="417dp">
 
                 <EditText
                     android:id="@+id/details_ReviewHeader"
-                    android:layout_width="270dp"
-                    android:layout_height="48dp"
+                    android:layout_width="224dp"
+                    android:layout_height="53dp"
                     android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
+
                     android:layout_marginBottom="8dp"
                     android:ems="10"
                     android:hint="Review Header"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/details_ReviewBody"
                     card_view:layout_constraintBottom_toTopOf="@+id/details_ReviewBody"
-                    card_view:layout_constraintVertical_bias="0.25" />
+                    card_view:layout_constraintVertical_bias="0.25"
+                    tools:ignore="MissingConstraints" />
 
                 <EditText
                     android:id="@+id/details_ReviewBody"
-                    android:layout_width="272dp"
-                    android:layout_height="76dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="64dp"
+                    android:layout_width="223dp"
+                    android:layout_height="68dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="100dp"
                     android:background="#f8f7e5"
                     android:hint="Review Body"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <Button
                     android:id="@+id/details_AddNewReview"
-                    android:layout_width="50dp"
-                    android:layout_height="58dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="88dp"
+                    android:layout_width="77dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="32dp"
                     android:background="#fcad2e"
+
                     android:text="Add Review"
                     card_view:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
                     card_view:layout_constraintTop_toTopOf="@+id/details_ReviewHeader" />
+
+                <RatingBar
+                    android:id="@+id/new_rating_user"
+                    android:layout_width="243dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="8dp"
+                    android:numStars="5"
+                    android:progressBackgroundTint="@color/DimGray"
+                    android:progressTint="@color/Gold"
+                    android:rating="0"
+                    android:scaleX="1.1"
+                    android:scaleY="1.1"
+                    android:secondaryProgressTint="@color/Black"
+                    android:stepSize="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/details_ReviewBody" />
+
+
+                <TextView
+                    android:id="@+id/textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Music Palyer"
+                    android:textSize="20dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button2"
+                    app:layout_constraintEnd_toEndOf="@+id/button3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="86dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/forward"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="87dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="35dp"
+                    android:text="@string/pause"
+                    app:layout_constraintStart_toEndOf="@+id/button"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/button3"
+                    android:layout_width="87dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/button2"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/button2"
+                    android:layout_toRightOf="@+id/button2"
+                    android:text="@string/back"
+                    app:layout_constraintStart_toEndOf="@+id/button2"
+                    app:layout_constraintTop_toBottomOf="@+id/textview" />
+
+
+                <Button
+                    android:id="@+id/button4"
+                    android:layout_width="87dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/button3"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_toEndOf="@+id/button3"
+                    android:layout_toRightOf="@+id/button3"
+                    android:text="@string/rewind"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/button3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/button3" />
+
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="343dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/button3" />
+
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="109dp"
+                    android:layout_height="31dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Small Text"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                    app:layout_constraintVertical_bias="0.307" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="256dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Small Text"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    app:layout_constraintStart_toEndOf="@+id/textView2"
+                    app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="371dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                <Button
+                    android:id="@+id/btBack"
+                    android:layout_width="111dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Back"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.529"
+                    app:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
+                    app:layout_constraintTop_toBottomOf="@+id/details_AddNewReview"
+                    app:layout_constraintVertical_bias="0.0" />
 
 
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.CardView>
-
-
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btBack"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Go Back" />
 
 
 </LinearLayout>

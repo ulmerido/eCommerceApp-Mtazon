@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.Review;
 import com.example.ido.appex2.entities.User;
@@ -107,7 +108,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
         {
             Log.e(TAG,"populate() >>  "+ i_Review.getUserEmail());
 
-            if(m_ReviewBody ==null)
+            if(m_ReviewBody == null)
             {
                 Log.e(TAG,"Nulllllllllllllll() >>  "+ i_Review.getUserEmail());
 
@@ -115,11 +116,16 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             m_ReviewBody.setText(i_Review.getReviewBody());
             m_ReviewHeader.setText(i_Review.getReviewHedaer());
 
-            //m_ReviewDate.setText(i_Review.getReviewBody());
+            m_ReviewDate.setText(i_Review.getM_Date());
             m_ReviewRating.setText(Double.toString( i_Review.getRating()));
 
             m_ReviewUserName.setText(i_Review.getUserEmail());
 
+
+
+            Log.e(TAG, "updateProfilePicInTheActivityView() >>");
+
+            Log.e(TAG, "updateProfilePicInTheActivityView() <<");
 
             Log.e(TAG,"populate() << ");
 
