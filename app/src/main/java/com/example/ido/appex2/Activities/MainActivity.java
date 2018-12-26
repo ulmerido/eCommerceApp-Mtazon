@@ -472,10 +472,19 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "createNewUser() >>");
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
 
         if (user == null) {
             Log.e(TAG, "createNewUser() << Error user is null");
+            return;
+        }
+        else if(user.isAnonymous())
+        {
+            userRef.child(user.getUid()).setValue(new User("", "",
+                    "", "",
+                    0,null));
+            Log.e(TAG, "createNewUser (Anonymous) () <<");
             return;
         }
         userRef.child(user.getUid()).setValue(new User(user.getEmail(), user.getDisplayName(),

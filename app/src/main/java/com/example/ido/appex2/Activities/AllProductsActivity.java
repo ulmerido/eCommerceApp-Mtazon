@@ -1,5 +1,7 @@
 package com.example.ido.appex2.Activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.constraint.solver.widgets.Snapshot;
@@ -22,6 +24,7 @@ import com.example.ido.appex2.Adapter.AudioBookWithKey;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.User;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -64,7 +67,9 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private RadioButton m_radioButtonByReviews;
     private Spinner m_search_spinner;
     private TextView m_orderby_label;
-    FirebaseUser m_fbUser;
+    private FirebaseUser m_fbUser;
+    private FirebaseAuth m_Auth;
+    private boolean m_logOutChoise = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -88,6 +93,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        m_Auth = FirebaseAuth.getInstance();
 
         if (m_fbUser != null) {
             getAllBooks();
@@ -151,8 +157,47 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        logOutOrNot();
     }
+
+
+    private void logOutOrNot()
+    {
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(AllProductsActivity.this,
+                R.style.DialogeTheme);
+
+        builder.setCancelable(true);
+        builder.setTitle("Confirm Log Out");
+        builder.setMessage("Are you sure you want to logout??");
+
+
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                m_Auth.signOut();
+                LoginManager.getInstance().logOut();
+                //m_logOutChoise = true;
+                dialogInterface.cancel();
+
+                Intent intent_LogOut = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent_LogOut);
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
 
     private void getAllBooks()
     {
@@ -383,15 +428,27 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     public void onUserClick(View v)
     {
-        Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
-        startActivity(intent_UserActivity);
+        if (m_fbUser.isAnonymous()) {
+            Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login..."
+                    ,Toast.LENGTH_SHORT).show();
+        } else {
+
+            Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
+            startActivity(intent_UserActivity);
+        }
     }
+
     public void onMyProductButtonClick(View v)
     {
-        Intent intent_UserActivity = new Intent(getApplicationContext(), AllUserPurchase.class);
-        intent_UserActivity.putExtra("Key", m_Key);
+        if (m_fbUser.isAnonymous()) {
+            Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login..."
+                    ,Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent_UserActivity = new Intent(getApplicationContext(), AllUserPurchase.class);
+            intent_UserActivity.putExtra("Key", m_Key);
 
-        startActivity(intent_UserActivity);
+            startActivity(intent_UserActivity);
+        }
     }
 
 }

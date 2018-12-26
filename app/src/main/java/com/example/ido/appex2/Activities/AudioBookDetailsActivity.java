@@ -126,7 +126,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
         m_Auth = FirebaseAuth.getInstance();
-        FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
         //m_User = getIntent().getParcelableExtra("User");
         m_AudioBook = getIntent().getParcelableExtra("AudioBook");
@@ -203,24 +203,29 @@ public class AudioBookDetailsActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
-
-                if (m_AudioBookWasPurchased) {
-                    Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
-                    //User purchased the song so he can play it
-                    //playCurrentSong(song.getFile());
-
+                if (fbUser.isAnonymous()) {
+                    Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login..."
+                            ,Toast.LENGTH_SHORT).show();
                 } else {
-                    //Purchase the song.
-                    Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
-                    m_User.getMyAudioBooks().add(m_Key);
-                    m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
-                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
-                    m_AudioBookWasPurchased = true;
-                    m_Buy.setText("PLAY");
+                    Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
+
+                    if (m_AudioBookWasPurchased) {
+                        Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
+                        //User purchased the song so he can play it
+                        //playCurrentSong(song.getFile());
+
+                    } else {
+                        //Purchase the song.
+                        Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
+                        m_User.getMyAudioBooks().add(m_Key);
+                        m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
+                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
+                        m_AudioBookWasPurchased = true;
+                        m_Buy.setText("PLAY");
+                    }
+                    Log.e(TAG, "playSong.onClick() <<");
                 }
-                Log.e(TAG, "playSong.onClick() <<");
             }
         });
 
@@ -589,11 +594,16 @@ private void whenAddedReviwWithRating() {
 
         public void onClickRating() {
 
-            Log.e(TAG, "onClickRating >> ");
-            Intent intent = new Intent(this, AllReviewsActivity.class);
-            intent.putExtra("Key", m_Key);
-            startActivity(intent);
-            //finish();
-            Log.e(TAG, "onClickRating <<");
+            if (m_AudioBook.getReviewsCount() == 0) {
+                Toast.makeText(getApplicationContext(), "There is no reviews for this book "  ,Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Log.e(TAG, "onClickRating >> ");
+                Intent intent = new Intent(this, AllReviewsActivity.class);
+                intent.putExtra("Key", m_Key);
+                startActivity(intent);
+                //finish();
+                Log.e(TAG, "onClickRating <<");
+            }
         }
     }
