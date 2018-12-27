@@ -51,7 +51,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AudioBookDetailsActivity extends AppCompatActivity
+public class AudioBookDetailsActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener
 {
 
     public static final String TAG = "AudBookDetActiv:";
@@ -89,7 +89,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
     private DatabaseReference m_AudioBookRef;
     private List<Review> reviewsList = new ArrayList<>();
 
-    private boolean m_AudioBookWasPurchased;
+    private boolean m_AudioBookWasPurchased = false;
 
     //------Media Player---------
     private Button forwardBtn, pauseBtn, playBtn, rewindBtn;
@@ -180,6 +180,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         m_Buy = findViewById(R.id.details_buy);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+
+
         populate();
         createAndInvokeMediaPlayer();
         m_Buy.setOnClickListener(new View.OnClickListener()
@@ -287,91 +290,100 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
-    private void createAndInvokeMediaPlayer()
-    {
-
-        //tx3 = (TextView)findViewById(R.id.textView4);
-        //tx3.setText("Song.mp3");
+    private void createAndInvokeMediaPlayer() {
 
         seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setClickable(false);
 
         pauseBtn.setEnabled(false);
 
-        playBtn.setOnClickListener(new View.OnClickListener()
-        {
+        playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 playAudioBook(m_AudioBook.getFile());
+
             }
         });
 
-        pauseBtn.setOnClickListener(new View.OnClickListener()
-        {
+        pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-               // Toast.makeText(getApplicationContext(), "Pausing sound", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                // Toast.makeText(getApplicationContext(), "Pausing sound", Toast.LENGTH_SHORT).show();
                 mediaPlayer.pause();
                 m_lengthOfSound = mediaPlayer.getCurrentPosition();
-             //   Toast.makeText(getApplicationContext(), "Pausing at : " + m_lengthOfSound, Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(getApplicationContext(), "Pausing at : " + m_lengthOfSound, Toast.LENGTH_SHORT).show();
                 pauseBtn.setEnabled(false);
                 playBtn.setEnabled(true);
             }
         });
 
-        forwardBtn.setOnClickListener(new View.OnClickListener()
-        {
+        forwardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 int temp = (int) startTime;
 
-                if((temp + forwardTime) <= finalTime)
-                {
+                if ((temp + forwardTime) <= finalTime) {
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
-                   // Toast.makeText(getApplicationContext(), "You have Jumped forward 5 seconds", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                  //  Toast.makeText(getApplicationContext(), "Cannot jump forward 5 seconds", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(), "You have Jumped forward 5 seconds", Toast.LENGTH_SHORT).show();
+                } else {
+                    //  Toast.makeText(getApplicationContext(), "Cannot jump forward 5 seconds", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        rewindBtn.setOnClickListener(new View.OnClickListener()
-        {
+        rewindBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 int temp = (int) startTime;
 
-                if((temp - backwardTime) > 0)
-                {
+                if ((temp - backwardTime) > 0) {
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
-                  //  Toast.makeText(getApplicationContext(), "You have Jumped backward 5 seconds", Toast.LENGTH_SHORT).show();
                 }
-//                else
-//                {
-//                    Toast.makeText(getApplicationContext(), "Cannot jump backward 5 seconds", Toast.LENGTH_SHORT).show();
-//                }
+
             }
         });
-
+        mediaPlayer.setOnCompletionListener(this);
     }
+
+
+            @Override
+            public void onCompletion(MediaPlayer mp)
+            {
+                whenAudioFinish();
+            }
+
+private void whenAudioFinish()
+{
+    mediaPlayer.stop();
+    mediaPlayer.reset();
+    pauseBtn.setEnabled(false);
+    playBtn.setEnabled(true);
+}
+
 
     private Runnable UpdateSongTime = new Runnable()
     {
         public void run()
         {
+            long currentMin = TimeUnit.MILLISECONDS.toMinutes((long) startTime);
+            long currentSec = (TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+                            toMinutes((long) startTime)));
             startTime = mediaPlayer.getCurrentPosition();
-            runingTimeBook.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) startTime), TimeUnit.MILLISECONDS.toSeconds((long) startTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
-                    toMinutes((long) startTime))));
+            runingTimeBook.setText(String.format("%d min, %d sec",
+                    currentMin, currentSec));
             seekbar.setProgress((int) startTime);
+            if( currentSec >= 30 && !m_AudioBookWasPurchased)
+            {
+                whenAudioFinish();
+                Toast.makeText(getApplicationContext(), "Only 30 seconds for DEMO version\nBuy the AudioBook to get " +
+                        "the FULL version" , Toast.LENGTH_SHORT).show();
+            }
             myHandler.postDelayed(this, 100);
+
+
         }
     };
 
@@ -402,7 +414,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity
                         mediaPlayer.setDataSource(downloadUrl.toString());
                         mediaPlayer.prepare(); // might take long! (for buffering, etc)
                         mediaPlayer.start();
-                        //buyPlay.setText("STOP");
+
                     }
                     catch(Exception e)
                     {
@@ -423,15 +435,21 @@ public class AudioBookDetailsActivity extends AppCompatActivity
         finalTime = mediaPlayer.getDuration();
         startTime = mediaPlayer.getCurrentPosition();
 
-        if(oneTimeOnly == 0)
-        {
+
+        if (oneTimeOnly == 0) {
             seekbar.setMax((int) finalTime);
             oneTimeOnly = 1;
         }
 
-        bookOverallTime.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) finalTime), TimeUnit.MILLISECONDS.toSeconds((long) finalTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalTime))));
+        bookOverallTime.setText(String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
+                TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalTime))));
 
-        runingTimeBook.setText(String.format("%d min, %d sec", TimeUnit.MILLISECONDS.toMinutes((long) startTime), TimeUnit.MILLISECONDS.toSeconds((long) startTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) startTime))));
+        runingTimeBook.setText(String.format("%d min, %d sec",
+                TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+                TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) startTime))));
 
         seekbar.setProgress((int) startTime);
         myHandler.postDelayed(UpdateSongTime, 100);
@@ -634,4 +652,11 @@ public class AudioBookDetailsActivity extends AppCompatActivity
             Log.e(TAG, "onClickRating <<");
         }
     }
+
+//    @Override
+//    public void onCompletion(MediaPlayer mp) {
+//
+//
+//
+//    }
 }

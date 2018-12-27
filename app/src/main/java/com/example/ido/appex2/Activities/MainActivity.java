@@ -299,8 +299,6 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<");
 
                     checkIfUserExists();
-                    //createNewUserFacebookAndGoogle();
-                    //createNewBook();
                     startActivity(intent_AllProductsActivity);
                     slideUpToNewActivity();
                     //finish();

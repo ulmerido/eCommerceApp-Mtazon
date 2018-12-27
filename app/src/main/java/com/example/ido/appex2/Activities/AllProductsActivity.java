@@ -352,7 +352,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             {
 
                 Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
-                updateSongsList(snapshot);
+                updateAudioBooksList(snapshot);
                 Log.e(TAG, "onDataChange(Query) <<");
 
             }
@@ -368,7 +368,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         Log.e(TAG, "onSearchButtonClick() <<");
     }
 
-    private void updateSongsList(DataSnapshot snapshot)
+    private void updateAudioBooksList(DataSnapshot snapshot)
     {
         boolean isAutor = false, isPrice = false;
         Spinner mySpinner = (Spinner) findViewById(R.id.search_spinner);
