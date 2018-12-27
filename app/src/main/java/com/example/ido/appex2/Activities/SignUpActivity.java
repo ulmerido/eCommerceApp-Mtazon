@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ido.appex2.R;
@@ -28,8 +29,8 @@ public class SignUpActivity extends AppCompatActivity
     private EditText m_etLastName;
     private FirebaseAuth m_Auth;
     private FirebaseUser m_FirsebaseUser;
-    private Button m_btnBack;
-    private Button m_btnRegister;
+    private TextView m_tvBack;
+    private TextView m_tvRegister;
     public static final String TAG = "SignUpActivity";
 
 
@@ -45,9 +46,9 @@ public class SignUpActivity extends AppCompatActivity
         m_etEmail = findViewById(R.id.etEmail);
         m_etFirstName = findViewById(R.id.etFname);
         m_etLastName = findViewById(R.id.etLname);
-        m_btnRegister = (Button) findViewById(R.id.btnSignUp);
-        m_btnBack = (Button) findViewById(R.id.btnBack);
-        m_btnRegister.setOnClickListener(new View.OnClickListener()
+        m_tvRegister = (TextView) findViewById(R.id.btnSignUp);
+        m_tvBack = (TextView) findViewById(R.id.tvBack);
+        m_tvRegister.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -55,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity
                 onClickRegiser();
             }
         });
-        m_btnBack.setOnClickListener(new View.OnClickListener()
+        m_tvBack.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

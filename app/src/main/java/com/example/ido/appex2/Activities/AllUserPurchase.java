@@ -1,26 +1,24 @@
 package com.example.ido.appex2.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.example.ido.appex2.Adapter.AudioBookAdapter;
 import com.example.ido.appex2.Adapter.AudioBookWithKey;
-import com.example.ido.appex2.Adapter.ReviewAdapter;
 import com.example.ido.appex2.Adapter.UserBooksAdapter;
+import com.example.ido.appex2.MenuItemFunctions;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
-import com.example.ido.appex2.entities.Review;
 import com.example.ido.appex2.entities.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -28,7 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +55,7 @@ public class AllUserPurchase extends AppCompatActivity
     private Button mPlaybtn;
     private String m_Key;
     private List<String> mUserBookList;
+    private MenuItemFunctions m_MenuFunctions ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -85,8 +83,38 @@ public class AllUserPurchase extends AppCompatActivity
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
 
+
+
+        Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        m_MenuFunctions =new MenuItemFunctions(this);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setSubtitle("Your Orders");
+
         getAllUserBooks();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        Log.e("Test", "onCreateOptionsMenu() >>");
+
+        m_MenuFunctions = new MenuItemFunctions(this);
+        Log.e("Test", "onCreateOptionsMenu() <<");
+        m_MenuFunctions.onCreateOptionsMenu(menu);
+        m_MenuFunctions.setOnClickSearch();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        m_MenuFunctions.onOptionItemSelect(item);
+        return  super.onOptionsItemSelected(item);
     }
 
 

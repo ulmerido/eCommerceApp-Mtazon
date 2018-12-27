@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- Search / will display always -->
+    <item android:id="@+id/action_search"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_action_search"
+        android:background="@color/Azure"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    />
+
+    <item android:id="@+id/action_navigate_Store"
+        android:icon="@drawable/ic_action_place"
+        android:title="Store"
+        app:showAsAction="ifRoom" />
+
+
+    <!-- Refresh -->
+    <item android:id="@+id/action_refresh"
+        android:title="Refresh"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_mycart"
+        android:title="My Orders"
+        app:showAsAction="never"/>
+
+
+    <item android:id="@+id/action_myprofile"
+        android:title="My Profile"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/action_logout"
+        android:title="Logout"
+        app:showAsAction="never" />
+
+
+
+</menu>

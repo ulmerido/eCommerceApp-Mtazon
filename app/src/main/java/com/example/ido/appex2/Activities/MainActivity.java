@@ -59,13 +59,14 @@ public class MainActivity extends AppCompatActivity {
     private AccessTokenTracker m_AccessTokenTracker;
     private LoginButton m_FacebookLogin_btn;
     private TextView m_SignUp_tv;
-    private Button m_BtnSignin;
+    private TextView m_tvLogIn;
     private TextView m_EtUserEmail;
     private TextView m_tvRecoverPassword;
     private TextView m_EtUserPassword;
     private TextView m_TvAnonymous;
     private String m_EmailReset;
     private FirebaseRemoteConfig m_RemoteConfig;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         m_CallbackManager = CallbackManager.Factory.create();
         m_GoogleSignInButton = (SignInButton) findViewById(R.id.googleSignInButton);
         m_SignUp_tv = (TextView) findViewById(R.id.tvSignUp);
-        m_BtnSignin = (Button) findViewById(R.id.btn_SignIn);
+        m_tvLogIn = (TextView) findViewById(R.id.btn_SignIn);
         m_tvRecoverPassword = (TextView) findViewById(R.id.tvForgetPass);
         m_EtUserEmail = (TextView) findViewById(R.id.etEmail);
         m_EtUserPassword = (TextView) findViewById(R.id.et_UserPassword);
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        m_BtnSignin.setOnClickListener(new View.OnClickListener() {
+        m_tvLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickSignin();

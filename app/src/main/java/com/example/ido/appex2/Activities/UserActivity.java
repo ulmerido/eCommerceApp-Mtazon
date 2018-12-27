@@ -6,9 +6,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 import com.bumptech.glide.Glide;
+import com.example.ido.appex2.MenuItemFunctions;
 import com.example.ido.appex2.R;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,6 +57,7 @@ public class UserActivity extends AppCompatActivity
     private StorageReference m_StorageReference;
     private TextView m_tvRemoveAccount;
     private boolean m_IsUploadingProsses;
+    private MenuItemFunctions m_MenuFunctions ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -107,9 +113,34 @@ public class UserActivity extends AppCompatActivity
         });
 
         updateLoginStatus();
+
+        Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        m_MenuFunctions =new MenuItemFunctions(this);
+
+
         Log.e(TAG, "onCreate() <<");
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        Log.e("Test", "onCreateOptionsMenu() >>");
 
+        m_MenuFunctions = new MenuItemFunctions(this);
+        Log.e("Test", "onCreateOptionsMenu() <<");
+        m_MenuFunctions.onCreateOptionsMenu(menu);
+        m_MenuFunctions.setOnClickSearch();
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        m_MenuFunctions.onOptionItemSelect(item);
+        return  super.onOptionsItemSelected(item);
+    }
     private void onClickLogOut()
     {
         Log.e(TAG, "onClickLogOut() >>");
