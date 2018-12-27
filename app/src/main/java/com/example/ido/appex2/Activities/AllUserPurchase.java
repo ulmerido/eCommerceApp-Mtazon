@@ -54,7 +54,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
     private TextView  mUserItemGenrekName;
     private TextView mUserReviesCount;
     private ImageView mRatingStar;
-    private Button mPlaybtn;
     private String m_Key;
     private List<String> mUserBookList;
     private MenuItemFunctions m_MenuFunctions ;
@@ -80,7 +79,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         mUserItemGenrekName = findViewById(R.id.user_item_book_genre);
         mUserReviesCount = findViewById(R.id.user_item_book_review_count);
         mRatingStar= findViewById(R.id.user_ratingstar_iv);
-        mPlaybtn= findViewById(R.id.user_palyBook);
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
 

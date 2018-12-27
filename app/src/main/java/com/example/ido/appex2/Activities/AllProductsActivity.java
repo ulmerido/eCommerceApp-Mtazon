@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -94,7 +95,8 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Auth = FirebaseAuth.getInstance();
-
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
         //actionBar.setDisplayShowTitleEnabled(false);
