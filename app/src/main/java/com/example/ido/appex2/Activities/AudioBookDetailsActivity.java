@@ -172,10 +172,10 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_tvBookPrice = findViewById(R.id.details_price);
         m_tvBookReviewCount = findViewById(R.id.details_ReviewCount);
         m_tvBookReviewAvg = findViewById(R.id.details_ReviewAvg);
-        m_tvPlaySample = findViewById(R.id.details_playSampleText);
+        //m_tvPlaySample = findViewById(R.id.details_playSampleText);
         m_ivBookImage = findViewById(R.id.details_book_image);
         //m_btnSearch = findViewById(R.id.details_button_search);
-        m_btnPlay = findViewById(R.id.details_Play);
+        //m_btnPlay = findViewById(R.id.details_Play);
         //m_addReview = findViewById(R.id.details_AddNewReview);
         m_Buy = findViewById(R.id.details_buy);
         mediaPlayer = new MediaPlayer();
@@ -294,7 +294,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
         seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setClickable(false);
-
+        seekbar.setProgress(0);
         pauseBtn.setEnabled(false);
 
         playBtn.setOnClickListener(new View.OnClickListener() {
@@ -352,15 +352,21 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             public void onCompletion(MediaPlayer mp)
             {
                 whenAudioFinish();
+                runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
             }
 
-private void whenAudioFinish()
-{
-    mediaPlayer.stop();
-    mediaPlayer.reset();
-    pauseBtn.setEnabled(false);
-    playBtn.setEnabled(true);
-}
+            private void whenAudioFinish()
+           {
+               mediaPlayer.stop();
+               mediaPlayer.reset();
+              // m_lengthOfSound = 1;
+               seekbar.setProgress(0);
+               runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
+               //mediaPlayer.seekTo(1);
+               pauseBtn.setEnabled(false);
+               playBtn.setEnabled(true);
+
+           }
 
 
     private Runnable UpdateSongTime = new Runnable()
@@ -372,14 +378,16 @@ private void whenAudioFinish()
                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
                             toMinutes((long) startTime)));
             startTime = mediaPlayer.getCurrentPosition();
-            runingTimeBook.setText(String.format("%d min, %d sec",
-                    currentMin, currentSec));
+            runingTimeBook.setText(String.format("%d min, %d sec", currentMin, currentSec));
             seekbar.setProgress((int) startTime);
             if( currentSec >= 30 && !m_AudioBookWasPurchased)
             {
                 whenAudioFinish();
                 Toast.makeText(getApplicationContext(), "Only 30 seconds for DEMO version\nBuy the AudioBook to get " +
                         "the FULL version" , Toast.LENGTH_SHORT).show();
+
+                //mediaPlayer.start();
+                //pauseBtn.callOnClick();
             }
             myHandler.postDelayed(this, 100);
 
@@ -412,7 +420,10 @@ private void whenAudioFinish()
                     {
 
                         mediaPlayer.setDataSource(downloadUrl.toString());
+                        //mediaPlayer.setLooping(true);
+                        runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
                         mediaPlayer.prepare(); // might take long! (for buffering, etc)
+
                         mediaPlayer.start();
 
                     }

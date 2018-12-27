@@ -38,8 +38,8 @@
 
             <TextView
                 android:id="@+id/details_book_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="108dp"
+                android:layout_height="25dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="[BOOK NAME]"
@@ -62,8 +62,8 @@
 
             <TextView
                 android:id="@+id/details_genre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="56dp"
+                android:layout_height="23dp"
 
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -75,8 +75,8 @@
 
             <TextView
                 android:id="@+id/details_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="67dp"
+                android:layout_height="31dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="[$X.X]"
@@ -89,37 +89,30 @@
 
             <TextView
                 android:id="@+id/details_ReviewCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="34dp"
+                android:layout_height="28dp"
 
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="88dp"
                 android:text="[13]"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.105"
+                app:layout_constraintVertical_bias="0.0"
                 card_view:layout_constraintStart_toEndOf="@+id/details_ratingstar_iv"
                 card_view:layout_constraintTop_toBottomOf="@+id/details_genre" />
 
             <ImageView
                 android:id="@+id/details_ratingstar_iv"
-                android:layout_width="25dp"
-                android:layout_height="21dp"
+                android:layout_width="27dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="88dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.117"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/raitingstar"
                 card_view:layout_constraintStart_toEndOf="@+id/details_ReviewAvg"
                 card_view:layout_constraintTop_toBottomOf="@+id/details_genre" />
-
-            <Button
-                android:id="@+id/details_Play"
-                android:layout_width="41dp"
-                android:layout_height="37dp"
-                android:layout_marginStart="8dp"
-                android:text="P"
-                app:layout_constraintStart_toEndOf="@+id/details_ReviewCount"
-                app:layout_constraintTop_toBottomOf="@+id/details_price" />
 
             <Button
                 android:id="@+id/details_buy"
@@ -135,19 +128,9 @@
                 card_view:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/details_playSampleText"
-                android:layout_width="80dp"
-                android:layout_height="28dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Play Demo"
-                app:layout_constraintStart_toEndOf="@+id/details_book_image"
-                app:layout_constraintTop_toBottomOf="@+id/details_ratingstar_iv" />
-
-            <TextView
                 android:id="@+id/details_ReviewAvg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="49dp"
+                android:layout_height="28dp"
                 android:layout_marginStart="8dp"
                 android:text="[4.4]"
                 app:layout_constraintStart_toEndOf="@+id/details_book_image"
