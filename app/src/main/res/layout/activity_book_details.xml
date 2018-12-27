@@ -156,17 +156,18 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
-
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <FrameLayout
         android:id="@+id/details_addReviewContainer"
         android:layout_width="match_parent"
         android:layout_height="426dp"
-        android:layout_marginBottom="8dp"
-
+        android:layout_marginBottom="6dp"
         android:background="#0f0f0f"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="12dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="6dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -248,60 +249,60 @@
                     android:layout_marginBottom="8dp"
                     android:text="Music Palyer"
                     android:textSize="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/button2"
-                    app:layout_constraintEnd_toEndOf="@+id/button3"
+                    app:layout_constraintBottom_toTopOf="@+id/pause_btn"
+                    app:layout_constraintEnd_toEndOf="@+id/play_btn"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/button"
-                    android:layout_width="86dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/forward_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="49dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="8dp"
                     android:text="@string/forward"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/button2"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/pause_btn"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <Button
-                    android:id="@+id/button2"
-                    android:layout_width="87dp"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/pause_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="49dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="35dp"
                     android:text="@string/pause"
-                    app:layout_constraintStart_toEndOf="@+id/button"
+                    app:layout_constraintStart_toEndOf="@+id/forward_btn"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/button3"
-                    android:layout_width="87dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/button2"
+                    android:id="@+id/play_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="49dp"
+                    android:layout_alignTop="@+id/pause_btn"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="4dp"
-                    android:layout_toEndOf="@+id/button2"
-                    android:layout_toRightOf="@+id/button2"
+                    android:layout_toEndOf="@+id/pause_btn"
+                    android:layout_toRightOf="@+id/pause_btn"
                     android:text="@string/back"
-                    app:layout_constraintStart_toEndOf="@+id/button2"
+                    app:layout_constraintStart_toEndOf="@+id/pause_btn"
                     app:layout_constraintTop_toBottomOf="@+id/textview" />
 
 
                 <Button
-                    android:id="@+id/button4"
-                    android:layout_width="87dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/button3"
+                    android:id="@+id/rewind_btn"
+                    android:layout_width="80dp"
+                    android:layout_height="49dp"
+                    android:layout_alignTop="@+id/play_btn"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_toEndOf="@+id/button3"
-                    android:layout_toRightOf="@+id/button3"
+                    android:layout_toEndOf="@+id/play_btn"
+                    android:layout_toRightOf="@+id/play_btn"
                     android:text="@string/rewind"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/button3"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/play_btn"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/button3" />
+                    app:layout_constraintStart_toEndOf="@+id/play_btn" />
 
                 <SeekBar
                     android:id="@+id/seekBar"
@@ -311,26 +312,24 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button3"
                     android:gravity="center"
                     android:max="25"
                     android:minHeight="10dp"
                     android:progress="10"
                     android:progressDrawable="@drawable/progress"
                     android:thumb="@drawable/custom_thumb"
-                    />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/play_btn" />
 
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/running_min_tv"
                     android:layout_width="109dp"
                     android:layout_height="31dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="Small Text"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
                     app:layout_constraintStart_toStartOf="parent"
@@ -338,13 +337,12 @@
                     app:layout_constraintVertical_bias="0.307" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/book_time_tv"
                     android:layout_width="256dp"
                     android:layout_height="28dp"
                     android:layout_marginTop="16dp"
-                    android:text="Small Text"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    app:layout_constraintStart_toEndOf="@+id/textView2"
+                    app:layout_constraintStart_toEndOf="@+id/running_min_tv"
                     app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
                 <View
@@ -356,30 +354,11 @@
                     android:background="?android:attr/listDivider"
                     app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-                <Button
-                    android:id="@+id/btBack"
-                    android:layout_width="111dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.529"
-                    app:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
-                    app:layout_constraintTop_toBottomOf="@+id/details_AddNewReview"
-                    app:layout_constraintVertical_bias="0.0" />
-
-
+                    app:layout_constraintTop_toBottomOf="@+id/book_time_tv" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.CardView>
     </FrameLayout>
 
-
-
+    </ScrollView>
 </LinearLayout>

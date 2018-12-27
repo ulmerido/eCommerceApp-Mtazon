@@ -166,6 +166,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
 
         public void populate(AudioBook i_audiobook)
         {
+            Double rating;
             Log.e(TAG,"populate() >> ");
             itemView.setTag(i_audiobook);
             m_tvName.setText(i_audiobook.getName());
@@ -173,7 +174,8 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             m_tvAuther.setText(i_audiobook.getAuthor());
             m_tvReviewCount.setText("(" + Integer.toString(i_audiobook.getReviewsCount()) + ")");
             m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
-            m_tvRating.setText("[" + Double.toString(i_audiobook.getRating()) + "]");
+            rating = i_audiobook.getRating();
+            m_tvRating.setText("[" + String.format("%.2f", rating)+ "]");
 
 
 

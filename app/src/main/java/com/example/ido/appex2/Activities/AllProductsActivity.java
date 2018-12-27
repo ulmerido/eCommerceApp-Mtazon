@@ -105,7 +105,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setSubtitle("All products");
-        Intent intent =getIntent();
+        Intent intent = getIntent();
         if(intent!=null)
         {
             String search = intent.getStringExtra("search");
@@ -125,8 +125,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         {
             onCreateWithoutUser();
         }
-
-        Toast.makeText(getApplicationContext(), "Welcome : ", Toast.LENGTH_SHORT).show();
         ButterKnife.bind(this);
         m_Key = getIntent().getStringExtra("Key");
 
