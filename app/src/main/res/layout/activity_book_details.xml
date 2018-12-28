@@ -142,209 +142,229 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-    <FrameLayout
-        android:id="@+id/details_addReviewContainer"
-        android:layout_width="match_parent"
-        android:layout_height="426dp"
-        android:layout_marginBottom="6dp"
-        android:background="#0f0f0f"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:paddingBottom="6dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/details_addReviewContainer_bar"
+        <FrameLayout
+            android:id="@+id/details_addReviewContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:clickable="false">
+            android:layout_height="426dp"
+            android:layout_marginBottom="6dp"
+            android:background="#0f0f0f"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:paddingBottom="6dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.constraint.ConstraintLayout
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/details_addReviewContainer_bar"
                 android:layout_width="match_parent"
-                android:layout_height="417dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:clickable="false">
 
-                <EditText
-                    android:id="@+id/details_ReviewHeader"
-                    android:layout_width="224dp"
-                    android:layout_height="53dp"
-                    android:layout_marginStart="4dp"
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="417dp">
 
-                    android:layout_marginBottom="8dp"
-                    android:ems="10"
-                    android:hint="Review Header"
-                    app:layout_constraintStart_toStartOf="@+id/details_ReviewBody"
-                    card_view:layout_constraintBottom_toTopOf="@+id/details_ReviewBody"
-                    card_view:layout_constraintVertical_bias="0.25"
-                    tools:ignore="MissingConstraints" />
+                    <EditText
+                        android:id="@+id/details_ReviewHeader"
+                        android:layout_width="224dp"
+                        android:layout_height="53dp"
+                        android:layout_marginStart="4dp"
 
-                <EditText
-                    android:id="@+id/details_ReviewBody"
-                    android:layout_width="223dp"
-                    android:layout_height="68dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginBottom="100dp"
-                    android:background="#f8f7e5"
-                    android:hint="Review Body"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                        android:layout_marginBottom="8dp"
+                        android:ems="10"
+                        android:hint="Review Header"
+                        app:layout_constraintStart_toStartOf="@+id/details_ReviewBody"
+                        card_view:layout_constraintBottom_toTopOf="@+id/details_ReviewBody"
+                        card_view:layout_constraintVertical_bias="0.25"
+                        tools:ignore="MissingConstraints" />
 
-                <Button
-                    android:id="@+id/details_AddNewReview"
-                    android:layout_width="122dp"
-                    android:layout_height="130dp"
-                    android:layout_marginStart="32dp"
-                    android:background="#fcad2e"
+                    <EditText
+                        android:id="@+id/details_ReviewBody"
+                        android:layout_width="223dp"
+                        android:layout_height="68dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginBottom="100dp"
+                        android:background="#f8f7e5"
+                        android:hint="Review Body"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                    android:text="Add\n Review"
-                    android:textAlignment="center"
-                    android:textSize="24sp"
-                    card_view:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
-                    card_view:layout_constraintTop_toTopOf="@+id/details_ReviewHeader" />
+                    <Button
+                        android:id="@+id/details_AddNewReview"
+                        android:layout_width="122dp"
+                        android:layout_height="130dp"
+                        android:layout_marginStart="32dp"
+                        android:background="#fcad2e"
 
-                <RatingBar
-                    android:id="@+id/new_rating_user"
-                    android:layout_width="243dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:numStars="5"
-                    android:progressBackgroundTint="@color/DimGray"
-                    android:progressTint="@color/Gold"
-                    android:rating="0"
-                    android:scaleX="1.1"
-                    android:scaleY="1.1"
-                    android:secondaryProgressTint="@color/Black"
-                    android:stepSize="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/details_ReviewBody" />
+                        android:text="Add\n Review"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        card_view:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
+                        card_view:layout_constraintTop_toTopOf="@+id/details_ReviewHeader" />
 
-
-                <TextView
-                    android:id="@+id/textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Music Palyer"
-                    android:textSize="20dp"
-                    app:layout_constraintBottom_toTopOf="@+id/pause_btn"
-                    app:layout_constraintEnd_toEndOf="@+id/play_btn"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/forward_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="49dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="16dp"
-                    android:text="@string/forward"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/pause_btn"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <Button
-                    android:id="@+id/pause_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="49dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/pause"
-                    app:layout_constraintStart_toEndOf="@+id/forward_btn"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/play_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="49dp"
-                    android:layout_alignTop="@+id/pause_btn"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_toEndOf="@+id/pause_btn"
-                    android:layout_toRightOf="@+id/pause_btn"
-                    android:text="@string/back"
-                    app:layout_constraintStart_toEndOf="@+id/pause_btn"
-                    app:layout_constraintTop_toBottomOf="@+id/textview" />
+                    <RatingBar
+                        android:id="@+id/new_rating_user"
+                        android:layout_width="243dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:numStars="5"
+                        android:progressBackgroundTint="@color/DimGray"
+                        android:progressTint="@color/Gold"
+                        android:rating="0"
+                        android:scaleX="1.1"
+                        android:scaleY="1.1"
+                        android:secondaryProgressTint="@color/Black"
+                        android:stepSize="1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/details_ReviewBody" />
 
 
-                <Button
-                    android:id="@+id/rewind_btn"
-                    android:layout_width="80dp"
-                    android:layout_height="49dp"
-                    android:layout_alignTop="@+id/play_btn"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_toEndOf="@+id/play_btn"
-                    android:layout_toRightOf="@+id/play_btn"
-                    android:text="@string/rewind"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/play_btn"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/play_btn" />
+                    <TextView
+                        android:id="@+id/textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Music Palyer"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/pause_btn"
+                        app:layout_constraintEnd_toEndOf="@+id/play_btn"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <SeekBar
-                    android:id="@+id/seekBar"
-                    style="@android:style/Widget.Material.SeekBar"
-                    android:layout_width="385dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:max="25"
-                    android:minHeight="10dp"
-                    android:progress="10"
-                    android:progressDrawable="@drawable/progress"
-                    android:thumb="@drawable/custom_thumb"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/play_btn" />
+                    <Button
+                        android:id="@+id/forward_btn"
+                        android:layout_width="80dp"
+                        android:layout_height="49dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:text="@string/forward"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/pause_btn"
+                        app:layout_constraintEnd_toStartOf="@+id/pause_btn"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <Button
+                        android:id="@+id/pause_btn"
+                        android:layout_width="80dp"
+                        android:layout_height="49dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="6dp"
+                        android:text="@string/pause"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/play_btn"
+                        app:layout_constraintStart_toEndOf="@+id/forward_btn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/play_btn"
+                        android:layout_width="80dp"
+                        android:layout_height="49dp"
+                        android:layout_alignTop="@+id/pause_btn"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_toEndOf="@+id/pause_btn"
+                        android:layout_toRightOf="@+id/pause_btn"
+                        android:text="@string/back"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/rewind_btn"
+                        app:layout_constraintStart_toEndOf="@+id/pause_btn"
+                        app:layout_constraintTop_toBottomOf="@+id/textview" />
 
 
-                <TextView
-                    android:id="@+id/running_min_tv"
-                    android:layout_width="109dp"
-                    android:layout_height="31dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/seekBar"
-                    app:layout_constraintVertical_bias="0.307" />
+                    <Button
+                        android:id="@+id/rewind_btn"
+                        android:layout_width="80dp"
+                        android:layout_height="49dp"
+                        android:layout_alignTop="@+id/play_btn"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_toEndOf="@+id/play_btn"
+                        android:layout_toRightOf="@+id/play_btn"
+                        android:text="@string/rewind"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/play_btn"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/play_btn" />
 
-                <TextView
-                    android:id="@+id/book_time_tv"
-                    android:layout_width="256dp"
-                    android:layout_height="28dp"
-                    android:layout_marginTop="16dp"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    app:layout_constraintStart_toEndOf="@+id/running_min_tv"
-                    app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+                    <SeekBar
+                        android:id="@+id/seekBar"
+                        style="@android:style/Widget.Material.SeekBar"
+                        android:layout_width="385dp"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center"
+                        android:max="25"
+                        android:minHeight="10dp"
+                        android:progress="10"
+                        android:progressDrawable="@drawable/progress"
+                        android:thumb="@drawable/custom_thumb"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/play_btn" />
 
-                <View
-                    android:id="@+id/divider2"
-                    android:layout_width="371dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="?android:attr/listDivider"
-                    app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/book_time_tv" />
 
-            </android.support.constraint.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/running_min_tv"
+                        android:layout_width="109dp"
+                        android:layout_height="31dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+                        app:layout_constraintVertical_bias="0.307" />
 
-        </android.support.v7.widget.CardView>
-    </FrameLayout>
+                    <TextView
+                        android:id="@+id/book_time_tv"
+                        android:layout_width="256dp"
+                        android:layout_height="28dp"
+                        android:layout_marginTop="16dp"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        app:layout_constraintStart_toEndOf="@+id/running_min_tv"
+                        app:layout_constraintTop_toBottomOf="@+id/seekBar" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="371dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="?android:attr/listDivider"
+                        app:layout_constraintBottom_toTopOf="@+id/details_ReviewHeader"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/book_time_tv" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.v7.widget.CardView>
+        </FrameLayout>
 
     </ScrollView>
 </LinearLayout>

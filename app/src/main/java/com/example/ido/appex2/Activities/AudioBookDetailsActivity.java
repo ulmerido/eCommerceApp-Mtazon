@@ -262,7 +262,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
         });
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        
+
     }
 
 
