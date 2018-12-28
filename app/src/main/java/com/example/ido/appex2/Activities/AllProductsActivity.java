@@ -79,6 +79,15 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_products);
 
+        createLayoutConnections();
+
+        createMenuConnetions();
+
+
+    }
+
+    private void createLayoutConnections()
+    {
         m_et_searchBook = (EditText) findViewById(R.id.et_searchBook);
         m_button_search = (Button) findViewById(R.id.button_search);
         m_radioButtonByPrice = (RadioButton) findViewById(R.id.radioButtonByPrice);
@@ -94,11 +103,11 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Auth = FirebaseAuth.getInstance();
+    }
 
-
-
+    private void createMenuConnetions()
+    {
         //actionBar.setDisplayShowTitleEnabled(false);
-
         Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -119,7 +128,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
         if(m_fbUser != null)
         {
-           onCreateWithUser();
+            onCreateWithUser();
         }
         else
         {
@@ -129,6 +138,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         m_Key = getIntent().getStringExtra("Key");
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {

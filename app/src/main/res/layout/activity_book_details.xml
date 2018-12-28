@@ -27,19 +27,19 @@
 
             <ImageView
                 android:id="@+id/details_book_image"
-                android:layout_width="152dp"
-                android:layout_height="149dp"
+                android:layout_width="157dp"
+                android:layout_height="186dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_launcher_background"
                 android:background="@drawable/border_image"
+                android:src="@drawable/ic_launcher_background"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/details_book_name"
-                android:layout_width="108dp"
-                android:layout_height="25dp"
+                android:layout_width="227dp"
+                android:layout_height="43dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="[BOOK NAME]"
@@ -51,8 +51,8 @@
 
             <TextView
                 android:id="@+id/details_auther"
-                android:layout_width="wrap_content"
-                android:layout_height="17dp"
+                android:layout_width="223dp"
+                android:layout_height="24dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:text="[auther]"
@@ -62,8 +62,8 @@
 
             <TextView
                 android:id="@+id/details_genre"
-                android:layout_width="56dp"
-                android:layout_height="23dp"
+                android:layout_width="227dp"
+                android:layout_height="37dp"
 
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -194,12 +194,14 @@
 
                 <Button
                     android:id="@+id/details_AddNewReview"
-                    android:layout_width="77dp"
-                    android:layout_height="56dp"
+                    android:layout_width="122dp"
+                    android:layout_height="130dp"
                     android:layout_marginStart="32dp"
                     android:background="#fcad2e"
 
-                    android:text="Add Review"
+                    android:text="Add\n Review"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
                     card_view:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
                     card_view:layout_constraintTop_toTopOf="@+id/details_ReviewHeader" />
 
@@ -207,8 +209,8 @@
                     android:id="@+id/new_rating_user"
                     android:layout_width="243dp"
                     android:layout_height="56dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
                     android:numStars="5"
                     android:progressBackgroundTint="@color/DimGray"
                     android:progressTint="@color/Gold"

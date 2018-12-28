@@ -123,6 +123,7 @@ public class UserActivity extends AppCompatActivity
 
         Log.e(TAG, "onCreate() <<");
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {

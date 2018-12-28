@@ -61,6 +61,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     private String m_Key;
     private User m_User;
     private FirebaseAuth m_Auth;
+    private FirebaseUser m_fbUser;
     private DatabaseReference m_MyUserRef;
 
     private EditText m_etSearch;
@@ -115,13 +116,121 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
+
+        getUserAndBookDetailsToActivity();
+
+        createLayoutConnections();
+
+        populate();
+        createAndInvokeMediaPlayer();
+
+
+        m_Buy.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                setBuyButton();
+            }
+        });
+
+        addListenerOnClickAddReview();
+
+        m_ivRatingImage.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickRating();
+            }
+        });
+
+        createMenuConnections();
+
+    }
+
+    private void createMenuConnections()
+    {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setSubtitle("Details");
+        m_MenuFunctions = new MenuItemFunctions(this);
+    }
+
+    private void setBuyButton()
+    {
+        if(m_fbUser.isAnonymous())
+        {
+            Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
+
+            if(m_AudioBookWasPurchased)
+            {
+                Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
+                //User purchased the song so he can play it
+                //playCurrentSong(song.getFile());
+
+            }
+            else
+            {
+                //Purchase the song.
+                Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
+                m_User.getMyAudioBooks().add(m_Key);
+                m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
+                DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
+                m_AudioBookWasPurchased = true;
+                m_Buy.setText("You Bought This eBook");
+                m_Buy.setEnabled(false);
+            }
+            Log.e(TAG, "playSong.onClick() <<");
+        }
+    }
+
+
+
+    private void createLayoutConnections() {
+
+        forwardBtn = (Button) findViewById(R.id.forward_btn);
+        pauseBtn = (Button) findViewById(R.id.pause_btn);
+        playBtn = (Button) findViewById(R.id.play_btn);
+        rewindBtn = (Button) findViewById(R.id.rewind_btn);
+
+        runingTimeBook = (TextView) findViewById(R.id.running_min_tv);
+        bookOverallTime = (TextView) findViewById(R.id.book_time_tv);
+
+        m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
+        m_etReviewBody = findViewById(R.id.details_ReviewBody);
+        m_ivRatingImage = findViewById(R.id.details_ratingstar_iv);
+        m_tvBookName = findViewById(R.id.details_book_name);
+        m_tvBookAuther = findViewById(R.id.details_auther);
+        m_tvBookGenre = findViewById(R.id.details_genre);
+        m_tvBookPrice = findViewById(R.id.details_price);
+        m_tvBookReviewCount = findViewById(R.id.details_ReviewCount);
+        m_tvBookReviewAvg = findViewById(R.id.details_ReviewAvg);
+        m_ivBookImage = findViewById(R.id.details_book_image);
+        m_Buy = findViewById(R.id.details_buy);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+    }
+
+    private void getUserAndBookDetailsToActivity() {
+
         m_Auth = FirebaseAuth.getInstance();
-        final FirebaseUser fbUser = FirebaseAuth.getInstance().getCurrentUser();
+        m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
         //m_User = getIntent().getParcelableExtra("User");
         m_AudioBook = getIntent().getParcelableExtra("AudioBook");
         m_AudioBookRef = FirebaseDatabase.getInstance().getReference("AudioBooks/" + m_Key);
-        m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + fbUser.getUid());
+        m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_fbUser.getUid());
         m_MyUserRef.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -154,95 +263,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
             }
         });
-
-        forwardBtn = (Button) findViewById(R.id.forward_btn);
-        pauseBtn = (Button) findViewById(R.id.pause_btn);
-        playBtn = (Button) findViewById(R.id.play_btn);
-        rewindBtn = (Button) findViewById(R.id.rewind_btn);
-
-        runingTimeBook = (TextView) findViewById(R.id.running_min_tv);
-        bookOverallTime = (TextView) findViewById(R.id.book_time_tv);
-
-        m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
-        m_etReviewBody = findViewById(R.id.details_ReviewBody);
-        m_ivRatingImage = findViewById(R.id.details_ratingstar_iv);
-        m_tvBookName = findViewById(R.id.details_book_name);
-        m_tvBookAuther = findViewById(R.id.details_auther);
-        m_tvBookGenre = findViewById(R.id.details_genre);
-        m_tvBookPrice = findViewById(R.id.details_price);
-        m_tvBookReviewCount = findViewById(R.id.details_ReviewCount);
-        m_tvBookReviewAvg = findViewById(R.id.details_ReviewAvg);
-        //m_tvPlaySample = findViewById(R.id.details_playSampleText);
-        m_ivBookImage = findViewById(R.id.details_book_image);
-        //m_btnSearch = findViewById(R.id.details_button_search);
-        //m_btnPlay = findViewById(R.id.details_Play);
-        //m_addReview = findViewById(R.id.details_AddNewReview);
-        m_Buy = findViewById(R.id.details_buy);
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-
-
-        populate();
-        createAndInvokeMediaPlayer();
-        m_Buy.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-
-                if(fbUser.isAnonymous())
-                {
-                    Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
-
-                    if(m_AudioBookWasPurchased)
-                    {
-                        Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
-                        //User purchased the song so he can play it
-                        //playCurrentSong(song.getFile());
-
-                    }
-                    else
-                    {
-                        //Purchase the song.
-                        Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
-                        m_User.getMyAudioBooks().add(m_Key);
-                        m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
-                        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
-                        m_AudioBookWasPurchased = true;
-                        m_Buy.setText("You Bought This eBook");
-                        m_Buy.setEnabled(false);
-                    }
-                    Log.e(TAG, "playSong.onClick() <<");
-                }
-            }
-        });
-
-        addListenerOnClickAddReview();
-
-        m_ivRatingImage.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                onClickRating();
-            }
-        });
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setSubtitle("Details");
-        m_MenuFunctions = new MenuItemFunctions(this);
-
     }
 
 
@@ -588,12 +608,17 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference();
                     reviewRef.child("Review").push().setValue(review);
                     reviewSetComlete();
+                    
+
                 }
 
                 Log.e(TAG, "onComplete() <<");
             }
         });
     }
+
+
+
 
     private void reviewSetComlete()
     {

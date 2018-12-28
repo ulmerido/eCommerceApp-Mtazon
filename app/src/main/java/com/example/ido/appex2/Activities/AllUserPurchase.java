@@ -65,6 +65,38 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_user_purchase);
 
+        createLayoutConnections();
+
+        createMenuConnections();
+
+        getAllUserBooks();
+
+
+//        mRatingStar.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                onClickRating();
+//            }
+//        });
+
+    }
+
+    private void createMenuConnections() {
+        Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        m_MenuFunctions =new MenuItemFunctions(this);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setSubtitle("Your Orders");
+    }
+
+
+    private void createLayoutConnections()
+    {
         mRecyclerView = findViewById(R.id.AllUserPurchase_RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -83,30 +115,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         mPlaybtn= findViewById(R.id.user_palyBook);
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
-
-
-
-        Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        m_MenuFunctions =new MenuItemFunctions(this);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setSubtitle("Your Orders");
-
-        getAllUserBooks();
-
-
-//        mRatingStar.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                onClickRating();
-//            }
-//        });
-
     }
 
 

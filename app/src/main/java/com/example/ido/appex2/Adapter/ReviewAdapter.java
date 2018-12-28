@@ -14,6 +14,11 @@ import com.bumptech.glide.Glide;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.Review;
 import com.example.ido.appex2.entities.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import butterknife.BindView;
@@ -96,7 +101,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             m_ReviewRating = itemView.findViewById(R.id.UserReview_rating_tv);
             m_ReviewUserName = itemView.findViewById(R.id.UserReview_user_name);
             m_ReviewStarImage = itemView.findViewById(R.id.UserReview_ratingstar_iv);
-            m_ReviewUserImage = itemView.findViewById(R.id.UserReview_user_image);
+            //m_ReviewUserImage = itemView.findViewById(R.id.UserReview_user_image);
             m_cvViewBook = itemView.findViewById(R.id.item_card_UserReview);
 
             this.m_Context = i_Context;
@@ -118,6 +123,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
 
             m_ReviewDate.setText(i_Review.getM_Date());
             m_ReviewRating.setText(Double.toString( i_Review.getRating()));
+
 
             m_ReviewUserName.setText(i_Review.getUserEmail());
 
@@ -191,15 +197,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             this.m_ReviewStarImage = m_ReviewStarImage;
         }
 
-        public ImageView getReviewUserImage()
-        {
-            return m_ReviewUserImage;
-        }
-
-        public void setReviewUserImage(ImageView m_ReviewUserImage)
-        {
-            this.m_ReviewUserImage = m_ReviewUserImage;
-        }
+//        public ImageView getReviewUserImage()
+//        {
+//            return m_ReviewUserImage;
+//        }
+//
+//        public void setReviewUserImage(ImageView m_ReviewUserImage)
+//        {
+//            this.m_ReviewUserImage = m_ReviewUserImage;
+//        }
 
         public CardView getCvViewBook()
         {

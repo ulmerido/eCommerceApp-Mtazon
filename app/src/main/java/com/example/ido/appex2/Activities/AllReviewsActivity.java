@@ -59,6 +59,16 @@ public class AllReviewsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_reviews);
 
+        createLayoutConnections();
+
+        createMenuConnctions();
+
+        getAllReviews();
+
+    }
+
+    private void createLayoutConnections()
+    {
         mRecyclerView = findViewById(R.id.Review_RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -71,10 +81,14 @@ public class AllReviewsActivity extends AppCompatActivity
         m_ReviewDate = findViewById(R.id.UserReview_Date);
         m_ReviewRating = findViewById(R.id.UserReview_rating_tv);
 
-        m_UserImage = findViewById(R.id.UserReview_user_image);
+        //m_UserImage = findViewById(R.id.UserReview_user_image);
         m_ivRatingImage = findViewById(R.id.UserReview_ratingstar_iv);
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
+    }
+
+    private void createMenuConnctions()
+    {
 
         Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -84,9 +98,6 @@ public class AllReviewsActivity extends AppCompatActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setSubtitle("Reviews");
-
-        getAllReviews();
-
     }
 
     @Override
