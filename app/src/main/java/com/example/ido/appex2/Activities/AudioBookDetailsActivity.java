@@ -233,15 +233,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_AudioBookRef = FirebaseDatabase.getInstance().getReference("AudioBooks/" + m_Key);
         m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_fbUser.getUid());
         m_MyUserRef.addValueEventListener(new ValueEventListener()
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        populate();
-        createAndInvokeMediaPlayer();
-        m_Buy.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onDataChange(DataSnapshot snapshot)
-            {
+            public void onDataChange(DataSnapshot snapshot) {
                 Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
                 Log.e(TAG, "onDataChange(User) >> " + snapshot.getValue(User.class).toString());
                 m_User = snapshot.getValue(User.class);
@@ -250,10 +244,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                 m_Buy.setText("BUY $" + m_AudioBook.getPrice());
                 Iterator i = m_User.getMyAudioBooks().iterator();
-                while(i.hasNext())
-                {
-                    if(i.next().equals(m_Key))
-                    {
+                while (i.hasNext()) {
+                    if (i.next().equals(m_Key)) {
                         m_AudioBookWasPurchased = true;
                         m_Buy.setText("You Bought This eBook");
                         m_Buy.setEnabled(false);
@@ -264,11 +256,13 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
+            public void onCancelled(DatabaseError databaseError) {
                 Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
             }
+
         });
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        
     }
 
 
@@ -617,7 +611,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference();
                     reviewRef.child("Review").push().setValue(review);
                     reviewSetComlete();
-                    //asdasdas
+                    
 
                 }
 

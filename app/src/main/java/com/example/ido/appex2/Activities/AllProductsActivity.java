@@ -87,8 +87,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     }
 
-    private void createLayoutConnections()
-    {
+    private void createLayoutConnections() {
         m_et_searchBook = (EditText) findViewById(R.id.et_searchBook);
         m_button_search = (Button) findViewById(R.id.button_search);
         m_radioButtonByPrice = (RadioButton) findViewById(R.id.radioButtonByPrice);
@@ -106,6 +105,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         m_Auth = FirebaseAuth.getInstance();
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
 
     private void createMenuConnetions()
     {
@@ -138,7 +138,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         }
         ButterKnife.bind(this);
         m_Key = getIntent().getStringExtra("Key");
-
     }
 
     @Override
