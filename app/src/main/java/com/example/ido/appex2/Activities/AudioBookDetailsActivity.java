@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -232,6 +233,11 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_AudioBookRef = FirebaseDatabase.getInstance().getReference("AudioBooks/" + m_Key);
         m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_fbUser.getUid());
         m_MyUserRef.addValueEventListener(new ValueEventListener()
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        populate();
+        createAndInvokeMediaPlayer();
+        m_Buy.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onDataChange(DataSnapshot snapshot)
@@ -528,6 +534,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 Log.e(TAG, "Exception " + e.getMessage());
             }
+            m_etReviewHeader.setHintTextColor(Color.GRAY);
+            m_etReviewBody.setHintTextColor(Color.GRAY);
+
         }
         else
         {

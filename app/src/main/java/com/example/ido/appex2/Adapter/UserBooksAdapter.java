@@ -112,7 +112,6 @@ public class UserBooksAdapter extends RecyclerView.Adapter<UserBooksAdapter.User
             mUserItemGenrekName = itemView.findViewById(R.id.user_item_book_genre);
             mUserReviesCount    = itemView.findViewById(R.id.user_item_book_review_count);
             mRatingStar= itemView.findViewById(R.id.user_ratingstar_iv);
-            mPlaybtn= itemView.findViewById(R.id.user_palyBook);
             m_cvViewBook = itemView.findViewById(R.id.item_card_view_book);
             this.m_Context = i_Context;
             Log.e(TAG, "UserBookHolder() << ");
