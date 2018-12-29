@@ -306,15 +306,16 @@
                         android:id="@+id/play_btn"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:background="@color/Black"
-
                         android:layout_alignTop="@+id/pause_btn"
+
                         android:layout_marginStart="6dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="6dp"
                         android:layout_toEndOf="@+id/pause_btn"
                         android:layout_toRightOf="@+id/pause_btn"
+                        android:background="@color/Black"
                         android:drawableLeft="@android:drawable/ic_media_play"
+                        android:textAlignment="viewStart"
                         android:textAllCaps="true"
                         android:textSize="24sp"
                         android:textStyle="bold"

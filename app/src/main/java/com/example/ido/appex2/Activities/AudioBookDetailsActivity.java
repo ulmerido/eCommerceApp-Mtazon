@@ -189,8 +189,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_tvBookReviewAvg = findViewById(R.id.details_ReviewAvg);
         m_ivBookImage = findViewById(R.id.details_book_image);
         m_Buy = findViewById(R.id.details_buy);
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         m_moreReviews = findViewById(R.id.details_watchReviews);
         m_moreReviews.setOnClickListener(new View.OnClickListener()
         {
@@ -294,15 +292,16 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     public void onBackPressed()
     {
         Log.e(TAG, "onBackPressed() >>");
-
-        //  pauseBtn.callOnClick(); // close music when we are back
         whenAudioFinish();
+        mediaPlayer.seekTo(0);
         super.onBackPressed();
         Log.e(TAG, "onBackPressed() <<");
     }
 
     private void createAndInvokeMediaPlayer()
     {
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         Log.e(TAG, "createAndInvokeMediaPlayer() >>");
         seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setClickable(false);
@@ -437,11 +436,11 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                     try
                     {
-
                         mediaPlayer.setDataSource(downloadUrl.toString());
                         runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
                         mediaPlayer.prepare(); // might take long! (for buffering, etc)
-
+                        mediaPlayer.seekTo(0);
+                        oneTimeOnly = 0;
                         mediaPlayer.start();
 
                     } catch (Exception e)

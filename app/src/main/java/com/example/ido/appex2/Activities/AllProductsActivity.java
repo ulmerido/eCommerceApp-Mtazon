@@ -215,6 +215,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 dialogInterface.cancel();
                 Intent intent_LogOut = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent_LogOut);
+                finish();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
