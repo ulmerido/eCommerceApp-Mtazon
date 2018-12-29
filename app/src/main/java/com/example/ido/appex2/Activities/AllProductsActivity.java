@@ -61,17 +61,10 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private User mUser = null;
     private String m_Key;
     /// xml buttons
-    private Button m_userInfo_btn;
-    private Button m_product_btn;
+
     private EditText m_et_searchBook;
-    private Button m_button_search;
-    private RadioButton m_radioButtonByPrice;
-    private RadioButton m_radioButtonByReviews;
-    private Spinner m_search_spinner;
-    private TextView m_orderby_label;
     private FirebaseUser m_fbUser;
     private FirebaseAuth m_Auth;
-    private boolean m_logOutChoise = false;
     private MenuItemFunctions m_MenuFunctions ;
 
     @Override
@@ -89,12 +82,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     private void createLayoutConnections() {
         m_et_searchBook = (EditText) findViewById(R.id.et_searchBook);
-        m_button_search = (Button) findViewById(R.id.button_search);
-        m_radioButtonByPrice = (RadioButton) findViewById(R.id.radioButtonByPrice);
-        m_radioButtonByReviews = (RadioButton) findViewById(R.id.radioButtonByRating);
-        m_search_spinner = (Spinner) findViewById(R.id.search_spinner);
-        m_orderby_label = (TextView) findViewById(R.id.orderby_label);
-
         ButterKnife.bind(this);
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -109,7 +96,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     private void createMenuConnetions()
     {
-        //actionBar.setDisplayShowTitleEnabled(false);
         Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -193,27 +179,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         getAllBooks();
     }
 
-    private void deleteAllReviewsAndRating()
-    {
-        FirebaseDatabase.getInstance().getReference().child("AudioBooks").addListenerForSingleValueEvent(new ValueEventListener()
-        {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                for(DataSnapshot book : dataSnapshot.getChildren())
-                {
-                    book.child("reviewCount").getRef().setValue(0);
-                    book.child("rating").getRef().setValue(0.0);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
-            }
-        });
-
-    }
 
     @Override
     public void onBackPressed()
@@ -311,37 +276,35 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             {
                 Log.e(TAG, "onChildMoved(Songs) >> " + snapshot.getKey());
                 Log.e(TAG, "onChildMoved(Songs) << Doing nothing");
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot snapshot)
             {
 
-                Log.e(TAG, "onChildRemoved(Songs) >> " + snapshot.getKey());
+                Log.e(TAG, "onChildRemoved(Books) >> " + snapshot.getKey());
 
-                AudioBook book = snapshot.getValue(AudioBook.class);
                 String key = snapshot.getKey();
 
                 for(int i = 0; i < m_BooksList.size(); i++)
                 {
-                    AudioBookWithKey songWithKey = (AudioBookWithKey) m_BooksList.get(i);
-                    if(songWithKey.getKey().equals(snapshot.getKey()))
+                    AudioBookWithKey bookWithKey = (AudioBookWithKey) m_BooksList.get(i);
+                    if(bookWithKey.getKey().equals(key))
                     {
                         m_BooksList.remove(i);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
-                        Log.e(TAG, "onChildRemoved(Songs) >> i=" + i);
+                        Log.e(TAG, "onChildRemoved(Books) >> i=" + i);
                         break;
                     }
                 }
 
-                Log.e(TAG, "onChildRemoved(Songs) <<");
+                Log.e(TAG, "onChildRemoved(Books) <<");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-                Log.e(TAG, "onCancelled(Songs) >>" + databaseError.getMessage());
+                Log.e(TAG, "onCancelled(Books) >><<" + databaseError.getMessage());
             }
 
         });
@@ -361,17 +324,14 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             @Override
             public void onDataChange(DataSnapshot snapshot)
             {
-
                 Log.e(TAG, "onDataChange(Query) >> " + snapshot.getKey());
                 updateAudioBooksList(snapshot);
                 Log.e(TAG, "onDataChange(Query) <<");
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-
                 Log.e(TAG, "onCancelled() >>" + databaseError.getMessage());
             }
 
@@ -462,32 +422,4 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         startActivity(intent);
         Log.e(TAG, "onAudioBookCardClick <<");
     }
-
-    public void onUserClick(View v)
-    {
-        if(m_fbUser.isAnonymous())
-        {
-            Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Intent intent_UserActivity = new Intent(getApplicationContext(), UserActivity.class);
-            startActivity(intent_UserActivity);
-        }
-    }
-
-    public void onMyProductButtonClick(View v)
-    {
-        if(m_fbUser.isAnonymous())
-        {
-            Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Intent intent_UserActivity = new Intent(getApplicationContext(), AllUserPurchase.class);
-            intent_UserActivity.putExtra("Key", m_Key);
-            startActivity(intent_UserActivity);
-        }
-    }
-
 }

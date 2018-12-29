@@ -46,10 +46,8 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AudioBookDetailsActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener
@@ -57,59 +55,42 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
     public static final String TAG = "AudBookDetActiv:";
     private MenuItemFunctions m_MenuFunctions;
-
     private AudioBook m_AudioBook;
     private String m_Key;
     private User m_User;
     private FirebaseAuth m_Auth;
     private FirebaseUser m_fbUser;
     private DatabaseReference m_MyUserRef;
-
-    private EditText m_etSearch;
     private EditText m_etReviewHeader;
     private EditText m_etReviewBody;
-
     private TextView m_tvBookName;
     private TextView m_tvBookAuther;
     private TextView m_tvBookGenre;
     private TextView m_tvBookReviewCount;
     private TextView m_tvBookReviewAvg;
-    private TextView m_tvPlaySample;
     private TextView m_tvBookPrice;
-
     private ImageView m_ivBookImage;
     private ImageView m_ivRatingImage;
-    private Button m_btnSearch;
-    private Button m_btnPlay;
     private Button m_addReview;
     private Button m_Buy;
-
     private float m_PrevRating = -1;
     private RatingBar m_UserRating;
-
-    private DatabaseReference m_AudioBookReviewsRef;
     private DatabaseReference m_AudioBookRef;
-    private List<Review> reviewsList = new ArrayList<>();
-
     private boolean m_AudioBookWasPurchased = false;
+    private  TextView m_moreReviews;
 
     //------Media Player---------
     private Button forwardBtn, pauseBtn, playBtn, rewindBtn;
-    private ImageView iv;
     private MediaPlayer mediaPlayer;
-
     private double startTime = 0;
     private double finalTime = 0;
-
     private Handler myHandler = new Handler();
-    ;
     private int forwardTime = 5000;
     private int backwardTime = 5000;
     private SeekBar seekbar;
     private TextView runingTimeBook, bookOverallTime, tx3;
     private int m_lengthOfSound = 0;
     public static int oneTimeOnly = 0;
-
     //---------------------------
 
     @Override
@@ -119,13 +100,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         setContentView(R.layout.activity_book_details);
 
         getUserAndBookDetailsToActivity();
-
         createLayoutConnections();
-
         populate();
         createAndInvokeMediaPlayer();
-
-
         m_Buy.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -134,9 +111,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 setBuyButton();
             }
         });
-
         addListenerOnClickAddReview();
-
         m_ivRatingImage.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -145,9 +120,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 onClickRating();
             }
         });
-
         createMenuConnections();
-
     }
 
     private void createMenuConnections()
@@ -175,9 +148,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             if(m_AudioBookWasPurchased)
             {
                 Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
-                //User purchased the song so he can play it
-                //playCurrentSong(song.getFile());
-
             }
             else
             {
@@ -191,6 +161,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 m_Buy.setText("You Bought This eBook");
                 m_Buy.setEnabled(false);
             }
+
             Log.e(TAG, "playSong.onClick() <<");
         }
     }
@@ -203,10 +174,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         pauseBtn = (Button) findViewById(R.id.pause_btn);
         playBtn = (Button) findViewById(R.id.play_btn);
         rewindBtn = (Button) findViewById(R.id.rewind_btn);
-
         runingTimeBook = (TextView) findViewById(R.id.running_min_tv);
         bookOverallTime = (TextView) findViewById(R.id.book_time_tv);
-
         m_etReviewHeader = findViewById(R.id.details_ReviewHeader);
         m_etReviewBody = findViewById(R.id.details_ReviewBody);
         m_ivRatingImage = findViewById(R.id.details_ratingstar_iv);
@@ -220,6 +189,15 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_Buy = findViewById(R.id.details_buy);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        m_moreReviews = findViewById(R.id.details_watchReviews);
+        m_moreReviews.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickRating();
+            }
+        });
 
     }
 
@@ -228,7 +206,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_Auth = FirebaseAuth.getInstance();
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
-        //m_User = getIntent().getParcelableExtra("User");
         m_AudioBook = getIntent().getParcelableExtra("AudioBook");
         m_AudioBookRef = FirebaseDatabase.getInstance().getReference("AudioBooks/" + m_Key);
         m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_fbUser.getUid());
@@ -310,54 +287,60 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         super.onBackPressed();
     }
 
-    private void createAndInvokeMediaPlayer() {
+    private void createAndInvokeMediaPlayer()
+    {
 
         seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setClickable(false);
         seekbar.setProgress(0);
         pauseBtn.setEnabled(false);
 
-        playBtn.setOnClickListener(new View.OnClickListener() {
+        playBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 playAudioBook(m_AudioBook.getFile());
 
             }
         });
 
-        pauseBtn.setOnClickListener(new View.OnClickListener() {
+        pauseBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                // Toast.makeText(getApplicationContext(), "Pausing sound", Toast.LENGTH_SHORT).show();
+            public void onClick(View v)
+            {
                 mediaPlayer.pause();
                 m_lengthOfSound = mediaPlayer.getCurrentPosition();
-                //   Toast.makeText(getApplicationContext(), "Pausing at : " + m_lengthOfSound, Toast.LENGTH_SHORT).show();
                 pauseBtn.setEnabled(false);
                 playBtn.setEnabled(true);
             }
         });
 
-        forwardBtn.setOnClickListener(new View.OnClickListener() {
+        forwardBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 int temp = (int) startTime;
 
-                if ((temp + forwardTime) <= finalTime) {
+                if((temp + forwardTime) <= finalTime)
+                {
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
-                    // Toast.makeText(getApplicationContext(), "You have Jumped forward 5 seconds", Toast.LENGTH_SHORT).show();
-                } else {
-                    //  Toast.makeText(getApplicationContext(), "Cannot jump forward 5 seconds", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        rewindBtn.setOnClickListener(new View.OnClickListener() {
+        rewindBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 int temp = (int) startTime;
 
-                if ((temp - backwardTime) > 0) {
+                if((temp - backwardTime) > 0)
+                {
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
                 }
@@ -379,10 +362,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
            {
                mediaPlayer.stop();
                mediaPlayer.reset();
-              // m_lengthOfSound = 1;
                seekbar.setProgress(0);
                runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
-               //mediaPlayer.seekTo(1);
                pauseBtn.setEnabled(false);
                playBtn.setEnabled(true);
 
@@ -405,9 +386,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 whenAudioFinish();
                 Toast.makeText(getApplicationContext(), "Only 30 seconds for DEMO version\nBuy the AudioBook to get " +
                         "the FULL version" , Toast.LENGTH_SHORT).show();
-
-                //mediaPlayer.start();
-                //pauseBtn.callOnClick();
             }
             myHandler.postDelayed(this, 100);
 
@@ -440,7 +418,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     {
 
                         mediaPlayer.setDataSource(downloadUrl.toString());
-                        //mediaPlayer.setLooping(true);
                         runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
                         mediaPlayer.prepare(); // might take long! (for buffering, etc)
 
@@ -465,8 +442,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     {
         finalTime = mediaPlayer.getDuration();
         startTime = mediaPlayer.getCurrentPosition();
-
-
         if (oneTimeOnly == 0) {
             seekbar.setMax((int) finalTime);
             oneTimeOnly = 1;
@@ -497,14 +472,10 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_tvBookReviewCount.setText("(" + Integer.toString(m_AudioBook.getReviewsCount()) + ")");
         m_tvBookPrice.setText(Integer.toString(m_AudioBook.getPrice()) + "$");
         m_tvBookReviewAvg.setText("[" + Double.toString(m_AudioBook.getRating()) + "]");
-
         Log.e(TAG, "updateProfilePicInTheActivityView() >>");
-
         Glide.with(this.getApplicationContext()).load(m_AudioBook.getThumbImage()).thumbnail(Glide.with(this.getApplicationContext()).load(R.drawable.sppiner_loading)).fallback(R.drawable.com_facebook_profile_picture_blank_portrait).into(m_ivBookImage);
-
         Log.e(TAG, "updateProfilePicInTheActivityView() <<");
         Log.e(TAG, "Hello World " + m_AudioBook.getThumbImage());
-
         Log.e(TAG, "populate<<");
 
     }
@@ -515,8 +486,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
         String headerString = m_etReviewHeader.getText().toString().trim();
         String bodyString = m_etReviewBody.getText().toString().trim();
-      //  boolean starWasChecked  = m_PrevRating
-        if(checkReviewParams(m_etReviewHeader.getText().toString(), m_etReviewBody.getText().toString()))
+        if(checkReviewParams(headerString, bodyString))
         {
             whenAddedReviwWithRating();
             try
@@ -528,9 +498,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 Log.e(TAG, "Exception " + e.getMessage());
             }
+
             m_etReviewHeader.setHintTextColor(Color.GRAY);
             m_etReviewBody.setHintTextColor(Color.GRAY);
-
         }
         else
         {
@@ -557,9 +527,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
 
                 Log.e(TAG, "doTransaction() >>");
-
                 AudioBook audioBook = mutableData.getValue(AudioBook.class);
-
                 if(audioBook == null)
                 {
                     Log.e(TAG, "doTransaction() << song is null");
@@ -570,14 +538,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 {
                     // Increment the review count and rating only in case the user enters a new review
                     audioBook.incrementReviewCount();
-                    //audioBook.incrementRating((int) m_UserRating.getRating());
                     double newRating = avgRatingOfAudioBook(audioBook.getRating(), m_UserRating.getRating(), audioBook.getReviewsCount());
                     newRating = Math.round(newRating * 100)/100.00;
                     audioBook.setRating(newRating);
-                }
-                else
-                {
-                    //audioBook.incrementRating((int) (m_UserRating.getRating() - m_PrevRating));
                 }
 
                 mutableData.setValue(audioBook);
@@ -602,18 +565,16 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     String header = m_etReviewHeader.getText().toString();
                     String body = m_etReviewBody.getText().toString();
                     FirebaseUser user = m_Auth.getCurrentUser();
-                    float rating = m_PrevRating;
+                    float rating;
                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Date date = new Date();
                     rating = m_UserRating.getRating();
-                    Review review = new Review(header, body, rating, user.getEmail(), user.getUid(), m_Key, dateFormat.format(date));
-                    //DatabaseReference reviewsRef = ref.child("Reviews");
+                    Review review = new Review(header, body, rating, user.getEmail(), user.getUid(), m_Key, dateFormat.format(date),m_Auth.getCurrentUser().getPhotoUrl().toString());
                     DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference();
                     reviewRef.child("Review").push().setValue(review);
-                    reviewSetComlete();
-                    
-
+                    reviewSetComplete();
                 }
+
 
                 Log.e(TAG, "onComplete() <<");
             }
@@ -623,7 +584,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
 
 
-    private void reviewSetComlete()
+    private void reviewSetComplete()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(AudioBookDetailsActivity.this, R.style.DialogeTheme);
 
@@ -636,7 +597,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
             {
-                //alertTextView.setVisibility(View.VISIBLE);
                 m_etReviewHeader.setText("");
                 m_etReviewBody.setText("");
                 m_UserRating.setIsIndicator(false);
@@ -645,6 +605,12 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
         });
         builder.show();
+        //Refresh
+
+            Intent intent = new Intent(this, AudioBookDetailsActivity.class);
+            intent.putExtra("Key", m_Key);
+            finish();
+            startActivity(intent);
 
     }
 
@@ -687,15 +653,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             Intent intent = new Intent(this, AllReviewsActivity.class);
             intent.putExtra("Key", m_Key);
             startActivity(intent);
-            //finish();
             Log.e(TAG, "onClickRating <<");
         }
     }
-
-//    @Override
-//    public void onCompletion(MediaPlayer mp) {
-//
-//
-//
-//    }
 }

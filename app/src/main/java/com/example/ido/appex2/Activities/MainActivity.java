@@ -286,51 +286,64 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onClickSignin <<");
     }
 
-    private void ifLogedInGoToUserActivity() {
-        //Log.e(TAG, "ifLogedInGoToUserActivity >>" + m_Auth.getCurrentUser().getDisplayName());
+    private void ifLogedInGoToUserActivity()
+    {
+        Log.e(TAG, "ifLogedInGoToUserActivity >>");
         boolean userSignedIn = m_Auth.getCurrentUser() != null;
-        try {
-            if (userSignedIn) {
+        try
+        {
+            if(userSignedIn)
+            {
                 boolean isAnonymous = m_Auth.getCurrentUser().isAnonymous();
                 boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
 
-                if (isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
+                if(isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com"))
+                {
                     Intent intent_AllProductsActivity = new Intent(getApplicationContext(), AllProductsActivity.class);
-                    Log.e(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<");
 
                     checkIfUserExists();
                     startActivity(intent_AllProductsActivity);
                     slideUpToNewActivity();
-                    //finish();
+                    finish();
                 }
             }
 
-            Log.e(TAG, "ifLogedInGoToUserActivity <<");
-        } catch (Exception e) {
+        }
+        catch(Exception e)
+        {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG);
         }
-
+        Log.e(TAG, "ifLogedInGoToUserActivity <<");
     }
 
     private void checkIfUserExists()
     {
+        Log.e(TAG, "checkIfUserExists >>");
+
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference uidRef = rootRef.child("Users").child(uid);
         Log.e(TAG, "********** uidRef" + uidRef.toString());
-        ValueEventListener eventListener = new ValueEventListener() {
+        ValueEventListener eventListener = new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()) {
-                    Log.e(TAG, "********** uidRef Not exists <<----" );
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if(!dataSnapshot.exists())
+                {
+                    Log.e(TAG, "********** uidRef Not exists <<----");
                     createNewUserFacebookAndGoogle();
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError)
+            {
+            }
         };
         uidRef.addListenerForSingleValueEvent(eventListener);
+        Log.e(TAG, "checkIfUserExists <<");
+
     }
 
 
@@ -355,20 +368,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         Log.e(TAG, "onActivityResult >>");
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 101) {
+        if(requestCode == 101)
+        {
             Task<GoogleSignInAccount> task = com.google.android.gms.auth.api.signin.GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
+            try
+            {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-                //ifLogedInGoToUserActivity();
 
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
+            }
+            catch(ApiException e)
+            {
                 Log.w("Sign IN:", "Google sign in failed", e);
                 // ...
             }
@@ -454,13 +468,11 @@ public class MainActivity extends AppCompatActivity {
                         firebaseAuthTaskCheck(task);
                     }
                 });
-        //isExistInDB();
         Log.e(TAG, "firebaseAuthWithGoogleAndFacebook() <<");
     }
 
     private void slideUpToNewActivity() {
         Log.e(TAG, "slideUpToNewActivity() >>");
-        //finish();
         overridePendingTransition(R.anim.slide_up, R.anim.no_animation);
         Log.e(TAG, "slideUpToNewActivity() <<");
     }
@@ -469,11 +481,8 @@ public class MainActivity extends AppCompatActivity {
     private void createNewUserFacebookAndGoogle() {
 
         Log.e(TAG, "createNewUser() >>");
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-
         if (user == null) {
             Log.e(TAG, "createNewUser() << Error user is null");
             return;
@@ -497,12 +506,9 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, "createNewUser() >>");
 
-        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("AudioBooks");
-        //User user = new User();
         userRef.child(UUID.randomUUID().toString()).setValue(new AudioBook("Harry Poter", "J.K Rolling",
                 "Fantasy", "1.mp3", "", 100, 5, 7, null));
-
         Log.e(TAG, "createNewUser() <<");
     }
 }

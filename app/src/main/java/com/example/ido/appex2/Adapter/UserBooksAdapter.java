@@ -56,7 +56,6 @@ public class UserBooksAdapter extends RecyclerView.Adapter<UserBooksAdapter.User
         Log.e(TAG,"onBindViewHolder() >> " + position);
         final AudioBookWithKey bookWithKeyy = mBookList.get(position);
         AudioBook book = mBookList.get(position).getAudioBook();
-        String songKey = mBookList.get(position).getKey();
         holder.populate(book);
 
         Log.e(TAG,"onBindViewHolder() << "+ position);
@@ -66,14 +65,9 @@ public class UserBooksAdapter extends RecyclerView.Adapter<UserBooksAdapter.User
             @Override
             public void onClick(View v)
             {
-                //Context context = v.getContext();
-                //Intent intent = new Intent(context, AudioBookDetailsActivity.class);
-                //intent.putExtra("User", m_User);
-                final AudioBookWithKey bookWithKey = bookWithKeyy; //m_BooksList.get(m_possition);
 
-                //Log.e(TAG,"onBindViewHolder()After >>>>>>>> " + userRef.getUser().getFullName());
+                final AudioBookWithKey bookWithKey = bookWithKeyy;
                 Log.e(TAG,"onBindViewHolder()After >> " + bookWithKey.getAudioBook().getName());
-
                 m_AudioBookCardClick.onAudioBookCardClick(bookWithKey);
             }
         });
@@ -93,7 +87,6 @@ public class UserBooksAdapter extends RecyclerView.Adapter<UserBooksAdapter.User
         public TextView  mUserItemBookName;
         public TextView  mUserItemAuthorName;
         public TextView  mUserItemGenrekName;
-        public TextView  mUserItemPrice;
         public TextView   mUserReviesCount;
         public ImageView  mRatingStar;
         public Button     mPlaybtn;

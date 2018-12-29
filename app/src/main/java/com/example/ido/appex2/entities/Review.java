@@ -7,16 +7,16 @@ public class Review
 
     private String m_ReviewHedaer;
     private String m_ReviewBody;
-    private float m_Rating;
+    private float  m_Rating;
     private String m_UserEmail;
     private String m_UserID;
     private String m_BookID;
     private String m_Date;
+    private String m_UserImageUrl;
 
-    public Review(){
+    public Review() { }
 
-    }
-    public Review(String i_ReviewHedaer, String i_ReviewBody, float i_Rating, String i_UserEmail, String i_UserKey, String i_BookID, String i_date)
+    public Review(String i_ReviewHedaer, String i_ReviewBody, float i_Rating, String i_UserEmail, String i_UserKey, String i_BookID, String i_date, String i_UserImageUrl)
     {
         this.m_ReviewHedaer = i_ReviewHedaer;
         this.m_ReviewBody = i_ReviewBody;
@@ -25,6 +25,7 @@ public class Review
         this.m_UserID = i_UserKey;
         this.m_BookID = i_BookID;
         this.m_Date = i_date;
+        this.m_UserImageUrl = i_UserImageUrl;
     }
 
     public String getBookID()
@@ -95,5 +96,16 @@ public class Review
     public void setM_Date(String m_Date) {
         this.m_Date = m_Date;
     }
+
+    public String getUserImageUrl()
+    {
+        return m_UserImageUrl;
+    }
+
+    public void setUserImageUrl(String userImageUrl)
+    {
+        m_UserImageUrl = userImageUrl;
+    }
+
 }
 

@@ -1,6 +1,7 @@
 package com.example.ido.appex2.Adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,11 +15,6 @@ import com.bumptech.glide.Glide;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.Review;
 import com.example.ido.appex2.entities.User;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 import butterknife.BindView;
@@ -28,14 +24,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
 {
     private final String           TAG = "ReviewAdapter";
     private List<Review>           m_ReviewList;
-    private User                   m_User;
     private LayoutInflater         m_inflater;
 
 
-    public ReviewAdapter(List<Review> i_Review, User i_User)
+    public ReviewAdapter(List<Review> i_Review)
     {
         this.m_ReviewList = i_Review;
-        this.m_User = i_User;
     }
 
     @Override
@@ -72,24 +66,23 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
     public class ReviewHolder extends RecyclerView.ViewHolder
     {
 
-        public TextView m_ReviewBody;
+        private TextView m_ReviewBody;
 
-        public TextView m_ReviewHeader;
+        private TextView m_ReviewHeader;
 
+        private TextView m_ReviewDate;
 
-        public TextView m_ReviewDate;
+        private TextView m_ReviewRating;
 
-        public TextView m_ReviewRating;
+        private TextView m_ReviewUserName;
 
-        public TextView m_ReviewUserName;
+        private ImageView m_ReviewStarImage;
 
-        public ImageView m_ReviewStarImage;
+        private ImageView m_ReviewUserImage;
 
-        public ImageView m_ReviewUserImage;
+        private CardView m_cvViewBook;
 
-        public CardView m_cvViewBook;
-
-        public Context m_Context;
+        private Context m_Context;
 
         public ReviewHolder(Context i_Context, View itemView)
         {
@@ -101,7 +94,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             m_ReviewRating = itemView.findViewById(R.id.UserReview_rating_tv);
             m_ReviewUserName = itemView.findViewById(R.id.UserReview_user_name);
             m_ReviewStarImage = itemView.findViewById(R.id.UserReview_ratingstar_iv);
-            //m_ReviewUserImage = itemView.findViewById(R.id.UserReview_user_image);
+            m_ReviewUserImage = itemView.findViewById(R.id.UserReview_user_image);
             m_cvViewBook = itemView.findViewById(R.id.item_card_UserReview);
 
             this.m_Context = i_Context;
@@ -113,30 +106,27 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
         {
             Log.e(TAG,"populate() >>  "+ i_Review.getUserEmail());
 
-            if(m_ReviewBody == null)
-            {
-                Log.e(TAG,"Nulllllllllllllll() >>  "+ i_Review.getUserEmail());
-
-            }
             m_ReviewBody.setText(i_Review.getReviewBody());
             m_ReviewHeader.setText(i_Review.getReviewHedaer());
-
             m_ReviewDate.setText(i_Review.getM_Date());
             m_ReviewRating.setText(Double.toString( i_Review.getRating()));
-
-
             m_ReviewUserName.setText(i_Review.getUserEmail());
+            String ImgUrl = i_Review.getUserImageUrl();
+
+            Glide.with(m_Context)
+                    .load(ImgUrl)
+                    .thumbnail(Glide.with(m_Context).load(R.drawable.loading_3))
+                    .override(351, 322)
+                    .centerCrop()
+                    .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
+                    .into(m_ReviewUserImage);
 
 
-
-            Log.e(TAG, "updateProfilePicInTheActivityView() >>");
-
-            Log.e(TAG, "updateProfilePicInTheActivityView() <<");
 
             Log.e(TAG,"populate() << ");
 
-
         }
+
         public TextView getReviewBody()
         {
             return m_ReviewBody;
@@ -197,15 +187,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             this.m_ReviewStarImage = m_ReviewStarImage;
         }
 
-//        public ImageView getReviewUserImage()
-//        {
-//            return m_ReviewUserImage;
-//        }
-//
-//        public void setReviewUserImage(ImageView m_ReviewUserImage)
-//        {
-//            this.m_ReviewUserImage = m_ReviewUserImage;
-//        }
+        public ImageView getReviewUserImage()
+        {
+            return m_ReviewUserImage;
+        }
+
+        public void setReviewUserImage(ImageView m_ReviewUserImage)
+        {
+            this.m_ReviewUserImage = m_ReviewUserImage;
+        }
 
         public CardView getCvViewBook()
         {

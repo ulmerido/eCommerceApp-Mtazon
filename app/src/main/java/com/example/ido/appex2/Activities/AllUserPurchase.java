@@ -63,26 +63,13 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_user_purchase);
-
         createLayoutConnections();
-
         createMenuConnections();
-
         getAllUserBooks();
-
-
-//        mRatingStar.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View v)
-//            {
-//                onClickRating();
-//            }
-//        });
-
     }
 
-    private void createMenuConnections() {
+    private void createMenuConnections()
+    {
         Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -102,8 +89,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mUserBookList = new ArrayList<String>();
-
-
         mRatingReview = findViewById(R.id.user_rating_review_tv);
         mItemBookImage = findViewById(R.id.user_item_book_image);
         mUserItemBookName = findViewById(R.id.user_item_book_name);
@@ -115,28 +100,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         m_Key = getIntent().getStringExtra("Key");
     }
 
-
-    public void onClickRating()
-    {
-
-//        AudioBook m_AudioBook;
-//        m_AudioBook = getIntent().getParcelableExtra("AudioBook");
-//        if(m_AudioBook.getReviewsCount() == 0)
-//        {
-//            Toast.makeText(getApplicationContext(), "There are no reviews for this book ", Toast.LENGTH_SHORT).show();
-//        }
-//        else
-//        {
-//            Log.e(TAG, "onClickRating >> ");
-//            Intent intent = new Intent(this, AllReviewsActivity.class);
-//            intent.putExtra("Key", m_Key);
-//            startActivity(intent);
-//            //finish();
-//            Log.e(TAG, "onClickRating <<");
-//        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -144,7 +107,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
         return super.onCreateOptionsMenu(menu);
-
     }
 
     @Override
@@ -210,20 +172,9 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
 
         });
 
-        foo();
+        getTheAudioBooksListFromFirebase();
 
     }
-
-//    @Override
-//    public void onAudioBookCardClick(AudioBookWithKey i_book)
-//    {
-//        Log.e(TAG, "onAudioBookCardClick >> " + i_book.getAudioBook().getName());
-//        Intent intent = new Intent(this, AudioBookDetailsActivity.class);
-//        intent.putExtra("Key", i_book.getKey());
-//        intent.putExtra("AudioBook", i_book.getAudioBook());
-//        startActivity(intent);
-//        Log.e(TAG, "onAudioBookCardClick <<");
-//    }
 
 
     @Override
@@ -237,7 +188,7 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         Log.e(TAG, "onAudioBookCardClick <<");
     }
 
-    private  void foo()
+    private void getTheAudioBooksListFromFirebase()
     {
         mAllBooksRef = FirebaseDatabase.getInstance().getReference("AudioBooks");
         mAllBooksRef.addChildEventListener(new ChildEventListener()
@@ -251,7 +202,6 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
                 {
                     if (s.equals(bookWithKey.getKey()))
                     {
-                        Log.e(TAG, "adddddd" + bookWithKey.getAudioBook().getName());
                         m_BooksList.add(bookWithKey);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
                     }
@@ -262,7 +212,7 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
             @Override
             public void onChildChanged(DataSnapshot snapshot, String previousChildName){
 
-                Log.e(TAG, "onChildChanged(Songs) >> " + snapshot.getKey());
+                Log.e(TAG, "onChildChanged(Books) >> " + snapshot.getKey());
 
                 AudioBook book =snapshot.getValue(AudioBook.class);
                 String key = snapshot.getKey();
@@ -275,7 +225,7 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
                     {
                         if(s.equals(bookWithKey.getKey()))
                         {
-                            if (bookWithKey.getKey().equals(snapshot.getKey()))
+                            if (bookWithKey.getKey().equals(key))
                             {
                                 bookWithKey.setAudioBook(book);
                                 mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -287,47 +237,44 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
 
                 }
 
-                Log.e(TAG, "onChildChanged(Songs) <<");
+                Log.e(TAG, "onChildChanged(Books) <<");
 
             }
             @Override
             public void onChildMoved(DataSnapshot snapshot, String previousChildName)
             {
 
-                Log.e(TAG, "onChildMoved(Songs) >> " + snapshot.getKey());
+                Log.e(TAG, "onChildMoved(Books) >> " + snapshot.getKey());
 
 
-                Log.e(TAG, "onChildMoved(Songs) << Doing nothing");
+                Log.e(TAG, "onChildMoved(Books) << Doing nothing");
 
             }
             @Override
             public void onChildRemoved(DataSnapshot snapshot)
             {
 
-                Log.e(TAG, "onChildRemoved(Songs) >> " + snapshot.getKey());
-
-                AudioBook book =snapshot.getValue(AudioBook.class);
+                Log.e(TAG, "onChildRemoved(Books) >> " + snapshot.getKey());
                 String key = snapshot.getKey();
-
                 for (int i = 0 ; i < m_BooksList.size() ; i++)
                 {
                     AudioBookWithKey songWithKey = (AudioBookWithKey) m_BooksList.get(i);
-                    if (songWithKey.getKey().equals(snapshot.getKey()))
+                    if (songWithKey.getKey().equals(key))
                     {
                         m_BooksList.remove(i);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
-                        Log.e(TAG, "onChildRemoved(Songs) >> i=" + i);
+                        Log.e(TAG, "onChildRemoved(Books) >> i=" + i);
                         break;
                     }
                 }
 
-                Log.e(TAG, "onChildRemoved(Songs) <<");
+                Log.e(TAG, "onChildRemoved(Books) <<");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-                Log.e(TAG, "onCancelled(Songs) >>" + databaseError.getMessage());
+                Log.e(TAG, "onCancelled(Books) >>" + databaseError.getMessage());
             }
 
         });

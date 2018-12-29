@@ -33,7 +33,6 @@ public class SignUpActivity extends AppCompatActivity
     private TextView m_tvRegister;
     public static final String TAG = "SignUpActivity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -76,79 +75,74 @@ public class SignUpActivity extends AppCompatActivity
     private boolean successfullValidation()
     {
         Log.e(TAG, "successfullValidation() >>");
-        boolean res;
-        if (!ValidationChecker.CheckValidEmail(m_etEmail) || !ValidationChecker.CheckValidName(m_etLastName) || !ValidationChecker.CheckValidName(m_etFirstName) || !ValidationChecker.CheckValidPassword(m_etPassword))
+        boolean res = true;
+        if(!ValidationChecker.CheckValidEmail(m_etEmail) || !ValidationChecker.CheckValidName(m_etLastName) || !ValidationChecker.CheckValidName(m_etFirstName) || !ValidationChecker.CheckValidPassword(m_etPassword))
         {
-            res =  false;
+            res = false;
         }
-        res =  true;
         Log.e(TAG, "successfullValidation() <<");
-        return  res;
+        return res;
     }
 
     private void onClickRegiser()
     {
         Log.e(TAG, "registerUser() >>");
-        if (!successfullValidation())
+        if(!successfullValidation())
         {
             Toast.makeText(SignUpActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
         final String passString = m_etPassword.getText().toString().trim();
         final String emailString = m_etEmail.getText().toString().trim();
-        final String fullName =  m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
-        m_Auth.createUserWithEmailAndPassword(emailString, passString)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>()
+        final String fullName = m_etFirstName.getText().toString().trim() + " " + m_etLastName.getText().toString();
+        m_Auth.createUserWithEmailAndPassword(emailString, passString).addOnCompleteListener(new OnCompleteListener<AuthResult>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task)
+            {
+                if(task.isSuccessful())
                 {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
+                    User user = new User();
+                    DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+                    if(user == null)
                     {
-                        if (task.isSuccessful())
-                        {
-                            User user = new User();
-                            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                            if (user == null) {
-                                Log.e(TAG, "createNewUser() << Error user is null");
-                                return; }
-                            //FirebaseDatabase.getInstance().getReference("Users")
-                            userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName,
-                                    passString, null,
-                                    0,null))
-                                    .addOnCompleteListener(new OnCompleteListener<Void>()
-                                    {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task)
-                                        {
-                                            m_FirsebaseUser = m_Auth.getCurrentUser();
-                                            m_FirsebaseUser.sendEmailVerification()
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>()
-                                                    {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task)
-                                                        {
-                                                            if (task.isSuccessful())
-                                                            {
-                                                                Log.d(TAG, "Email sent.");
-                                                                Toast.makeText(SignUpActivity.this, "Email sent to: " + m_FirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
-                                                                finishSignUp();
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    });
-                        } else
-                        {
-                            Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        }
+                        Log.e(TAG, "createNewUser() << Error user is null");
+                        return;
                     }
-                });
+                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName, passString, null, 0, null)).addOnCompleteListener(new OnCompleteListener<Void>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task)
+                        {
+                            m_FirsebaseUser = m_Auth.getCurrentUser();
+                            m_FirsebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>()
+                            {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task)
+                                {
+                                    if(task.isSuccessful())
+                                    {
+                                        Log.d(TAG, "Email sent.");
+                                        Toast.makeText(SignUpActivity.this, "Email sent to: " + m_FirsebaseUser.getEmail(), Toast.LENGTH_SHORT).show();
+                                        finishSignUp();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+                else
+                {
+                    Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         Log.e(TAG, "registerUser() <<");
     }
 
     private void finishSignUp()
     {
         Log.e(TAG, "finishSignUp() >>");
-        //updateUserNameInDB();
         m_Auth.signOut();
         Intent intent_SignUp = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent_SignUp);

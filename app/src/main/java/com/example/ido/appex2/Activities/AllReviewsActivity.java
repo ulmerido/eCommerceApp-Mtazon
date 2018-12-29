@@ -34,23 +34,11 @@ public class AllReviewsActivity extends AppCompatActivity
 
     public RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private User m_User;
     private FirebaseAuth m_Auth;
     private List<Review> m_ReviewList = new ArrayList<>();
     private ReviewAdapter mAdapter;
-    private DatabaseReference mMyUserRef;
     private DatabaseReference mAllReviewRef;
     private MenuItemFunctions m_MenuFunctions ;
-
-
-    private TextView m_userName;
-    private TextView m_ReviewHeader;
-    private TextView m_ReviewBody;
-    private TextView m_ReviewDate;
-    private TextView m_ReviewRating;
-
-    private ImageView m_UserImage;
-    private ImageView m_ivRatingImage;
     private String m_Key;
 
     @Override
@@ -74,15 +62,6 @@ public class AllReviewsActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        m_userName = findViewById(R.id.UserReview_user_name);
-        m_ReviewHeader = findViewById(R.id.UserReview_header);
-        m_ReviewBody = findViewById(R.id.UserReview_body);
-        m_ReviewDate = findViewById(R.id.UserReview_Date);
-        m_ReviewRating = findViewById(R.id.UserReview_rating_tv);
-
-        //m_UserImage = findViewById(R.id.UserReview_user_image);
-        m_ivRatingImage = findViewById(R.id.UserReview_ratingstar_iv);
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
     }
@@ -103,12 +82,13 @@ public class AllReviewsActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.e("Test", "onCreateOptionsMenu() >>");
+        Log.e(TAG, "onCreateOptionsMenu() >>");
 
         m_MenuFunctions = new MenuItemFunctions(this);
-        Log.e("Test", "onCreateOptionsMenu() <<");
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
+        Log.e(TAG ,"onCreateOptionsMenu() <<");
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -123,7 +103,7 @@ public class AllReviewsActivity extends AppCompatActivity
         Log.e(TAG, "getAllReviews() >>");
 
         m_ReviewList.clear();
-        mAdapter = new ReviewAdapter(m_ReviewList, m_User);
+        mAdapter = new ReviewAdapter(m_ReviewList);
         mRecyclerView.setAdapter(mAdapter);
         getAllBooksUsingChildListenrs();
         Log.e(TAG, "getAllReviews <<");

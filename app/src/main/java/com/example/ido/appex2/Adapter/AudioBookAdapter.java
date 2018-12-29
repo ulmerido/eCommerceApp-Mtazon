@@ -30,8 +30,6 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
     private User                   m_User;
     private int                    m_possition;
     private LayoutInflater         m_inflater;
-   // private UserReference          m_UserRef;
-    //private AudioBookWithKey       m_CurrentBookWithKey;
     public Interface_OnClickAudioBookCard  m_AudioBookCardClick;
     public AudioBookAdapter(List<AudioBookWithKey> i_Books, User i_User, Interface_OnClickAudioBookCard i_AudioBookCardClick)
     {
@@ -60,11 +58,8 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
         Log.e(TAG,"onBindViewHolder() >> " + position);
         m_possition = position;
         final AudioBookWithKey bookWithKeyy = m_BooksList.get(position);
-        //final User user = m_UserRef.getUser();
-        //m_CurrentBookWithKey = m_BooksList.get(position);
         AudioBook book = m_BooksList.get(position).getAudioBook();
         String songKey = m_BooksList.get(position).getKey();
-        //holder.getRating().setRating(book.getRating());
         holder.populate(book);
 
        holder.m_cvViewBook.setOnClickListener(new View.OnClickListener()
@@ -72,13 +67,9 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
            @Override
            public void onClick(View v)
            {
-               //Context context = v.getContext();
-               //Intent intent = new Intent(context, AudioBookDetailsActivity.class);
-               //intent.putExtra("User", m_User);
                Log.e(TAG,"onBindViewHolder() bookWithKeyy>> " + bookWithKeyy.getAudioBook().getName());
                final AudioBookWithKey bookWithKey = bookWithKeyy; //m_BooksList.get(m_possition);
 
-               //Log.e(TAG,"onBindViewHolder()After >>>>>>>> " + userRef.getUser().getFullName());
                Log.e(TAG,"onBindViewHolder()After >> " + bookWithKey.getAudioBook().getName());
 
                m_AudioBookCardClick.onAudioBookCardClick(bookWithKey);
@@ -141,9 +132,8 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
         public AudioBookHolder(Context i_Context, View itemView)
         {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             this.m_Context = i_Context;
-
 
             m_cvViewBook.setOnClickListener(new View.OnClickListener()
             {
@@ -152,12 +142,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
                 {
 
                     Context context = view.getContext();
-//                      Intent intent = new Intent(context, AudioBookDetailsActivity.class);
-////                    intent.putExtra("song", selectedSong);
-////                    intent.putExtra("key", selectedSongKey);
-//                      intent.putExtra("user", m_User);
-//                      Log.e(TAG,"&&&&&&&&&&&&&&&&&&&&&&&&&&& ");
-//                      context.startActivity(intent);
+
                 }
             });
         }
@@ -176,9 +161,6 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             m_tvPrice.setText(Integer.toString(i_audiobook.getPrice()) +"$");
             rating = i_audiobook.getRating();
             m_tvRating.setText("[" + String.format("%.2f", rating)+ "]");
-
-
-
             Log.e(TAG, "updateProfilePicInTheActivityView() >>");
             Glide.with(this.getContext())
                     .load(i_audiobook.getThumbImage())

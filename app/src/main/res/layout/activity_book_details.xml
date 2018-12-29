@@ -44,7 +44,7 @@
                 android:layout_marginTop="8dp"
                 android:text="[BOOK NAME]"
                 android:textColor="@color/DarkBlue"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 card_view:layout_constraintStart_toEndOf="@+id/details_book_image"
                 card_view:layout_constraintTop_toBottomOf="@+id/details_auther" />
@@ -55,6 +55,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
+                android:textSize="12sp"
                 android:text="[auther]"
                 android:textColor="@android:color/holo_blue_dark"
                 card_view:layout_constraintStart_toEndOf="@+id/details_book_image"
@@ -69,9 +70,23 @@
                 android:layout_marginTop="8dp"
                 android:text="[genere]"
                 android:textColor="@android:color/holo_blue_light"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 card_view:layout_constraintStart_toEndOf="@+id/details_book_image"
                 card_view:layout_constraintTop_toBottomOf="@+id/details_book_name" />
+
+            <TextView
+                android:id="@+id/details_watchReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:text="more Reviews"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="10sp"
+
+                app:layout_constraintStart_toEndOf="@+id/details_ReviewAvg"
+                app:layout_constraintTop_toBottomOf="@+id/details_ratingstar_iv"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/details_price"
@@ -173,6 +188,7 @@
                         android:layout_width="224dp"
                         android:layout_height="53dp"
                         android:layout_marginStart="4dp"
+                        android:textSize="14sp"
 
                         android:layout_marginBottom="8dp"
                         android:ems="10"
@@ -189,20 +205,21 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="100dp"
                         android:background="#f8f7e5"
+                        android:textSize="12sp"
                         android:hint="Review Body"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <Button
                         android:id="@+id/details_AddNewReview"
-                        android:layout_width="122dp"
-                        android:layout_height="130dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:background="#fcad2e"
 
                         android:text="Add\n Review"
                         android:textAlignment="center"
-                        android:textSize="24sp"
+                        android:textSize="18sp"
                         card_view:layout_constraintStart_toEndOf="@+id/details_ReviewBody"
                         card_view:layout_constraintTop_toTopOf="@+id/details_ReviewHeader" />
 
