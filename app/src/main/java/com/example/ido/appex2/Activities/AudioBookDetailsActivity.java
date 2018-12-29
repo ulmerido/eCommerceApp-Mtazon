@@ -412,7 +412,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     {
         Log.e(TAG, "playAudioBook() >>");
 
-        Toast.makeText(getApplicationContext(), "Playing sound " + i_AudioBookFile, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Loading Audiobook..." , Toast.LENGTH_SHORT).show();
         Uri downloadUrl = Uri.parse(m_AudioBook.getFile());
         if(m_lengthOfSound > 0)
         {

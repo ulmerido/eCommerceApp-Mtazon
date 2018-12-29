@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "log out first", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
-            Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Enter email", Toast.LENGTH_SHORT).show();
         }
         Log.e(TAG, "recoverPassword <<");
     }
