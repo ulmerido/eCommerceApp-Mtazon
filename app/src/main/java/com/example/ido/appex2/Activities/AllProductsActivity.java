@@ -242,7 +242,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 String bookToSearch = m_et_searchBook.getText().toString();
                 String currentBookName = bookWithKey.getAudioBook().getName();
 
-               if(currentBookName.startsWith(bookToSearch))
+               if(currentBookName.toLowerCase().startsWith(bookToSearch.toLowerCase()))
                 {
                     m_BooksList.add(bookWithKey);
                     mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -364,7 +364,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 String key = dataSnapshot.getKey();
                 if(isAutor)
                 {
-                    if(book.getAuthor().startsWith(searchString))
+                    if(book.getAuthor().toLowerCase().startsWith(searchString.toLowerCase()))
                     {
                         if(isPrice)
                         {
@@ -378,7 +378,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 }
                 else
                 {
-                    if(book.getName().startsWith(searchString))
+                    if(book.getName().toLowerCase().startsWith(searchString.toLowerCase()))
                     {
                         if(isPrice)
                         {
