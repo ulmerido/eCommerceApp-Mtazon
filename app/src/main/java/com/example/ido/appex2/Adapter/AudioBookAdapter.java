@@ -59,7 +59,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
         m_possition = position;
         final AudioBookWithKey bookWithKeyy = m_BooksList.get(position);
         AudioBook book = m_BooksList.get(position).getAudioBook();
-        String songKey = m_BooksList.get(position).getKey();
+        String bookKey = m_BooksList.get(position).getKey();
         holder.populate(book);
 
        holder.m_cvViewBook.setOnClickListener(new View.OnClickListener()
@@ -82,7 +82,7 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
             Iterator i = m_User.getMyAudioBooks().iterator();
             while (i.hasNext())
             {
-                if (i.next().equals(songKey))
+                if (i.next().equals(bookKey))
                 {
                     holder.getPrice().setTextColor(0xffaabb);
                     break;
@@ -98,7 +98,6 @@ public class AudioBookAdapter extends RecyclerView.Adapter<AudioBookAdapter.Audi
     {
         return m_BooksList.size();
     }
-
 
     public class AudioBookHolder extends RecyclerView.ViewHolder
     {

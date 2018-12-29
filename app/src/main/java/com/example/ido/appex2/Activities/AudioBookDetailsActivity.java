@@ -151,11 +151,10 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
             if (m_AudioBookWasPurchased)
             {
-                Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
+                Log.e(TAG, "buyPlay.onClick() >> Playing purchased book");
             } else
             {
-                //Purchase the song.
-                Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
+                Log.e(TAG, "buyPlay.onClick() >> Purchase the book");
                 m_User.getMyAudioBooks().add(m_Key);
                 m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
                 DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
@@ -392,7 +391,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     }
 
 
-    private Runnable UpdateSongTime = new Runnable()
+    private Runnable UpdateBookTime = new Runnable()
     {
         public void run()
         {
@@ -447,7 +446,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                     } catch (Exception e)
                     {
-                        Log.w(TAG, "playSong() error:" + e.getMessage());
+                        Log.w(TAG, "playbook() error:" + e.getMessage());
                     }
 
                     whatToDoAfterPlayAudioBook();
@@ -482,7 +481,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) startTime))));
 
         seekbar.setProgress((int) startTime);
-        myHandler.postDelayed(UpdateSongTime, 100);
+        myHandler.postDelayed(UpdateBookTime, 100);
         pauseBtn.setEnabled(true);
         playBtn.setEnabled(false);
         Log.e(TAG, "whatToDoAfterPlayAudioBook() <<");
@@ -554,7 +553,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 AudioBook audioBook = mutableData.getValue(AudioBook.class);
                 if (audioBook == null)
                 {
-                    Log.e(TAG, "doTransaction() << song is null");
+                    Log.e(TAG, "doTransaction() << book is null");
                     return Transaction.success(mutableData);
                 }
 
@@ -568,7 +567,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 }
 
                 mutableData.setValue(audioBook);
-                Log.e(TAG, "doTransaction() << song was set");
+                Log.e(TAG, "doTransaction() << book was set");
                 return Transaction.success(mutableData);
             }
 

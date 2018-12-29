@@ -204,13 +204,13 @@ public class AllReviewsActivity extends AppCompatActivity
                     }
                 }
 
-                Log.e(TAG, "onChildRemoved(Songs) <<");
+                Log.e(TAG, "onChildRemoved(book) <<");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-                Log.e(TAG, "onCancelled(Songs) >>" + databaseError.getMessage());
+                Log.e(TAG, "onCancelled(book) >>" + databaseError.getMessage());
             }
 
         });

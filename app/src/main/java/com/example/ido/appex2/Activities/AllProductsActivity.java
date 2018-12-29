@@ -266,7 +266,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             @Override
             public void onChildChanged(DataSnapshot snapshot, String previousChildName)
             {
-                Log.e(TAG, "onChildChanged(Songs) >> " + snapshot.getKey());
+                Log.e(TAG, "onChildChanged >> " + snapshot.getKey());
                 AudioBook book = snapshot.getValue(AudioBook.class);
                 String key = snapshot.getKey();
                 for (int i = 0; i < m_BooksList.size(); i++)
@@ -280,14 +280,14 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                     }
                 }
 
-                Log.e(TAG, "onChildChanged(Songs) <<");
+                Log.e(TAG, "onChildChanged <<");
             }
 
             @Override
             public void onChildMoved(DataSnapshot snapshot, String previousChildName)
             {
-                Log.e(TAG, "onChildMoved(Songs) >> " + snapshot.getKey());
-                Log.e(TAG, "onChildMoved(Songs) << Doing nothing");
+                Log.e(TAG, "onChildMoved(book) >> " + snapshot.getKey());
+                Log.e(TAG, "onChildMoved(book) << Doing nothing");
             }
 
             @Override
@@ -373,7 +373,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             for (DataSnapshot dataSnapshot : snapshot.getChildren())
             {
                 AudioBook book = dataSnapshot.getValue(AudioBook.class);
-                Log.e(TAG, "updateSongList() >> adding song: " + book.getName());
+                Log.e(TAG, "updateAudioBooksList() >> adding book: " + book.getName());
                 String key = dataSnapshot.getKey();
                 if (isAutor)
                 {

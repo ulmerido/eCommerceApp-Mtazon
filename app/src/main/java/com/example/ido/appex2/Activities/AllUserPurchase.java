@@ -169,8 +169,8 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
             @Override
             public void onChildMoved(DataSnapshot snapshot, String previousChildName)
             {
-                Log.e(TAG, "onChildMoved(Songs) >> " + snapshot.getKey());
-                Log.e(TAG, "onChildMoved(Songs) << Doing nothing");
+                Log.e(TAG, "onChildMoved(book) >> " + snapshot.getKey());
+                Log.e(TAG, "onChildMoved(book) << Doing nothing");
             }
             @Override
             public void onChildRemoved(DataSnapshot snapshot)
@@ -273,8 +273,8 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
                 String key = snapshot.getKey();
                 for (int i = 0 ; i < m_BooksList.size() ; i++)
                 {
-                    AudioBookWithKey songWithKey = (AudioBookWithKey) m_BooksList.get(i);
-                    if (songWithKey.getKey().equals(key))
+                    AudioBookWithKey bookWithKey = (AudioBookWithKey) m_BooksList.get(i);
+                    if (bookWithKey.getKey().equals(key))
                     {
                         m_BooksList.remove(i);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
