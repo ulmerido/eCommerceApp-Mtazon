@@ -32,6 +32,7 @@ import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.Review;
 import com.example.ido.appex2.entities.User;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -128,6 +129,14 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     private void createMenuConnections()
     {
         Log.e(TAG, "createMenuConnections() >>");
+        m_Auth =FirebaseAuth.getInstance();
+        if(m_Auth ==null || m_Auth.getCurrentUser() == null)
+        {
+            LoginManager.getInstance().logOut();
+            Intent intent_LogOut = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent_LogOut);
+            finish();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();

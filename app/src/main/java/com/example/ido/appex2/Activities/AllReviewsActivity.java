@@ -1,5 +1,6 @@
 package com.example.ido.appex2.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.example.ido.appex2.MenuItemFunctions;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.Review;
 import com.example.ido.appex2.entities.User;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -50,6 +52,7 @@ public class AllReviewsActivity extends AppCompatActivity
         createLayoutConnections();
         createMenuConnctions();
         getAllReviews();
+
         Log.e(TAG, "onCreate() <<");
 
 
@@ -64,6 +67,13 @@ public class AllReviewsActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         m_Auth = FirebaseAuth.getInstance();
+        if(m_Auth ==null || m_Auth.getCurrentUser() == null)
+        {
+            LoginManager.getInstance().logOut();
+            Intent intent_LogOut = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent_LogOut);
+            finish();
+        }
         m_Key = getIntent().getStringExtra("Key");
         Log.e(TAG, "onCreateOptionsMenu() <<");
 

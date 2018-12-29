@@ -23,6 +23,7 @@ import com.example.ido.appex2.MenuItemFunctions;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.User;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -103,6 +104,13 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         mUserReviesCount = findViewById(R.id.user_item_book_review_count);
         mRatingStar= findViewById(R.id.user_ratingstar_iv);
         m_Auth = FirebaseAuth.getInstance();
+        if(m_Auth ==null || m_Auth.getCurrentUser() == null)
+        {
+            LoginManager.getInstance().logOut();
+            Intent intent_LogOut = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent_LogOut);
+            finish();
+        }
         m_Key = getIntent().getStringExtra("Key");
         Log.e(TAG, "createLayoutConnections() <<");
 

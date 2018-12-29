@@ -88,8 +88,16 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Auth = FirebaseAuth.getInstance();
+        if(m_Auth ==null || m_Auth.getCurrentUser() == null)
+        {
+            LoginManager.getInstance().logOut();
+            Intent intent_LogOut = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent_LogOut);
+            finish();
+        }
+        m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
+
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Log.e(TAG, "createLayoutConnections() <<");
