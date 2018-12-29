@@ -605,13 +605,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
         });
         builder.show();
-        //Refresh
-
-            Intent intent = new Intent(this, AudioBookDetailsActivity.class);
-            intent.putExtra("Key", m_Key);
-            finish();
-            startActivity(intent);
-
     }
 
     private double avgRatingOfAudioBook(double i_LastRating, float i_NewRating, int i_NumOfRating)

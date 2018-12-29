@@ -31,7 +31,7 @@ public class SplashScreen extends AppCompatActivity
                 .withFullScreen()
                 .withTargetActivity(MainActivity.class)
                 .withSplashTimeOut(2000)
-                .withBackgroundResource(R.color.BackgroundBlue)
+                .withBackgroundResource(R.drawable.grdnt)
                 .withLogo(R.drawable.logo3)
                 .withHeaderText("Welcome to our App: Ex03")
                 .withFooterText("© HBU")
