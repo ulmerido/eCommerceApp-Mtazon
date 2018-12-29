@@ -31,9 +31,11 @@ public class UserBooksAdapter extends RecyclerView.Adapter<UserBooksAdapter.User
 
     public UserBooksAdapter(List<AudioBookWithKey> i_Book, User i_User, Interface_OnClickAudioBookCard i_AudioBookCardClick)
     {
+        Log.e(TAG, "UserBooksAdapter() <<");
         this.mBookList = i_Book;
         this.m_User = i_User;
         this.m_AudioBookCardClick = i_AudioBookCardClick;
+        Log.e(TAG, "UserBooksAdapter() >>");
 
     }
 
@@ -71,11 +73,15 @@ public class UserBooksAdapter extends RecyclerView.Adapter<UserBooksAdapter.User
                 m_AudioBookCardClick.onAudioBookCardClick(bookWithKey);
             }
         });
+
+        Log.e(TAG,"onBindViewHolder() >> ");
+
     }
 
     @Override
     public int getItemCount()
     {
+        Log.e(TAG, "onBindViewHolder() <<");
         return mBookList.size();
     }
 

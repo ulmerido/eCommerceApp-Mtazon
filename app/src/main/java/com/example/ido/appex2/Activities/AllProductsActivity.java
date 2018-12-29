@@ -65,22 +65,22 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private EditText m_et_searchBook;
     private FirebaseUser m_fbUser;
     private FirebaseAuth m_Auth;
-    private MenuItemFunctions m_MenuFunctions ;
+    private MenuItemFunctions m_MenuFunctions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.e(TAG, "onCreate() >>");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_products);
-
         createLayoutConnections();
-
         createMenuConnetions();
-
-
+        Log.e(TAG, "onCreate() <<");
     }
 
-    private void createLayoutConnections() {
+    private void createLayoutConnections()
+    {
+        Log.e(TAG, "createLayoutConnections() >>");
         m_et_searchBook = (EditText) findViewById(R.id.et_searchBook);
         ButterKnife.bind(this);
         mRecyclerView = findViewById(R.id.my_recycler_view);
@@ -92,61 +92,69 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         m_Auth = FirebaseAuth.getInstance();
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Log.e(TAG, "createLayoutConnections() <<");
+
     }
 
     private void createMenuConnetions()
     {
-        Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
+        Log.e(TAG, "createMenuConnetions() >>");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setSubtitle("All products");
         Intent intent = getIntent();
-        if(intent!=null)
+        if (intent != null)
         {
             String search = intent.getStringExtra("search");
-            if(search!=null)
+            if (search != null)
             {
                 m_et_searchBook.setText(search);
             }
         }
 
-        m_MenuFunctions =new MenuItemFunctions(this);
+        m_MenuFunctions = new MenuItemFunctions(this);
 
-        if(m_fbUser != null)
+        if (m_fbUser != null)
         {
             onCreateWithUser();
-        }
-        else
+        } else
         {
             onCreateWithoutUser();
         }
         ButterKnife.bind(this);
         m_Key = getIntent().getStringExtra("Key");
+        Log.e(TAG, "createMenuConnetions() <<");
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        Log.e(TAG, "onCreateOptionsMenu() >>");
         Log.e("Test", "onCreateOptionsMenu() >>");
-
         m_MenuFunctions = new MenuItemFunctions(this);
         Log.e("Test", "onCreateOptionsMenu() <<");
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
+        Log.e(TAG, "onCreateOptionsMenu() <<");
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.e(TAG, "onOptionsItemSelected() >>");
         m_MenuFunctions.onOptionItemSelect(item);
-        return  super.onOptionsItemSelected(item);
+        Log.e(TAG, "onOptionsItemSelected() <<");
+        return super.onOptionsItemSelected(item);
     }
 
-    private  void onCreateWithUser()
+    private void onCreateWithUser()
     {
+        Log.e(TAG, "onCreateWithUser() >>");
         getAllBooks();
         new Handler().postDelayed(new Runnable()
         {
@@ -169,25 +177,30 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                         Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
                     }
                 });
-                Log.e(TAG, "onCreate() <<");
             }
         }, 2000);
+        Log.e(TAG, "onCreateWithUser() <<");
     }
 
     private void onCreateWithoutUser()
     {
+        Log.e(TAG, "onCreate() >>");
         getAllBooks();
+        Log.e(TAG, "onCreate() <<");
     }
 
 
     @Override
     public void onBackPressed()
     {
+        Log.e(TAG, "onBackPressed() >>");
         logOutOrNot();
+        Log.e(TAG, "onBackPressed() <<");
     }
 
     private void logOutOrNot()
     {
+        Log.e(TAG, "logOutOrNot() >>");
         AlertDialog.Builder builder = new AlertDialog.Builder(AllProductsActivity.this, R.style.DialogeTheme);
         builder.setCancelable(true);
         builder.setTitle("Confirm Log Out");
@@ -213,6 +226,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             }
         });
         builder.show();
+        Log.e(TAG, "logOutOrNot() <<");
 
     }
 
@@ -229,9 +243,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private void getAllBooksUsingChildListenrs()
     {
         Log.e(TAG, "getAllBooksUsingChildListenrs() >>");
-
         mAllBooksRef = FirebaseDatabase.getInstance().getReference("AudioBooks");
-
         mAllBooksRef.addChildEventListener(new ChildEventListener()
         {
             @Override
@@ -242,7 +254,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 String bookToSearch = m_et_searchBook.getText().toString();
                 String currentBookName = bookWithKey.getAudioBook().getName();
 
-               if(currentBookName.toLowerCase().startsWith(bookToSearch.toLowerCase()))
+                if (currentBookName.toLowerCase().startsWith(bookToSearch.toLowerCase()))
                 {
                     m_BooksList.add(bookWithKey);
                     mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -257,10 +269,10 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 Log.e(TAG, "onChildChanged(Songs) >> " + snapshot.getKey());
                 AudioBook book = snapshot.getValue(AudioBook.class);
                 String key = snapshot.getKey();
-                for(int i = 0; i < m_BooksList.size(); i++)
+                for (int i = 0; i < m_BooksList.size(); i++)
                 {
                     AudioBookWithKey bookWithKey = (AudioBookWithKey) m_BooksList.get(i);
-                    if(bookWithKey.getKey().equals(key))
+                    if (bookWithKey.getKey().equals(key))
                     {
                         bookWithKey.setAudioBook(book);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -286,10 +298,10 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
                 String key = snapshot.getKey();
 
-                for(int i = 0; i < m_BooksList.size(); i++)
+                for (int i = 0; i < m_BooksList.size(); i++)
                 {
                     AudioBookWithKey bookWithKey = (AudioBookWithKey) m_BooksList.get(i);
-                    if(bookWithKey.getKey().equals(key))
+                    if (bookWithKey.getKey().equals(key))
                     {
                         m_BooksList.remove(i);
                         mRecyclerView.getAdapter().notifyDataSetChanged();
@@ -308,13 +320,13 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             }
 
         });
-
         Log.e(TAG, "getAllBooksUsingChildListenrs <<");
 
     }
 
     public void onSearchButtonClick(View v)
     {
+        Log.e(TAG, "onSearchButtonClick() >>");
         String orderBy = ((RadioButton) findViewById(R.id.radioButtonByRating)).isChecked() ? "rating" : "price";
         Query searchBook;
         m_BooksList.clear();
@@ -341,67 +353,68 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
     private void updateAudioBooksList(DataSnapshot snapshot)
     {
+        Log.e(TAG, "updateAudioBooksList() >>");
         boolean isAutor = false, isPrice = false;
         Spinner mySpinner = (Spinner) findViewById(R.id.search_spinner);
         String spiner_text = mySpinner.getSelectedItem().toString();
         String searchString = ((EditText) findViewById(R.id.et_searchBook)).getText().toString();
         Deque<AudioBookWithKey> stack = new ArrayDeque<AudioBookWithKey>();
         String orderBy = ((RadioButton) findViewById(R.id.radioButtonByRating)).isChecked() ? "rating" : "price";
-        if(orderBy.equals("price"))
+        if (orderBy.equals("price"))
         {
             isPrice = true;
         }
-        if(searchString != null)
+        if (searchString != null)
         {
-            if(spiner_text.equals("Author"))
+            if (spiner_text.equals("Author"))
             {
                 isAutor = true;
             }
-            for(DataSnapshot dataSnapshot : snapshot.getChildren())
+            for (DataSnapshot dataSnapshot : snapshot.getChildren())
             {
                 AudioBook book = dataSnapshot.getValue(AudioBook.class);
                 Log.e(TAG, "updateSongList() >> adding song: " + book.getName());
                 String key = dataSnapshot.getKey();
-                if(isAutor)
+                if (isAutor)
                 {
-                    if(book.getAuthor().toLowerCase().startsWith(searchString.toLowerCase()))
+                    if (book.getAuthor().toLowerCase().startsWith(searchString.toLowerCase()))
                     {
-                        if(isPrice)
+                        if (isPrice)
                         {
                             m_BooksList.add(new AudioBookWithKey(key, book));
-                        }
-                        else
+                        } else
                         {
                             stack.push(new AudioBookWithKey(key, book));
                         }
                     }
-                }
-                else
+                } else
                 {
-                    if(book.getName().toLowerCase().startsWith(searchString.toLowerCase()))
+                    if (book.getName().toLowerCase().startsWith(searchString.toLowerCase()))
                     {
-                        if(isPrice)
+                        if (isPrice)
                         {
                             m_BooksList.add(new AudioBookWithKey(key, book));
-                        }
-                        else
+                        } else
                         {
                             stack.push(new AudioBookWithKey(key, book));
                         }
                     }
                 }
             }
-            while(!stack.isEmpty())
+            while (!stack.isEmpty())
             {
                 m_BooksList.add(stack.pop());
             }
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
+        Log.e(TAG, "updateAudioBooksList() <<");
+
     }
 
     public void onRadioButtonCLick(View v)
     {
-        switch(v.getId())
+        Log.e(TAG, "onRadioButtonCLick() >>");
+        switch (v.getId())
         {
             case R.id.radioButtonByPrice:
                 ((RadioButton) findViewById(R.id.radioButtonByRating)).setChecked(false);
@@ -410,6 +423,8 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 ((RadioButton) findViewById(R.id.radioButtonByPrice)).setChecked(false);
                 break;
         }
+        Log.e(TAG, "onRadioButtonCLick() <<");
+
     }
 
     @Override

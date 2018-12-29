@@ -21,7 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MenuItemFunctions {
+public class MenuItemFunctions
+{
     AppCompatActivity m_Activity;
     Menu m_Menu;
     SearchView m_SearchView;
@@ -32,7 +33,8 @@ public class MenuItemFunctions {
 
     private final String TAG = "Menu_Item_Functions";
 
-    public MenuItemFunctions(AppCompatActivity i_Activity) {
+    public MenuItemFunctions(AppCompatActivity i_Activity)
+    {
         m_Activity = i_Activity;
         Log.e(TAG, "Ctr() >>");
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -40,44 +42,47 @@ public class MenuItemFunctions {
         //m_LogOut_In = (TextView) findViewById(R.id.action_logout);
     }
 
-    public boolean onOptionItemSelect(MenuItem item) {
-        Log.e(TAG, "onItemSelect()" +item.getItemId());
+    public boolean onOptionItemSelect(MenuItem item)
+    {
+        Log.e(TAG, "onItemSelect()" + item.getItemId());
 
-            switch (item.getItemId()) {
-                case android.R.id.home:
-                    backPressed();
-                    return true;
-                case R.id.action_search:
-                    return true;
-                case R.id.action_navigate_Store:
-                    goToStore();
-                    return true;
-                case R.id.action_refresh:
-                    refresh();
-                    return true;
-                case R.id.action_myprofile:
-                    goToProfile();
-                    return true;
-                case R.id.action_logout:
-                    onClickLogOut();
-                    return true;
-                case R.id.action_mycart:
-                    goToCart();
-                default:
-                    return false;
-            }
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                backPressed();
+                return true;
+            case R.id.action_search:
+                return true;
+            case R.id.action_navigate_Store:
+                goToStore();
+                return true;
+            case R.id.action_refresh:
+                refresh();
+                return true;
+            case R.id.action_myprofile:
+                goToProfile();
+                return true;
+            case R.id.action_logout:
+                onClickLogOut();
+                return true;
+            case R.id.action_mycart:
+                goToCart();
+            default:
+                return false;
         }
+    }
 
-    private void backPressed() {
+    private void backPressed()
+    {
         m_Activity.onBackPressed();
     }
 
 
     private void onClickLogOut()
     {
-
-
-        if(m_fbUser.isAnonymous()) {
+        Log.e(TAG, "onClickLogOut() >>");
+        if (m_fbUser.isAnonymous())
+        {
             Intent intent_Back = new Intent(m_Activity.getApplicationContext(), MainActivity.class);
             m_Activity.startActivity(intent_Back);
             m_Activity.finish();
@@ -135,36 +140,48 @@ public class MenuItemFunctions {
 
     private void goToStore()
     {
+        Log.e(TAG, "goToStore() >>");
         Intent i = new Intent(m_Activity.getApplicationContext(), AllProductsActivity.class);
         m_Activity.startActivity(i);
         m_Activity.finish();
+        Log.e(TAG, "goToStore() <<");
+
     }
 
     private void goToProfile()
     {
-        if(m_fbUser.isAnonymous())
+        Log.e(TAG, "goToProfile() >>");
+        if (m_fbUser.isAnonymous())
         {
             Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else
+        {
             Intent i = new Intent(m_Activity.getApplicationContext(), UserActivity.class);
             m_Activity.startActivity(i);
             m_Activity.finish();
 
         }
+        Log.e(TAG, "goToProfile() <<");
     }
 
-    private void goToCart() {
-        if (m_fbUser.isAnonymous()) {
+    private void goToCart()
+    {
+        Log.e(TAG, "goToCart() >>");
+        if (m_fbUser.isAnonymous())
+        {
             Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-        } else {
+        } else
+        {
             Intent i = new Intent(m_Activity.getApplicationContext(), AllUserPurchase.class);
             m_Activity.startActivity(i);
         }
+        Log.e(TAG, "goToCart() <<");
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        Log.e(TAG, "onCreateOptionsMenu() >>");
         MenuInflater inflater = m_Activity.getMenuInflater();
         inflater.inflate(R.menu.activity_main_actions, menu);
         m_Menu = menu;
@@ -173,12 +190,12 @@ public class MenuItemFunctions {
         m_SearchView = searchView;
 
         MenuItem logOutMenuItem = m_Menu.findItem(R.id.action_logout);
-        if(m_fbUser.isAnonymous())
+        if (m_fbUser.isAnonymous())
         {
             logOutMenuItem.setTitle("Login");
         }
 
-
+        Log.e(TAG, "onCreateOptionsMenu() <<");
         return true;
     }
 }

@@ -61,15 +61,18 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.e(TAG, "onCreate() >>");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_user_purchase);
         createLayoutConnections();
         createMenuConnections();
         getAllUserBooks();
+        Log.e(TAG, "onCreate() <<");
     }
 
     private void createMenuConnections()
     {
+        Log.e(TAG, "createMenuConnections() >>");
         Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -78,11 +81,14 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setSubtitle("Your Orders");
+        Log.e(TAG, "createMenuConnections() <<");
+
     }
 
 
     private void createLayoutConnections()
     {
+        Log.e(TAG, "createLayoutConnections() >>");
         mRecyclerView = findViewById(R.id.AllUserPurchase_RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -98,21 +104,28 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         mRatingStar= findViewById(R.id.user_ratingstar_iv);
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
+        Log.e(TAG, "createLayoutConnections() <<");
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+        Log.e(TAG, "onCreateOptionsMenu() >>");
         m_MenuFunctions = new MenuItemFunctions(this);
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
+        Log.e(TAG, "onCreateOptionsMenu() <<");
         return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.e(TAG, "onOptionsItemSelected() >>");
         m_MenuFunctions.onOptionItemSelect(item);
+        Log.e(TAG, "onOptionsItemSelected() <<");
         return  super.onOptionsItemSelected(item);
     }
 
@@ -173,6 +186,7 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
         });
 
         getTheAudioBooksListFromFirebase();
+        Log.e(TAG, "getAllBooksUsingChildListenrs() <<");
 
     }
 
@@ -190,6 +204,7 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
 
     private void getTheAudioBooksListFromFirebase()
     {
+        Log.e(TAG, "getTheAudioBooksListFromFirebase >>");
         mAllBooksRef = FirebaseDatabase.getInstance().getReference("AudioBooks");
         mAllBooksRef.addChildEventListener(new ChildEventListener()
         {
@@ -278,13 +293,7 @@ public class AllUserPurchase extends AppCompatActivity implements Interface_OnCl
             }
 
         });
+        Log.e(TAG, "getTheAudioBooksListFromFirebase <<");
 
     }
-
-
-
-
-
-
-
 }

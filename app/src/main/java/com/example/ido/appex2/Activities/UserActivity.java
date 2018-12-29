@@ -130,16 +130,18 @@ public class UserActivity extends AppCompatActivity
         Log.e("Test", "onCreateOptionsMenu() >>");
 
         m_MenuFunctions = new MenuItemFunctions(this);
-        Log.e("Test", "onCreateOptionsMenu() <<");
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
+        Log.e("Test", "onCreateOptionsMenu() <<");
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.e("Test", "onOptionsItemSelected() >>");
         m_MenuFunctions.onOptionItemSelect(item);
+        Log.e("Test", "onOptionsItemSelected() <<");
         return  super.onOptionsItemSelected(item);
     }
     private void onClickLogOut()
@@ -164,8 +166,10 @@ public class UserActivity extends AppCompatActivity
 
     private void onClickUploadbtn()
     {
+        Log.e(TAG, "onClickUploadbtn() >>");
         Log.v(TAG, " click Upload profile pic");
         chooseAndUploadImage();
+        Log.e(TAG, "onClickUploadbtn() <<");
         //uploadImage();
     }
 
@@ -371,6 +375,6 @@ public class UserActivity extends AppCompatActivity
                         }
                     }
                 });
-        Log.e(TAG, "updateUserPhotoInDB() >>");
+        Log.e(TAG, "updateUserPhotoInDB() <<");
     }
 }

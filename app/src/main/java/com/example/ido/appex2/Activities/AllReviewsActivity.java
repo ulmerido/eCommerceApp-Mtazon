@@ -44,19 +44,20 @@ public class AllReviewsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.e(TAG, "onCreate() >>");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_reviews);
-
         createLayoutConnections();
-
         createMenuConnctions();
-
         getAllReviews();
+        Log.e(TAG, "onCreate() <<");
+
 
     }
 
     private void createLayoutConnections()
     {
+        Log.e(TAG, "createLayoutConnections() >>");
         mRecyclerView = findViewById(R.id.Review_RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -64,11 +65,14 @@ public class AllReviewsActivity extends AppCompatActivity
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         m_Auth = FirebaseAuth.getInstance();
         m_Key = getIntent().getStringExtra("Key");
+        Log.e(TAG, "onCreateOptionsMenu() <<");
+
+
     }
 
     private void createMenuConnctions()
     {
-
+        Log.e(TAG, "createMenuConnctions() >>");
         Toolbar toolbar =(Toolbar)findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -77,31 +81,33 @@ public class AllReviewsActivity extends AppCompatActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setSubtitle("Reviews");
+        Log.e(TAG, "createMenuConnctions() <<");
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.e(TAG, "onCreateOptionsMenu() >>");
-
         m_MenuFunctions = new MenuItemFunctions(this);
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
         Log.e(TAG ,"onCreateOptionsMenu() <<");
-
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.e(TAG, "onOptionsItemSelected() >>");
         m_MenuFunctions.onOptionItemSelect(item);
+        Log.e(TAG, "onOptionsItemSelected() <<");
+
         return  super.onOptionsItemSelected(item);
     }
     private void getAllReviews()
     {
         Log.e(TAG, "getAllReviews() >>");
-
         m_ReviewList.clear();
         mAdapter = new ReviewAdapter(m_ReviewList);
         mRecyclerView.setAdapter(mAdapter);
@@ -113,9 +119,7 @@ public class AllReviewsActivity extends AppCompatActivity
     private void getAllBooksUsingChildListenrs()
     {
         Log.e(TAG, "getAllBooksUsingChildListenrs() >>");
-
         mAllReviewRef = FirebaseDatabase.getInstance().getReference("Review");
-
         mAllReviewRef.addChildEventListener(new ChildEventListener()
         {
             @Override
@@ -210,7 +214,6 @@ public class AllReviewsActivity extends AppCompatActivity
             }
 
         });
-
 
         Log.e(TAG, "getAllBooksUsingChildListenrs <<");
 

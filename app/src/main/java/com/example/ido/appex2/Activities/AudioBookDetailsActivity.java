@@ -77,7 +77,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     private RatingBar m_UserRating;
     private DatabaseReference m_AudioBookRef;
     private boolean m_AudioBookWasPurchased = false;
-    private  TextView m_moreReviews;
+    private TextView m_moreReviews;
 
     //------Media Player---------
     private Button forwardBtn, pauseBtn, playBtn, rewindBtn;
@@ -96,6 +96,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.e(TAG, "onCreate() >>");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_details);
 
@@ -121,10 +122,12 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
         });
         createMenuConnections();
+        Log.e(TAG, "onCreate() <<");
     }
 
     private void createMenuConnections()
     {
+        Log.e(TAG, "createMenuConnections() >>");
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -133,23 +136,23 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setSubtitle("Details");
         m_MenuFunctions = new MenuItemFunctions(this);
+        Log.e(TAG, "createMenuConnections() <<");
     }
 
     private void setBuyButton()
     {
-        if(m_fbUser.isAnonymous())
+        Log.e(TAG, "setBuyButton() >>");
+        if (m_fbUser.isAnonymous())
         {
             Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-        }
-        else
+        } else
         {
             Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
 
-            if(m_AudioBookWasPurchased)
+            if (m_AudioBookWasPurchased)
             {
                 Log.e(TAG, "buyPlay.onClick() >> Playing purchased song");
-            }
-            else
+            } else
             {
                 //Purchase the song.
                 Log.e(TAG, "buyPlay.onClick() >> Purchase the song");
@@ -162,14 +165,14 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 m_Buy.setEnabled(false);
             }
 
-            Log.e(TAG, "playSong.onClick() <<");
+            Log.e(TAG, "setBuyButton() <<");
         }
     }
 
 
-
-    private void createLayoutConnections() {
-
+    private void createLayoutConnections()
+    {
+        Log.e(TAG, "createLayoutConnections() >>");
         forwardBtn = (Button) findViewById(R.id.forward_btn);
         pauseBtn = (Button) findViewById(R.id.pause_btn);
         playBtn = (Button) findViewById(R.id.play_btn);
@@ -198,11 +201,12 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 onClickRating();
             }
         });
-
+        Log.e(TAG, "createLayoutConnections() <<");
     }
 
-    private void getUserAndBookDetailsToActivity() {
-
+    private void getUserAndBookDetailsToActivity()
+    {
+        Log.e(TAG, "getUserAndBookDetailsToActivity() >>");
         m_Auth = FirebaseAuth.getInstance();
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
@@ -212,7 +216,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_MyUserRef.addValueEventListener(new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(DataSnapshot snapshot)
+            {
                 Log.e(TAG, "onDataChange(User) >> " + snapshot.getKey());
                 Log.e(TAG, "onDataChange(User) >> " + snapshot.getValue(User.class).toString());
                 m_User = snapshot.getValue(User.class);
@@ -221,8 +226,10 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                 m_Buy.setText("BUY $" + m_AudioBook.getPrice());
                 Iterator i = m_User.getMyAudioBooks().iterator();
-                while (i.hasNext()) {
-                    if (i.next().equals(m_Key)) {
+                while (i.hasNext())
+                {
+                    if (i.next().equals(m_Key))
+                    {
                         m_AudioBookWasPurchased = true;
                         m_Buy.setText("You Bought This eBook");
                         m_Buy.setEnabled(false);
@@ -233,12 +240,14 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError)
+            {
                 Log.e(TAG, "onCancelled(Users) >>" + databaseError.getMessage());
             }
 
         });
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Log.e(TAG, "getUserAndBookDetailsToActivity() <<");
 
     }
 
@@ -246,28 +255,29 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.e("Test", "onCreateOptionsMenu() >>");
+        Log.e(TAG, "onCreateOptionsMenu() >>");
 
         m_MenuFunctions = new MenuItemFunctions(this);
-        Log.e("Test", "onCreateOptionsMenu() <<");
         m_MenuFunctions.onCreateOptionsMenu(menu);
         m_MenuFunctions.setOnClickSearch();
+        Log.e(TAG, "onCreateOptionsMenu() <<");
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        Log.e(TAG, "onOptionsItemSelected() >>");
         m_MenuFunctions.onOptionItemSelect(item);
+        Log.e(TAG, "onOptionsItemSelected() <<");
         return super.onOptionsItemSelected(item);
     }
 
     public void addListenerOnClickAddReview()
     {
-
+        Log.e(TAG, "addListenerOnClickAddReview() >>");
         m_UserRating = findViewById(R.id.new_rating_user);
         m_addReview = findViewById(R.id.details_AddNewReview);
-
         m_addReview.setOnClickListener(new View.OnClickListener()
         {
 
@@ -277,21 +287,24 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 onClickAddReview();
             }
         });
+        Log.e(TAG, "addListenerOnClickAddReview() <<");
 
     }
 
     @Override
     public void onBackPressed()
     {
-      //  pauseBtn.callOnClick(); // close music when we are back
-        whenAudioFinish();
+        Log.e(TAG, "onBackPressed() >>");
 
+        //  pauseBtn.callOnClick(); // close music when we are back
+        whenAudioFinish();
         super.onBackPressed();
+        Log.e(TAG, "onBackPressed() <<");
     }
 
     private void createAndInvokeMediaPlayer()
     {
-
+        Log.e(TAG, "createAndInvokeMediaPlayer() >>");
         seekbar = (SeekBar) findViewById(R.id.seekBar);
         seekbar.setClickable(false);
         seekbar.setProgress(0);
@@ -326,7 +339,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 int temp = (int) startTime;
 
-                if((temp + forwardTime) <= finalTime)
+                if ((temp + forwardTime) <= finalTime)
                 {
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
@@ -341,7 +354,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 int temp = (int) startTime;
 
-                if((temp - backwardTime) > 0)
+                if ((temp - backwardTime) > 0)
                 {
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
@@ -350,26 +363,33 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
         });
         mediaPlayer.setOnCompletionListener(this);
+        Log.e(TAG, "createAndInvokeMediaPlayer() <<");
+
     }
 
 
-            @Override
-            public void onCompletion(MediaPlayer mp)
-            {
-                whenAudioFinish();
-                runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
-            }
+    @Override
+    public void onCompletion(MediaPlayer mp)
+    {
+        Log.e(TAG, "onCompletion() >>");
+        whenAudioFinish();
+        runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
+        Log.e(TAG, "onCompletion() <<");
 
-            private void whenAudioFinish()
-           {
-               mediaPlayer.stop();
-               mediaPlayer.reset();
-               seekbar.setProgress(0);
-               runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
-               pauseBtn.setEnabled(false);
-               playBtn.setEnabled(true);
+    }
 
-           }
+    private void whenAudioFinish()
+    {
+        Log.e(TAG, "whenAudioFinish() >>");
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        seekbar.setProgress(0);
+        runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
+        pauseBtn.setEnabled(false);
+        playBtn.setEnabled(true);
+        Log.e(TAG, "whenAudioFinish() <<");
+
+    }
 
 
     private Runnable UpdateSongTime = new Runnable()
@@ -383,11 +403,11 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             startTime = mediaPlayer.getCurrentPosition();
             runingTimeBook.setText(String.format("%d min, %d sec", currentMin, currentSec));
             seekbar.setProgress((int) startTime);
-            if( currentSec >= 30 && !m_AudioBookWasPurchased)
+            if (currentSec >= 30 && !m_AudioBookWasPurchased)
             {
                 whenAudioFinish();
                 Toast.makeText(getApplicationContext(), "Only 30 seconds for DEMO version\nBuy the AudioBook to get " +
-                        "the FULL version" , Toast.LENGTH_SHORT).show();
+                        "the FULL version", Toast.LENGTH_SHORT).show();
             }
             myHandler.postDelayed(this, 100);
 
@@ -397,16 +417,16 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
     private void playAudioBook(String i_AudioBookFile)
     {
+        Log.e(TAG, "playAudioBook() >>");
+
         Toast.makeText(getApplicationContext(), "Playing sound " + i_AudioBookFile, Toast.LENGTH_SHORT).show();
 
-        if(m_lengthOfSound > 0)
+        if (m_lengthOfSound > 0)
         {
             mediaPlayer.seekTo(m_lengthOfSound);
             mediaPlayer.start();
             whatToDoAfterPlayAudioBook();
-        }
-
-        else
+        } else
         {
             FirebaseStorage.getInstance().getReference("AudioBooks/" + i_AudioBookFile).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
             {
@@ -425,8 +445,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                         mediaPlayer.start();
 
-                    }
-                    catch(Exception e)
+                    } catch (Exception e)
                     {
                         Log.w(TAG, "playSong() error:" + e.getMessage());
                     }
@@ -436,12 +455,14 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     Log.e(TAG, "onSuccess() <<");
                 }
             });
-            Log.e(TAG, "playCurrentSong() << ");
         }
+        Log.e(TAG, "playAudioBook() <<");
+
     }
 
     private void whatToDoAfterPlayAudioBook()
     {
+        Log.e(TAG, "whatToDoAfterPlayAudioBook() >>");
         finalTime = mediaPlayer.getDuration();
         startTime = mediaPlayer.getCurrentPosition();
         if (oneTimeOnly == 0)
@@ -464,6 +485,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         myHandler.postDelayed(UpdateSongTime, 100);
         pauseBtn.setEnabled(true);
         playBtn.setEnabled(false);
+        Log.e(TAG, "whatToDoAfterPlayAudioBook() <<");
     }
 
     private void populate()
@@ -485,43 +507,42 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
     public void onClickAddReview()
     {
-        Log.e(TAG, "onClickAddReview>>");
+        Log.e(TAG, "onClickAddReview >>");
 
         String headerString = m_etReviewHeader.getText().toString().trim();
         String bodyString = m_etReviewBody.getText().toString().trim();
-        if(checkReviewParams(headerString, bodyString))
+        if (checkReviewParams(headerString, bodyString))
         {
             whenAddedReviwWithRating();
             try
             {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            }
-            catch(Exception e)
+            } catch (Exception e)
             {
                 Log.e(TAG, "Exception " + e.getMessage());
             }
 
             m_etReviewHeader.setHintTextColor(Color.GRAY);
             m_etReviewBody.setHintTextColor(Color.GRAY);
-        }
-        else
+        } else
         {
-            if(m_etReviewHeader.getText().toString().isEmpty())
+            if (m_etReviewHeader.getText().toString().isEmpty())
             {
                 m_etReviewHeader.setHintTextColor(Color.RED);
             }
-            if(m_etReviewBody.getText().toString().isEmpty())
+            if (m_etReviewBody.getText().toString().isEmpty())
             {
                 m_etReviewBody.setHintTextColor(Color.RED);
             }
 
         }
-        Log.e(TAG, "onClickAddReview<<");
+        Log.e(TAG, "onClickAddReview <<");
     }
 
     private void whenAddedReviwWithRating()
     {
+        Log.e(TAG, "whenAddedReviwWithRating() >>");
         m_AudioBookRef.runTransaction(new Transaction.Handler()
         {
 
@@ -531,18 +552,18 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                 Log.e(TAG, "doTransaction() >>");
                 AudioBook audioBook = mutableData.getValue(AudioBook.class);
-                if(audioBook == null)
+                if (audioBook == null)
                 {
                     Log.e(TAG, "doTransaction() << song is null");
                     return Transaction.success(mutableData);
                 }
 
-                if(m_PrevRating == -1)
+                if (m_PrevRating == -1)
                 {
                     // Increment the review count and rating only in case the user enters a new review
                     audioBook.incrementReviewCount();
                     double newRating = avgRatingOfAudioBook(audioBook.getRating(), m_UserRating.getRating(), audioBook.getReviewsCount());
-                    newRating = Math.round(newRating * 100)/100.00;
+                    newRating = Math.round(newRating * 100) / 100.00;
                     audioBook.setRating(newRating);
                 }
 
@@ -557,13 +578,13 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                 Log.e(TAG, "onComplete() >>");
 
-                if(databaseError != null)
+                if (databaseError != null)
                 {
                     Log.e(TAG, "onComplete() << Error:" + databaseError.getMessage());
                     return;
                 }
 
-                if(committed)
+                if (committed)
                 {
                     String header = m_etReviewHeader.getText().toString();
                     String body = m_etReviewBody.getText().toString();
@@ -572,7 +593,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Date date = new Date();
                     rating = m_UserRating.getRating();
-                    Review review = new Review(header, body, rating, user.getEmail(), user.getUid(), m_Key, dateFormat.format(date),m_Auth.getCurrentUser().getPhotoUrl().toString());
+                    Review review = new Review(header, body, rating, user.getEmail(), user.getUid(), m_Key, dateFormat.format(date), m_Auth.getCurrentUser().getPhotoUrl().toString());
                     DatabaseReference reviewRef = FirebaseDatabase.getInstance().getReference();
                     reviewRef.child("Review").push().setValue(review);
                     reviewSetComplete();
@@ -582,18 +603,19 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 Log.e(TAG, "onComplete() <<");
             }
         });
+        Log.e(TAG, "whenAddedReviwWithRating() <<");
+
     }
-
-
 
 
     private void reviewSetComplete()
     {
+        Log.e(TAG, "reviewSetComplete() >>");
         AlertDialog.Builder builder = new AlertDialog.Builder(AudioBookDetailsActivity.this, R.style.DialogeTheme);
 
         builder.setCancelable(true);
         builder.setTitle("Thank You!!");
-        builder.setMessage("For given review for " + " ' " + m_AudioBook.getName() + " ' ");
+        builder.setMessage("For given review for " + " '" + m_AudioBook.getName() + "'");
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
         {
@@ -608,55 +630,58 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             }
         });
         builder.show();
+        Log.e(TAG, "reviewSetComplete() <<");
+
     }
 
     private double avgRatingOfAudioBook(double i_LastRating, float i_NewRating, int i_NumOfRating)
     {
+        Log.e(TAG, "avgRatingOfAudioBook() ");
         return ((i_LastRating * (i_NumOfRating - 1) + i_NewRating) / i_NumOfRating);
     }
 
     public boolean checkReviewParams(String i_Header, String i_Body)
     {
+        Log.e(TAG, "checkReviewParams() >>");
+
         boolean res = false, tooLong = false;
-        if(FirebaseAuth.getInstance().getCurrentUser().isAnonymous())
+        if (FirebaseAuth.getInstance().getCurrentUser().isAnonymous())
         {
             Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
             return false;
         }
         Log.e(TAG, "@@  Header--->> " + i_Header + " Body " + i_Body);
-        if(!i_Header.trim().isEmpty() && !i_Body.trim().isEmpty() && m_UserRating.getRating() != 0)
+        if (!i_Header.trim().isEmpty() && !i_Body.trim().isEmpty() && m_UserRating.getRating() != 0)
         {
-            if(i_Header.length() > 30)
+            if (i_Header.length() > 30)
             {
                 tooLong = true;
-                Toast.makeText(getApplicationContext(),"Heder must be less than 30 chars", Toast.LENGTH_SHORT).show();
-            }
-            else if(i_Body.length() > 100)
+                Toast.makeText(getApplicationContext(), "Heder must be less than 30 chars - you now have " + i_Header.length() + " chars", Toast.LENGTH_SHORT).show();
+            } else if (i_Body.length() > 100)
             {
                 tooLong = true;
-                Toast.makeText(getApplicationContext(),"Body must be less than 100 chars", Toast.LENGTH_SHORT).show();
-            }
-            else
+                Toast.makeText(getApplicationContext(), "Body must be less than 100 chars - you now have " + i_Body.length() + " chars", Toast.LENGTH_SHORT).show();
+            } else
             {
                 res = true;
             }
-        }
-        else
+        } else
         {
             res = false;
-            Toast.makeText(getApplicationContext(),"Please fill all fields: Header, Body and Rate", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Please fill all fields: Header, Body and Rate", Toast.LENGTH_SHORT).show();
         }
-
+        Log.e(TAG, "checkReviewParams() <<");
         return res;
+
     }
 
     public void onClickRating()
     {
-        if(m_AudioBook.getReviewsCount() == 0)
+        Log.e(TAG, "onClickRating() >>");
+        if (m_AudioBook.getReviewsCount() == 0)
         {
             Toast.makeText(getApplicationContext(), "There are no reviews for this book ", Toast.LENGTH_SHORT).show();
-        }
-        else
+        } else
         {
             Log.e(TAG, "onClickRating >> ");
             Intent intent = new Intent(this, AllReviewsActivity.class);

@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(TAG, "onCreate() >>");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 onClickAnonymos();
             }
         });
+        Log.e(TAG, "onCreate() <<");
     }
 
     private void onClickAnonymos() {

@@ -18,9 +18,6 @@ public class SplashScreen extends AppCompatActivity
     private static final String TAG = "Splash screen";
     private FirebaseAuth m_Auth;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

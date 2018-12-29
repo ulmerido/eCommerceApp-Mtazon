@@ -30,21 +30,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
 
     public ReviewAdapter(List<Review> i_Review)
     {
+        Log.e(TAG, "ReviewAdapter() >> ");
         this.m_ReviewList = i_Review;
+        Log.e(TAG, "ReviewAdapter() << ");
     }
 
     @Override
     public ReviewHolder onCreateViewHolder(ViewGroup parent, int i)
     {
         Log.e(TAG, "onCreateViewHolder() >>");
-
         m_inflater = LayoutInflater.from(parent.getContext());
         View itemView = m_inflater.inflate(R.layout.item_card_userreview, parent, false);
-
         Log.e(TAG, "onCreateViewHolder() <<");
         return new ReviewHolder(parent.getContext(), itemView);
     }
-
 
 
     @Override
@@ -53,13 +52,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
         Log.e(TAG,"onBindViewHolder() >> " + position);
         final Review review = m_ReviewList.get(position);
         holder.populate(review);
-
         Log.e(TAG,"onBindViewHolder() << "+ position);
     }
 
     @Override
     public int getItemCount()
     {
+        Log.e(TAG, "getItemCount() << ");
         return m_ReviewList.size();
     }
 
