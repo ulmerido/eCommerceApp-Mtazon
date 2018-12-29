@@ -77,7 +77,7 @@
                 android:id="@+id/UserReview_header"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="36dp"
                 android:text="[Review Header]"
                 android:textAlignment="center"
@@ -85,11 +85,12 @@
                 android:textSize="14sp"
                 card_view:layout_constraintStart_toEndOf="@+id/UserReview_user_image"
                 card_view:layout_constraintTop_toTopOf="@+id/UserReview_user_name" />
+
             <TextView
                 android:id="@+id/UserReview_body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
                 android:text="[review body]"
                 android:textColor="@android:color/black"

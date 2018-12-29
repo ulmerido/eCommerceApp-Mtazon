@@ -283,7 +283,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     @Override
     public void onBackPressed()
     {
-        pauseBtn.callOnClick(); // close music when we are back
+      //  pauseBtn.callOnClick(); // close music when we are back
+        whenAudioFinish();
+
         super.onBackPressed();
     }
 
@@ -442,7 +444,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     {
         finalTime = mediaPlayer.getDuration();
         startTime = mediaPlayer.getCurrentPosition();
-        if (oneTimeOnly == 0) {
+        if (oneTimeOnly == 0)
+        {
             seekbar.setMax((int) finalTime);
             oneTimeOnly = 1;
         }
@@ -614,7 +617,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
     public boolean checkReviewParams(String i_Header, String i_Body)
     {
-        boolean res;
+        boolean res = false, tooLong = false;
         if(FirebaseAuth.getInstance().getCurrentUser().isAnonymous())
         {
             Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
@@ -623,7 +626,20 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         Log.e(TAG, "@@  Header--->> " + i_Header + " Body " + i_Body);
         if(!i_Header.trim().isEmpty() && !i_Body.trim().isEmpty() && m_UserRating.getRating() != 0)
         {
-            res = true;
+            if(i_Header.length() > 30)
+            {
+                tooLong = true;
+                Toast.makeText(getApplicationContext(),"Heder must be less than 30 chars", Toast.LENGTH_SHORT).show();
+            }
+            else if(i_Body.length() > 100)
+            {
+                tooLong = true;
+                Toast.makeText(getApplicationContext(),"Body must be less than 100 chars", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                res = true;
+            }
         }
         else
         {
