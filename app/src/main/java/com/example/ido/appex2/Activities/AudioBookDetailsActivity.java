@@ -142,17 +142,19 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     private void setBuyButton()
     {
         Log.e(TAG, "setBuyButton() >>");
-        if (m_fbUser.isAnonymous())
+        if(m_fbUser.isAnonymous())
         {
             Toast.makeText(getApplicationContext(), "ACCESS DENIED!!\n Please login...", Toast.LENGTH_SHORT).show();
-        } else
+        }
+        else
         {
             Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
 
-            if (m_AudioBookWasPurchased)
+            if(m_AudioBookWasPurchased)
             {
                 Log.e(TAG, "buyPlay.onClick() >> Playing purchased book");
-            } else
+            }
+            else
             {
                 Log.e(TAG, "buyPlay.onClick() >> Purchase the book");
                 m_User.getMyAudioBooks().add(m_Key);
@@ -167,7 +169,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             Log.e(TAG, "setBuyButton() <<");
         }
     }
-
 
     private void createLayoutConnections()
     {
@@ -223,9 +224,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
                 m_Buy.setText("BUY $" + m_AudioBook.getPrice());
                 Iterator i = m_User.getMyAudioBooks().iterator();
-                while (i.hasNext())
+                while(i.hasNext())
                 {
-                    if (i.next().equals(m_Key))
+                    if(i.next().equals(m_Key))
                     {
                         m_AudioBookWasPurchased = true;
                         m_Buy.setText("You Bought This eBook");
@@ -247,7 +248,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         Log.e(TAG, "getUserAndBookDetailsToActivity() <<");
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -337,7 +337,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 int temp = (int) startTime;
 
-                if ((temp + forwardTime) <= finalTime)
+                if((temp + forwardTime) <= finalTime)
                 {
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
@@ -352,7 +352,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 int temp = (int) startTime;
 
-                if ((temp - backwardTime) > 0)
+                if((temp - backwardTime) > 0)
                 {
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
@@ -364,7 +364,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         Log.e(TAG, "createAndInvokeMediaPlayer() <<");
 
     }
-
 
     @Override
     public void onCompletion(MediaPlayer mp)
@@ -389,26 +388,22 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
     }
 
-
     private Runnable UpdateBookTime = new Runnable()
     {
         public void run()
         {
             long currentMin = TimeUnit.MILLISECONDS.toMinutes((long) startTime);
-            long currentSec = (TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
-                            toMinutes((long) startTime)));
+            long currentSec = (TimeUnit.MILLISECONDS.toSeconds((long) startTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+                    toMinutes((long) startTime)));
             startTime = mediaPlayer.getCurrentPosition();
             runingTimeBook.setText(String.format("%d min, %d sec", currentMin, currentSec));
             seekbar.setProgress((int) startTime);
-            if (currentSec >= 30 && !m_AudioBookWasPurchased)
+            if(currentSec >= 30 && !m_AudioBookWasPurchased)
             {
                 whenAudioFinish();
-                Toast.makeText(getApplicationContext(), "Only 30 seconds for DEMO version\nBuy the AudioBook to get " +
-                        "the FULL version", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Only 30 seconds for DEMO version\nBuy the AudioBook to get " + "the FULL version", Toast.LENGTH_SHORT).show();
             }
             myHandler.postDelayed(this, 100);
-
 
         }
     };
@@ -418,45 +413,39 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         Log.e(TAG, "playAudioBook() >>");
 
         Toast.makeText(getApplicationContext(), "Playing sound " + i_AudioBookFile, Toast.LENGTH_SHORT).show();
-
-        if (m_lengthOfSound > 0)
+        Uri downloadUrl = Uri.parse(m_AudioBook.getFile());
+        if(m_lengthOfSound > 0)
         {
             mediaPlayer.seekTo(m_lengthOfSound);
             mediaPlayer.start();
-            whatToDoAfterPlayAudioBook();
-        } else
-        {
-            FirebaseStorage.getInstance().getReference("AudioBooks/" + i_AudioBookFile).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-            {
-
-                @Override
-                public void onSuccess(Uri downloadUrl)
-                {
-                    Log.e(TAG, "onSuccess() >> " + downloadUrl.toString());
-
-                    try
-                    {
-                        mediaPlayer.setDataSource(downloadUrl.toString());
-                        runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
-                        mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                        mediaPlayer.seekTo(0);
-                        oneTimeOnly = 0;
-                        mediaPlayer.start();
-
-                    } catch (Exception e)
-                    {
-                        Log.w(TAG, "playbook() error:" + e.getMessage());
-                    }
-
-                    whatToDoAfterPlayAudioBook();
-
-                    Log.e(TAG, "onSuccess() <<");
-                }
-            });
         }
-        Log.e(TAG, "playAudioBook() <<");
+        else
+        {
+            Log.e(TAG, "onSuccess() >> " + downloadUrl.toString());
 
+            try
+            {
+                mediaPlayer.setDataSource(m_AudioBook.getFile());
+                runingTimeBook.setText(String.format("%d min, %d sec", 0, 0));
+                mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                mediaPlayer.seekTo(0);
+                oneTimeOnly = 0;
+                mediaPlayer.start();
+
+            }
+            catch(Exception e)
+            {
+                Log.w(TAG, "playbook() error:" + e.getMessage());
+            }
+
+
+            Log.e(TAG, "onSuccess() <<");
+        }
+        whatToDoAfterPlayAudioBook();
+        Log.e(TAG,"playAudioBook() <<");
     }
+
+
 
     private void whatToDoAfterPlayAudioBook()
     {
