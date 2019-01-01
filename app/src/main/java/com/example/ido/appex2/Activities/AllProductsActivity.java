@@ -3,8 +3,10 @@ package com.example.ido.appex2.Activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,8 +32,11 @@ import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.example.ido.appex2.entities.User;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -100,6 +105,13 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
 
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
+        if(m_Auth.getCurrentUser().getPhotoUrl() == null)
+        {
+            updatePRofilePic();
+
+        }
         Log.e(TAG, "createLayoutConnections() <<");
 
     }
@@ -445,5 +457,23 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         intent.putExtra("AudioBook", i_book.getAudioBook());
         startActivity(intent);
         Log.e(TAG, "onAudioBookCardClick <<");
+    }
+
+
+    private void updatePRofilePic()
+    {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(Uri.parse("https://www.carib-export.com/login/wp-content/uploads/2012/12/Avatar.png"))
+                .build();
+
+        m_fbUser.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User profile updated.");
+                        }
+                    }
+                });
     }
 }
