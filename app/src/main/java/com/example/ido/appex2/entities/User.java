@@ -100,5 +100,7 @@ public class User implements Parcelable {
     };
 
 
-
+    public int getTotalPurchase() {
+        return totalPurchase;
+    }
 }

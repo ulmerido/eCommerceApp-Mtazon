@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ido.appex2.Analytics.AnalyticsManager;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.ValidationChecker;
 import com.example.ido.appex2.entities.AudioBook;
@@ -45,6 +46,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -66,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView m_TvAnonymous;
     private String m_EmailReset;
     private FirebaseRemoteConfig m_RemoteConfig;
+    private MixpanelAPI mMixpanel;
+
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
 
     @Override
@@ -292,12 +297,18 @@ public class MainActivity extends AppCompatActivity {
     {
         Log.e(TAG, "ifLogedInGoToUserActivity >>");
         boolean userSignedIn = m_Auth.getCurrentUser() != null;
+        String methodUserPassword = "User/Password";
         try
         {
             if(userSignedIn)
             {
                 boolean isAnonymous = m_Auth.getCurrentUser().isAnonymous();
                 boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
+
+                if(isEmailVerified){
+                    m_AnalyticsManager.audioBookLoginEvent(methodUserPassword);
+                }
+
 
                 if(isAnonymous || isEmailVerified || m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com"))
                 {
@@ -320,8 +331,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkIfUserExists()
     {
-        Log.e(TAG, "checkIfUserExists >>");
 
+        Log.e(TAG, "checkIfUserExists >>");
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         DatabaseReference uidRef = rootRef.child("Users").child(uid);
@@ -329,13 +340,12 @@ public class MainActivity extends AppCompatActivity {
         ValueEventListener eventListener = new ValueEventListener()
         {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if(!dataSnapshot.exists())
-                {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
                     Log.e(TAG, "********** uidRef Not exists <<----");
                     createNewUserFacebookAndGoogle();
                 }
+                analyticsLogInOrSingUp(dataSnapshot.exists());
             }
 
             @Override
@@ -348,7 +358,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
+{
+    final String methodAnonymous = "Anonymous";
+    final String methodFacebook = "Facebook";
+    final String methodGoogle = "Google";
 
+    if(!i_existsUserOrNot)
+    {
+        if (m_Auth.getCurrentUser().isAnonymous()) {
+            m_AnalyticsManager.audioBookSignupEvent(methodAnonymous);
+        }
+        if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
+            m_AnalyticsManager.audioBookSignupEvent(methodFacebook);
+        }
+        if(!m_Auth.getCurrentUser().isEmailVerified()){
+            m_AnalyticsManager.audioBookSignupEvent(methodGoogle);
+        }
+
+    }
+    else
+    {
+        if (m_Auth.getCurrentUser().isAnonymous()) {
+            m_AnalyticsManager.audioBookLoginEvent(methodAnonymous);
+        }
+        if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
+            m_AnalyticsManager.audioBookLoginEvent(methodFacebook);
+        }
+        if(!m_Auth.getCurrentUser().isEmailVerified()){
+            m_AnalyticsManager.audioBookLoginEvent(methodGoogle);
+        }
+    }
+
+    m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),!i_existsUserOrNot);
+    m_AnalyticsManager.setUserProperty("email",m_Auth.getCurrentUser().getEmail());
+
+
+}
 
 
     private void googleSignInBuilder() {
@@ -513,4 +559,11 @@ public class MainActivity extends AppCompatActivity {
                 "Fantasy", "1.mp3", "", 100, 5, 7, null));
         Log.e(TAG, "createNewUser() <<");
     }
+
+//    @Override
+//    protected void onDestroy() {
+//        mMixpanel.flush();
+//        super.onDestroy();
+//    }
+
 }

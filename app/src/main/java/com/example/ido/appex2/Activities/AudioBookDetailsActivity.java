@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.ido.appex2.Analytics.AnalyticsManager;
 import com.example.ido.appex2.MenuItemFunctions;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
@@ -83,6 +84,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     private DatabaseReference m_AudioBookRef;
     private boolean m_AudioBookWasPurchased = false;
     private TextView m_moreReviews;
+
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     //------Media Player---------
     private Button forwardBtn, pauseBtn, playBtn, rewindBtn;
@@ -177,6 +180,9 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 m_AudioBookWasPurchased = true;
                 m_Buy.setText("You Bought This eBook");
                 m_Buy.setEnabled(false);
+                m_AnalyticsManager.audioBookPurchase(m_AudioBook);
+                m_AnalyticsManager.setUserProperty("total_purchase",Integer.toString(m_User.getTotalPurchase()));
+                m_AnalyticsManager.setUserProperty("my_songs_count",Integer.toString(m_User.getMyAudioBooks().size()));
             }
 
             Log.e(TAG, "setBuyButton() <<");
@@ -340,6 +346,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 m_lengthOfSound = mediaPlayer.getCurrentPosition();
                 pauseBtn.setEnabled(false);
                 playBtn.setEnabled(true);
+                logAudioBookEvent("Pause");
             }
         });
 
@@ -355,6 +362,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     startTime = startTime + forwardTime;
                     mediaPlayer.seekTo((int) startTime);
                 }
+                logAudioBookEvent("Forward");
             }
         });
 
@@ -370,7 +378,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                     startTime = startTime - backwardTime;
                     mediaPlayer.seekTo((int) startTime);
                 }
-
+                logAudioBookEvent("Rewind");
             }
         });
         mediaPlayer.setOnCompletionListener(this);
@@ -454,6 +462,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
             Log.e(TAG, "onSuccess() <<");
         }
+        logAudioBookEvent("Play");
         whatToDoAfterPlayAudioBook();
         Log.e(TAG,"playAudioBook() <<");
     }
@@ -487,6 +496,11 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         playBtn.setEnabled(false);
         Log.e(TAG, "whatToDoAfterPlayAudioBook() <<");
     }
+
+    private void logAudioBookEvent(String event) {
+        m_AnalyticsManager.audioBookEvent(event,m_AudioBook);
+    }
+
 
     private void populate()
     {
@@ -624,6 +638,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
             {
                 m_etReviewHeader.setText("");
                 m_etReviewBody.setText("");
+                m_AnalyticsManager.audioBookRating(m_AudioBook, (int)m_UserRating.getRating());
                 m_UserRating.setIsIndicator(false);
                 m_UserRating.setRating(0);
                 dialogInterface.cancel();

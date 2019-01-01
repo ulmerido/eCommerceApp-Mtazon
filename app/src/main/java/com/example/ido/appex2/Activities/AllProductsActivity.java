@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.ido.appex2.Adapter.AudioBookAdapter;
 import com.example.ido.appex2.Adapter.AudioBookWithKey;
+import com.example.ido.appex2.Analytics.AnalyticsManager;
 import com.example.ido.appex2.MenuItemFunctions;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
@@ -71,6 +72,8 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
     private FirebaseUser m_fbUser;
     private FirebaseAuth m_Auth;
     private MenuItemFunctions m_MenuFunctions;
+
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -387,6 +390,10 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         }
         if (searchString != null)
         {
+
+            m_AnalyticsManager.audioBookSearchByRadioChoiceEvent(spiner_text);
+            m_AnalyticsManager.audioBookSearchbyWordEvent(searchString);
+
             if (spiner_text.equals("Author"))
             {
                 isAutor = true;
@@ -429,6 +436,8 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
         Log.e(TAG, "updateAudioBooksList() <<");
+
+
 
     }
 
@@ -477,3 +486,22 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                 });
     }
 }
+
+
+//    private void deleteAllReviewsAndRating()
+//    {
+//        FirebaseDatabase.getInstance().getReference().child("AudioBooks")
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        for (DataSnapshot book : dataSnapshot.getChildren()) {
+//                            book.child("reviews").getRef().setValue(0);
+//                            book.child("rating").getRef().setValue(0.0);
+//                        }
+//                    }
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//                    }
+//                });
+//    }
+

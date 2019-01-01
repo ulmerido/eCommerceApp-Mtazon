@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ido.appex2.Analytics.AnalyticsManager;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.ValidationChecker;
 import com.example.ido.appex2.entities.User;
@@ -32,6 +33,8 @@ public class SignUpActivity extends AppCompatActivity
     private TextView m_tvBack;
     private TextView m_tvRegister;
     public static final String TAG = "SignUpActivity";
+
+    private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +89,7 @@ public class SignUpActivity extends AppCompatActivity
 
     private void onClickRegiser()
     {
+        final String methodUserPassword = "User/Password";
         Log.e(TAG, "registerUser() >>");
         if(!successfullValidation())
         {
@@ -114,6 +118,9 @@ public class SignUpActivity extends AppCompatActivity
                         @Override
                         public void onComplete(@NonNull Task<Void> task)
                         {
+                            m_AnalyticsManager.audioBookSignupEvent(methodUserPassword);
+                            m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),true);
+                            m_AnalyticsManager.setUserProperty("email",m_Auth.getCurrentUser().getEmail());
                             m_FirsebaseUser = m_Auth.getCurrentUser();
                             m_FirsebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>()
                             {

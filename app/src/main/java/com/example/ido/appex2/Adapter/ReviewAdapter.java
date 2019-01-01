@@ -113,15 +113,27 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
             m_ReviewUserName.setText(i_Review.getUserEmail());
             String ImgUrl = i_Review.getUserImageUrl();
 
-            Glide.with(m_Context)
-                    .load(ImgUrl)
-                    .thumbnail(Glide.with(m_Context).load(R.drawable.loading_3))
-                    .override(351, 322)
-                    .centerCrop()
-                    .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
-                    .into(m_ReviewUserImage);
+            if(ImgUrl != null)
+            {
 
+                Glide.with(m_Context)
+                        .load(ImgUrl)
+                        .thumbnail(Glide.with(m_Context).load(R.drawable.loading_3))
+                        .override(351, 322)
+                        .centerCrop()
+                        .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
+                        .into(m_ReviewUserImage);
+            }
+            else {
+                Glide.with(m_Context)
+                        .load(R.drawable.com_facebook_profile_picture_blank_portrait)
+                        .thumbnail(Glide.with(m_Context).load(R.drawable.loading_3))
+                        .override(351, 322)
+                        .centerCrop()
+                        .fallback(R.drawable.com_facebook_profile_picture_blank_portrait)
+                        .into(m_ReviewUserImage);
 
+            }
 
             Log.e(TAG,"populate() << ");
 

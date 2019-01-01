@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.example.ido.appex2.Activities.AllProductsActivity;
 import com.example.ido.appex2.Activities.MainActivity;
+import com.example.ido.appex2.Analytics.AnalyticsManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import gr.net.maroulis.library.EasySplashScreen;
@@ -40,6 +41,7 @@ public class SplashScreen extends AppCompatActivity
         config.getBeforeLogoTextView().setTextColor(Color.WHITE);
         View view =config.create();
         setContentView(view);
+        AnalyticsManager.getInstance().init(getApplicationContext());
         Log.e(TAG, "onCreate() <<");
     }
 }
