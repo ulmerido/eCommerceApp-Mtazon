@@ -181,8 +181,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 m_Buy.setText("You Bought This eBook");
                 m_Buy.setEnabled(false);
                 m_AnalyticsManager.audioBookPurchase(m_AudioBook);
-                m_AnalyticsManager.setUserProperty("total_purchase",Integer.toString(m_User.getTotalPurchase()));
-                m_AnalyticsManager.setUserProperty("my_songs_count",Integer.toString(m_User.getMyAudioBooks().size()));
+                m_AnalyticsManager.setUserProperty("total_purchase_($)",Integer.toString(m_User.getTotalPurchase()));
+                m_AnalyticsManager.setUserProperty("user_audioBooks_count",Integer.toString(m_User.getMyAudioBooks().size()));
             }
 
             Log.e(TAG, "setBuyButton() <<");

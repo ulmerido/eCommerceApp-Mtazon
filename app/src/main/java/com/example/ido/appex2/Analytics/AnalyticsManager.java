@@ -3,9 +3,7 @@ package com.example.ido.appex2.Analytics;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.appsee.Appsee;
 import com.example.ido.appex2.entities.AudioBook;
-import com.flurry.android.FlurryAgent;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
@@ -40,7 +38,7 @@ public class AnalyticsManager {
 
     public void audioBookSearchByRadioChoiceEvent(String searchChoice) {
 
-        String eventName = "search";
+        String eventName = "search_Choice_Radio_Button";
 
         //Firebase
         Bundle params = new Bundle();
@@ -56,7 +54,7 @@ public class AnalyticsManager {
 
     public void audioBookSearchbyWordEvent(String searchString) {
 
-        String eventName = "search";
+        String eventName = "search_By_Word";
 
         //Firebase
         Bundle params = new Bundle();
@@ -66,6 +64,22 @@ public class AnalyticsManager {
         //MixPanels
         Map<String, Object> eventParams2 = new HashMap<String, Object>();
         eventParams2.put("search word", searchString);
+        mMixpanel.trackMap(eventName,eventParams2);
+
+    }
+
+    public void audioBookSortbyEvent(String searchString) {
+
+        String eventName = "sort_by";
+
+        //Firebase
+        Bundle params = new Bundle();
+        params.putString(FirebaseAnalytics.Param.SEARCH_TERM, searchString);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SEARCH,params);
+
+        //MixPanels
+        Map<String, Object> eventParams2 = new HashMap<String, Object>();
+        eventParams2.put("sort by", searchString);
         mMixpanel.trackMap(eventName,eventParams2);
 
     }

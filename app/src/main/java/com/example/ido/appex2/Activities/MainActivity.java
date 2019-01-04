@@ -2,6 +2,7 @@ package com.example.ido.appex2.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -345,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "********** uidRef Not exists <<----");
                     createNewUserFacebookAndGoogle();
                 }
-                analyticsLogInOrSingUp(dataSnapshot.exists());
+                      analyticsLogInOrSingUp(dataSnapshot.exists());
             }
 
             @Override
@@ -368,11 +369,14 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
     {
         if (m_Auth.getCurrentUser().isAnonymous()) {
             m_AnalyticsManager.audioBookSignupEvent(methodAnonymous);
+            m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),!i_existsUserOrNot);
+            m_AnalyticsManager.setUserProperty("email",null);
+            m_AnalyticsManager.setUserProperty("name",methodAnonymous +" "+ m_Auth.getCurrentUser().getUid());
         }
-        if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
+        else if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
             m_AnalyticsManager.audioBookSignupEvent(methodFacebook);
         }
-        if(!m_Auth.getCurrentUser().isEmailVerified()){
+        else if(!m_Auth.getCurrentUser().isEmailVerified()){
             m_AnalyticsManager.audioBookSignupEvent(methodGoogle);
         }
 
@@ -381,18 +385,23 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
     {
         if (m_Auth.getCurrentUser().isAnonymous()) {
             m_AnalyticsManager.audioBookLoginEvent(methodAnonymous);
+            m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),!i_existsUserOrNot);
+            m_AnalyticsManager.setUserProperty("email",null);
+            m_AnalyticsManager.setUserProperty("name", methodAnonymous +" "+  m_Auth.getCurrentUser().getUid());
         }
-        if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
+        else if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
             m_AnalyticsManager.audioBookLoginEvent(methodFacebook);
         }
-        if(!m_Auth.getCurrentUser().isEmailVerified()){
+        else if(!m_Auth.getCurrentUser().isEmailVerified()){
             m_AnalyticsManager.audioBookLoginEvent(methodGoogle);
         }
+
     }
-
-    m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),!i_existsUserOrNot);
-    m_AnalyticsManager.setUserProperty("email",m_Auth.getCurrentUser().getEmail());
-
+if(!m_Auth.getCurrentUser().isAnonymous()) {
+    m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(), !i_existsUserOrNot);
+    m_AnalyticsManager.setUserProperty("email", m_Auth.getCurrentUser().getEmail());
+    m_AnalyticsManager.setUserProperty("name", m_Auth.getCurrentUser().getDisplayName());
+}
 
 }
 

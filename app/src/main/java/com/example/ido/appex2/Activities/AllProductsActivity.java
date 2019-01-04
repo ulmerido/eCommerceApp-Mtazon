@@ -390,10 +390,10 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         }
         if (searchString != null)
         {
-
-            m_AnalyticsManager.audioBookSearchByRadioChoiceEvent(spiner_text);
-            m_AnalyticsManager.audioBookSearchbyWordEvent(searchString);
-
+            if(searchString.length() > 0) {
+                m_AnalyticsManager.audioBookSearchByRadioChoiceEvent(spiner_text);
+                m_AnalyticsManager.audioBookSearchbyWordEvent(searchString);
+            }
             if (spiner_text.equals("Author"))
             {
                 isAutor = true;
@@ -435,6 +435,8 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
             }
             mRecyclerView.getAdapter().notifyDataSetChanged();
         }
+
+        m_AnalyticsManager.audioBookSortbyEvent(orderBy);
         Log.e(TAG, "updateAudioBooksList() <<");
 
 
