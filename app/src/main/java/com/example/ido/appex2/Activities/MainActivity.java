@@ -46,6 +46,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -306,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 boolean isAnonymous = m_Auth.getCurrentUser().isAnonymous();
                 boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
+                FirebaseMessaging.getInstance().subscribeToTopic("all");
 
                 if(isEmailVerified){
                     m_AnalyticsManager.audioBookLoginEvent(methodUserPassword);
@@ -503,14 +505,18 @@ if(!m_Auth.getCurrentUser().isAnonymous()) {
         Log.e(TAG, "handleFacebookAccessToken () <<");
     }
 
-    private void firebaseAuthTaskCheck(Task<AuthResult> i_Task) {
+    private void firebaseAuthTaskCheck(Task<AuthResult> i_Task)
+    {
         Log.e(TAG, "firebaseAuthTaskCheck() >>");
 
-        if (i_Task.isSuccessful()) {
+        if(i_Task.isSuccessful())
+        {
             Log.d(TAG, "signInWithCredential:success");
             ifLogedInGoToUserActivity();
             Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT).show();
-        } else {
+        }
+        else
+        {
             Toast.makeText(getApplicationContext(), i_Task.getException().toString(), Toast.LENGTH_SHORT).show();
             Log.w(TAG, "signInWithCredential:failure", i_Task.getException());
         }
