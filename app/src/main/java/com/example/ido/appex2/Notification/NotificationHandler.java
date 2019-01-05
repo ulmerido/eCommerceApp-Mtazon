@@ -144,7 +144,7 @@ public class NotificationHandler
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(m_Context);
         notificationManagerCompat.notify(1,builder.build());
     }
-    
+
     private void findAudioBook()
     {
         Log.e(TAG, "findAudioBook()>>");
