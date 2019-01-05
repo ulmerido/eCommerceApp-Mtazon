@@ -19,7 +19,8 @@ public class AnalyticsManager {
     private  MixpanelAPI mMixpanel;
 
 
-    private AnalyticsManager() {
+    private AnalyticsManager()
+    {
     }
 
     public static AnalyticsManager getInstance() {

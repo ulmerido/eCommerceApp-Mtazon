@@ -45,6 +45,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
@@ -548,31 +549,15 @@ if(!m_Auth.getCurrentUser().isAnonymous()) {
         {
             userRef.child(user.getUid()).setValue(new User("", "",
                     "", "",
-                    0,null));
+                    0,null,FirebaseInstanceId.getInstance().getToken()));
             Log.e(TAG, "createNewUser (Anonymous) () <<");
             return;
         }
         userRef.child(user.getUid()).setValue(new User(user.getEmail(), user.getDisplayName(),
                 "", user.getPhotoUrl().toString(),
-                0,null));
+                0,null,FirebaseInstanceId.getInstance().getToken()));
 
         Log.e(TAG, "createNewUser() <<");
     }
-
-   protected static void createNewBook() {
-
-        Log.e(TAG, "createNewUser() >>");
-
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("AudioBooks");
-        userRef.child(UUID.randomUUID().toString()).setValue(new AudioBook("Harry Poter", "J.K Rolling",
-                "Fantasy", "1.mp3", "", 100, 5, 7, null));
-        Log.e(TAG, "createNewUser() <<");
-    }
-
-//    @Override
-//    protected void onDestroy() {
-//        mMixpanel.flush();
-//        super.onDestroy();
-//    }
 
 }

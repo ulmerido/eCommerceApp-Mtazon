@@ -14,17 +14,29 @@ public class User implements Parcelable {
     private String profilePicURL;
     private int totalPurchase;
     private List<String> myAudioBooks = new ArrayList<>();
+    private String deviceToken ;
+
+    public String getDeviceToken()
+    {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken)
+    {
+        this.deviceToken = deviceToken;
+    }
 
     public User() {
     }
 
-    public User(String email, String fullName, String password, String profilePicURL, int totalPurchase, List<String> myAudioBooks) {
+    public User(String email, String fullName, String password, String profilePicURL, int totalPurchase, List<String> myAudioBooks, String i_deviceToken) {
         this.email = email;
         this.fullName = fullName;
         this.password = password;
         this.profilePicURL = profilePicURL;
         this.totalPurchase = totalPurchase;
         this.myAudioBooks = myAudioBooks;
+        this.deviceToken = i_deviceToken;
     }
 
     public String getEmail() {

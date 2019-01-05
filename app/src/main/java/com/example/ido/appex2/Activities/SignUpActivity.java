@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ido.appex2.Analytics.AnalyticsManager;
+import com.example.ido.appex2.Notification.FirebaseInstanceHandler;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.ValidationChecker;
 import com.example.ido.appex2.entities.User;
@@ -22,6 +23,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 public class SignUpActivity extends AppCompatActivity
 {
     private EditText m_etPassword;
@@ -113,7 +116,7 @@ public class SignUpActivity extends AppCompatActivity
                         Log.e(TAG, "createNewUser() << Error user is null");
                         return;
                     }
-                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName, passString, null, 0, null)).addOnCompleteListener(new OnCompleteListener<Void>()
+                    userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(new User(emailString, fullName, passString, null, 0, null,FirebaseInstanceId.getInstance().getToken())).addOnCompleteListener(new OnCompleteListener<Void>()
                     {
                         @Override
                         public void onComplete(@NonNull Task<Void> task)

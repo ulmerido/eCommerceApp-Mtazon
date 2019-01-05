@@ -476,7 +476,6 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setPhotoUri(Uri.parse("https://www.carib-export.com/login/wp-content/uploads/2012/12/Avatar.png"))
                 .build();
-
         m_fbUser.updateProfile(profileUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

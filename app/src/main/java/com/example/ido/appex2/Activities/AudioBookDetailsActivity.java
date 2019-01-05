@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -84,7 +85,8 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
     private DatabaseReference m_AudioBookRef;
     private boolean m_AudioBookWasPurchased = false;
     private TextView m_moreReviews;
-
+    private int m_OriginalPrice;
+    private int m_NewPrice = -1;
     private AnalyticsManager m_AnalyticsManager = AnalyticsManager.getInstance();
 
     //------Media Player---------
@@ -164,21 +166,18 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         }
         else
         {
-            Log.e(TAG, "buyPlay.onClick() >> file=" + m_AudioBook.getName());
+            Log.e(TAG, "setBuyButton: file = " + m_AudioBook.getName());
 
-            if(m_AudioBookWasPurchased)
+            if(!m_AudioBookWasPurchased)
             {
-                Log.e(TAG, "buyPlay.onClick() >> Playing purchased book");
-            }
-            else
-            {
-                Log.e(TAG, "buyPlay.onClick() >> Purchase the book");
+                Log.e(TAG, "setBuyButton: Buying book");
                 m_User.getMyAudioBooks().add(m_Key);
+                Log.e(TAG, m_Key);
                 m_User.upgdateTotalPurchase(m_AudioBook.getPrice());
                 DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
-                userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(m_User);
+                userRef.child(m_fbUser.getUid()).setValue(m_User);
                 m_AudioBookWasPurchased = true;
-                m_Buy.setText("You Bought This eBook");
+                m_Buy.setText("You Bought This AudioBook");
                 m_Buy.setEnabled(false);
                 m_AnalyticsManager.audioBookPurchase(m_AudioBook);
                 m_AnalyticsManager.setUserProperty("total_purchase_($)",Integer.toString(m_User.getTotalPurchase()));
@@ -228,6 +227,17 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_fbUser = FirebaseAuth.getInstance().getCurrentUser();
         m_Key = getIntent().getStringExtra("Key");
         m_AudioBook = getIntent().getParcelableExtra("AudioBook");
+        String discount =getIntent().getStringExtra("discount");
+        if(discount!= null)
+        {
+            m_OriginalPrice= m_AudioBook.getPrice();
+            int disc = Integer.parseInt(discount);
+            m_NewPrice = m_OriginalPrice  - disc;
+            if(m_NewPrice <0)
+                m_NewPrice =0;
+            m_AudioBook.setPrice(m_NewPrice);
+        }
+
         m_AudioBookRef = FirebaseDatabase.getInstance().getReference("AudioBooks/" + m_Key);
         m_MyUserRef = FirebaseDatabase.getInstance().getReference("Users/" + m_fbUser.getUid());
         m_MyUserRef.addValueEventListener(new ValueEventListener()
@@ -241,14 +251,24 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
                 Log.e(TAG, "onDataChange(User) After--->>> " + m_User.getFullName());
                 Log.e(TAG, "onDataChange(User) <<");
 
-                m_Buy.setText("BUY $" + m_AudioBook.getPrice());
+                if(m_NewPrice == -1)
+                {
+                    m_Buy.setText("BUY $" + m_AudioBook.getPrice());
+
+                }
+                else
+                {
+                    m_Buy.setText("Buy now $" + m_AudioBook.getPrice()+ " insted of $" + Integer.toString(m_OriginalPrice));
+                    //m_Buy.setTextColor(0xFFFF00);
+                }
+
                 Iterator i = m_User.getMyAudioBooks().iterator();
                 while(i.hasNext())
                 {
                     if(i.next().equals(m_Key))
                     {
                         m_AudioBookWasPurchased = true;
-                        m_Buy.setText("You Bought This eBook");
+                        m_Buy.setText("You Bought This Audio Book");
                         m_Buy.setEnabled(false);
                         m_Buy.setAllCaps(false);
                         break;
@@ -314,6 +334,7 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         whenAudioFinish();
         mediaPlayer.seekTo(0);
         super.onBackPressed();
+        finish();
         Log.e(TAG, "onBackPressed() <<");
     }
 
@@ -467,8 +488,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         Log.e(TAG,"playAudioBook() <<");
     }
 
-
-
     private void whatToDoAfterPlayAudioBook()
     {
         Log.e(TAG, "whatToDoAfterPlayAudioBook() >>");
@@ -501,7 +520,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_AnalyticsManager.audioBookEvent(event,m_AudioBook);
     }
 
-
     private void populate()
     {
         Log.e(TAG, "populate>>");
@@ -510,6 +528,10 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         m_tvBookAuther.setText(m_AudioBook.getAuthor());
         m_tvBookReviewCount.setText("(" + Integer.toString(m_AudioBook.getReviewsCount()) + ")");
         m_tvBookPrice.setText(Integer.toString(m_AudioBook.getPrice()) + "$");
+        if(m_NewPrice != -1)
+        {
+            m_tvBookPrice.setTextColor(0xFFFF00); //Yellow
+        }
         m_tvBookReviewAvg.setText("[" + Double.toString(m_AudioBook.getRating()) + "]");
         Log.e(TAG, "updateProfilePicInTheActivityView() >>");
         Glide.with(this.getApplicationContext()).load(m_AudioBook.getThumbImage()).thumbnail(Glide.with(this.getApplicationContext()).load(R.drawable.sppiner_loading)).fallback(R.drawable.com_facebook_profile_picture_blank_portrait).into(m_ivBookImage);
@@ -525,27 +547,29 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
         String headerString = m_etReviewHeader.getText().toString().trim();
         String bodyString = m_etReviewBody.getText().toString().trim();
-        if (checkReviewParams(headerString, bodyString))
+        if(checkReviewParams(headerString, bodyString))
         {
             whenAddedReviwWithRating();
             try
             {
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            } catch (Exception e)
+            }
+            catch(Exception e)
             {
                 Log.e(TAG, "Exception " + e.getMessage());
             }
 
             m_etReviewHeader.setHintTextColor(Color.GRAY);
             m_etReviewBody.setHintTextColor(Color.GRAY);
-        } else
+        }
+        else
         {
-            if (m_etReviewHeader.getText().toString().isEmpty())
+            if(m_etReviewHeader.getText().toString().isEmpty())
             {
                 m_etReviewHeader.setHintTextColor(Color.RED);
             }
-            if (m_etReviewBody.getText().toString().isEmpty())
+            if(m_etReviewBody.getText().toString().isEmpty())
             {
                 m_etReviewBody.setHintTextColor(Color.RED);
             }
@@ -621,7 +645,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
 
     }
 
-
     private void reviewSetComplete()
     {
         Log.e(TAG, "reviewSetComplete() >>");
@@ -648,7 +671,6 @@ public class AudioBookDetailsActivity extends AppCompatActivity implements Media
         Log.e(TAG, "reviewSetComplete() <<");
 
     }
-
 
     private double avgRatingOfAudioBook(double i_LastRating, float i_NewRating, int i_NumOfRating)
     {
