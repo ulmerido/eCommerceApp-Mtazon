@@ -1,10 +1,13 @@
 package com.example.ido.appex2.Notification;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -56,6 +59,14 @@ public class NotificationHandler
     {
         Log.e(TAG, "displyNotification() >>");
 
+        NotificationManager notificationManager = (NotificationManager) m_Context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        {
+
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Default", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(channel);
+        }
+
         if(m_Data.get("discount") != null)
         {
             Log.e(TAG, "go to BookSale()" + m_Data.get("discount"));
@@ -69,6 +80,10 @@ public class NotificationHandler
         {
             displyCampain_deafult();
         }
+
+
+
+
 
         Log.e(TAG, "displyNotification() <<");
 
