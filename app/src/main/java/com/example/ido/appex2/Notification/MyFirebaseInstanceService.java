@@ -1,6 +1,10 @@
 package com.example.ido.appex2.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.ido.appex2.Notification.NotificationHandler;
@@ -29,6 +33,7 @@ public class MyFirebaseInstanceService extends FirebaseMessagingService
             NotificationHandler notify = new NotificationHandler(this, remoteMessage);
             notify.displyNotification();
         }
+
 
         Log.e(TAG, "onMessageReceived() <<");
     }
