@@ -41,6 +41,9 @@ public class NotificationHandler
     private final String TAG = "NotificationHandler";
     private CountDownLatch m_Done;
     private RemoteMessage m_remoteMessage;
+    private NotificationManager m_notificationManager;
+    private Uri m_SoundUri;
+    private   NotificationCompat.Builder m_NotificationBuilder;
 
 
     private static final String CHANNEL_ID ="fcm_default_channel";
@@ -51,6 +54,11 @@ public class NotificationHandler
         m_Context=i_Context;
         m_remoteMessage =i_remoteMessage;
         m_Data = m_remoteMessage.getData();
+
+        m_notificationManager = (NotificationManager) m_Context.getSystemService(Context.NOTIFICATION_SERVICE);
+        m_SoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        m_NotificationBuilder= new NotificationCompat.Builder(m_Context, CHANNEL_ID);
+
         Log.e(TAG, "Ctr() <<");
 
     }
@@ -59,12 +67,17 @@ public class NotificationHandler
     {
         Log.e(TAG, "displyNotification() >>");
 
-        NotificationManager notificationManager = (NotificationManager) m_Context.getSystemService(Context.NOTIFICATION_SERVICE);
+        m_NotificationBuilder.setChannelId(CHANNEL_ID)
+                .setSound(m_SoundUri)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
+            Log.e(TAG, "this is Oreo+()");
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Default", NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
+            m_notificationManager.createNotificationChannel(channel);
+
         }
 
         if(m_Data.get("discount") != null)
@@ -74,16 +87,14 @@ public class NotificationHandler
         }
         else if(m_Data.get("profile")!= null)
         {
+            Log.e(TAG, "go to profile()" + m_Data.get("discount"));
             displyCampain_updateProfile();
         }
         else
         {
+            Log.e(TAG, "go to deafult()" + m_Data.get("discount"));
             displyCampain_deafult();
         }
-
-
-
-
 
         Log.e(TAG, "displyNotification() <<");
 
@@ -92,33 +103,36 @@ public class NotificationHandler
     private void displyCampain_BookSale()
     {
         Log.e(TAG, "displyCampain_BookSale() >>");
-        Uri soundRri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+
         m_AudioBookKey = m_Data.get("AudioBookKey");
         findAudioBook();
-
         Intent intent = new Intent(m_Context, AudioBookDetailsActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("discount", m_Data.get("discount"));
         intent.putExtra("Key", m_AudioBookKey);
-
-        Log.e(TAG, "audio: "+m_AudioBook.getName());
-
         intent.putExtra("AudioBook",m_AudioBook);
-
         PendingIntent pendingIntent = PendingIntent.getActivity(m_Context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(m_Context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifi)
+
+
+        m_NotificationBuilder.setSmallIcon(R.drawable.ic_notifi)
                 .setContentTitle("One Time Sale! $" + m_Data.get("discount")+ " off")
                 .setContentText("AudioBook in discount: " + m_AudioBook.getName())
-                .setContentIntent(pendingIntent)
-                .setSound(soundRri)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(m_Context);
-        notificationManagerCompat.notify(1,builder.build());
+                .setContentIntent(pendingIntent);
+
+        //NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(m_Context);
+        //notificationManagerCompat.notify(1,m_NotificationBuilder.build());
+        m_notificationManager.notify(0,m_NotificationBuilder.build());
+
+
     }
+
+
 
     private void displyCampain_deafult()
     {
+        Log.e(TAG, "displyCampain_deafult() >>");
+
         Intent intent = new Intent(m_Context, UserActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(m_Context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -127,37 +141,31 @@ public class NotificationHandler
             return;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(m_Context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifi)
                 .setContentTitle(notification.getTitle())
                 .setContentText(notification.getBody())
-                .setContentIntent(pendingIntent)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setPriority(m_remoteMessage.getPriority());
+                .setContentIntent(pendingIntent);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(m_Context);
-        notificationManagerCompat.notify(1,builder.build());
+        m_notificationManager.notify(0,m_NotificationBuilder.build());
+
     }
 
     private void displyCampain_updateProfile()
     {
+
+        NotificationManager m_notificationManager = (NotificationManager) m_Context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent intent = new Intent(m_Context, UserActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(m_Context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        Uri soundRri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
         String fname =FirebaseAuth.getInstance().getCurrentUser().getDisplayName().split(" ", 2)[0];
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(m_Context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifi)
                 .setContentTitle("Hey " + fname+"! we love you <3")
                 .setContentText("Want to update your profile?")
-                .setContentIntent(pendingIntent)
-                .setSound(soundRri)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setContentIntent(pendingIntent);
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(m_Context);
-        notificationManagerCompat.notify(1,builder.build());
+        m_notificationManager.notify(0,m_NotificationBuilder.build());
+
     }
 
     private void findAudioBook()
