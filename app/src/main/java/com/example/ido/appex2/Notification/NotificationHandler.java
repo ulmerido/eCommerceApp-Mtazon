@@ -69,7 +69,9 @@ public class NotificationHandler
 
         m_NotificationBuilder.setChannelId(CHANNEL_ID)
                 .setSound(m_SoundUri)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setSmallIcon(R.drawable.ic_notifi);
+
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
@@ -115,8 +117,7 @@ public class NotificationHandler
         PendingIntent pendingIntent = PendingIntent.getActivity(m_Context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
 
-        m_NotificationBuilder.setSmallIcon(R.drawable.ic_notifi)
-                .setContentTitle("One Time Sale! $" + m_Data.get("discount")+ " off")
+        m_NotificationBuilder.setContentTitle("One Time Sale! $" + m_Data.get("discount")+ " off")
                 .setContentText("AudioBook in discount: " + m_AudioBook.getName())
                 .setContentIntent(pendingIntent);
 
@@ -140,8 +141,7 @@ public class NotificationHandler
         if(notification == null)
             return;
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(m_Context, CHANNEL_ID)
-                .setContentTitle(notification.getTitle())
+        m_NotificationBuilder.setContentTitle(notification.getTitle())
                 .setContentText(notification.getBody())
                 .setContentIntent(pendingIntent);
 
@@ -159,8 +159,7 @@ public class NotificationHandler
         String fname =FirebaseAuth.getInstance().getCurrentUser().getDisplayName().split(" ", 2)[0];
 
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(m_Context, CHANNEL_ID)
-                .setContentTitle("Hey " + fname+"! we love you <3")
+        m_NotificationBuilder.setContentTitle("Hey " + fname+"! we love you <3")
                 .setContentText("Want to update your profile?")
                 .setContentIntent(pendingIntent);
 
