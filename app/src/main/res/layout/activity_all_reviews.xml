@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activities.AllProductsActivity">
-    <include layout="@layout/app_bar"/>
+
+    <include layout="@layout/app_bar" />
 
 
     <android.support.v7.widget.RecyclerView
