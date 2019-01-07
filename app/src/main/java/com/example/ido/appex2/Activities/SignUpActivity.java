@@ -124,6 +124,7 @@ public class SignUpActivity extends AppCompatActivity
                             m_AnalyticsManager.audioBookSignupEvent(methodUserPassword);
                             m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),true);
                             m_AnalyticsManager.setUserProperty("email",m_Auth.getCurrentUser().getEmail());
+                            m_AnalyticsManager.setUserProperty("connect_with", methodUserPassword);
                             m_FirsebaseUser = m_Auth.getCurrentUser();
                             m_FirsebaseUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>()
                             {

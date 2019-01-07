@@ -201,7 +201,7 @@ public class AllProductsActivity extends AppCompatActivity  implements Interface
                     }
                 });
             }
-        }, 2000);
+        }, 3000);
         Log.e(TAG, "onCreateWithUser() <<");
     }
 

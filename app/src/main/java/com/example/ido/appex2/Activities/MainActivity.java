@@ -309,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean isEmailVerified = m_Auth.getCurrentUser().isEmailVerified();
                 FirebaseMessaging.getInstance().subscribeToTopic("all");
 
-                if(isEmailVerified){
+                if(isEmailVerified && !m_Auth.getCurrentUser().getProviders().get(0).equals("google.com")){
                     m_AnalyticsManager.audioBookLoginEvent(methodUserPassword);
                 }
 
@@ -364,10 +364,11 @@ public class MainActivity extends AppCompatActivity {
 
 private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
 {
+    Log.e(TAG, "analyticsLogInOrSingUp() >>");
     final String methodAnonymous = "Anonymous";
     final String methodFacebook = "Facebook";
     final String methodGoogle = "Google";
-    final String methodUserPassword = "User/Password";
+
 
     if(!i_existsUserOrNot)
     {
@@ -382,7 +383,7 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
             m_AnalyticsManager.audioBookSignupEvent(methodFacebook);
             m_AnalyticsManager.setUserProperty("connect_with", methodFacebook);
         }
-        else if(!m_Auth.getCurrentUser().isEmailVerified()){
+        else if(m_Auth.getCurrentUser().getProviders().get(0).equals("google.com")){
             m_AnalyticsManager.audioBookSignupEvent(methodGoogle);
             m_AnalyticsManager.setUserProperty("connect_with", methodGoogle);
         }
@@ -401,7 +402,7 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
             m_AnalyticsManager.audioBookLoginEvent(methodFacebook);
             m_AnalyticsManager.setUserProperty("connect_with", methodFacebook);
         }
-        else if(!m_Auth.getCurrentUser().isEmailVerified()){
+        else if(m_Auth.getCurrentUser().getProviders().get(0).equals("google.com")){
             m_AnalyticsManager.audioBookLoginEvent(methodGoogle);
             m_AnalyticsManager.setUserProperty("connect_with", methodGoogle);
         }
@@ -411,8 +412,8 @@ if(!m_Auth.getCurrentUser().isAnonymous()) {
     m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(), !i_existsUserOrNot);
     m_AnalyticsManager.setUserProperty("email", m_Auth.getCurrentUser().getEmail());
     m_AnalyticsManager.setUserProperty("name", m_Auth.getCurrentUser().getDisplayName());
-    m_AnalyticsManager.setUserProperty("connect_with", methodUserPassword);
 }
+    Log.e(TAG, "analyticsLogInOrSingUp() <<");
 
 }
 
