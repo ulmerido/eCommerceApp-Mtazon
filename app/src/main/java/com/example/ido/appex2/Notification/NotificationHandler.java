@@ -17,6 +17,7 @@ import android.util.Log;
 import com.example.ido.appex2.Activities.AudioBookDetailsActivity;
 import com.example.ido.appex2.Activities.UserActivity;
 import com.example.ido.appex2.Adapter.AudioBookWithKey;
+import com.example.ido.appex2.Analytics.AnalyticsManager;
 import com.example.ido.appex2.R;
 import com.example.ido.appex2.entities.AudioBook;
 import com.google.firebase.FirebaseError;
@@ -31,6 +32,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class NotificationHandler
 {
@@ -105,8 +108,7 @@ public class NotificationHandler
     private void displyCampain_BookSale()
     {
         Log.e(TAG, "displyCampain_BookSale() >>");
-
-
+        AnalyticsManager.getInstance().init(getApplicationContext());
         m_AudioBookKey = m_Data.get("AudioBookKey");
         findAudioBook();
         Intent intent = new Intent(m_Context, AudioBookDetailsActivity.class);

@@ -367,6 +367,7 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
     final String methodAnonymous = "Anonymous";
     final String methodFacebook = "Facebook";
     final String methodGoogle = "Google";
+    final String methodUserPassword = "User/Password";
 
     if(!i_existsUserOrNot)
     {
@@ -375,12 +376,15 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
             m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),!i_existsUserOrNot);
             m_AnalyticsManager.setUserProperty("email",null);
             m_AnalyticsManager.setUserProperty("name",methodAnonymous +" "+ m_Auth.getCurrentUser().getUid());
+            m_AnalyticsManager.setUserProperty("connect_with", methodAnonymous);
         }
         else if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
             m_AnalyticsManager.audioBookSignupEvent(methodFacebook);
+            m_AnalyticsManager.setUserProperty("connect_with", methodFacebook);
         }
         else if(!m_Auth.getCurrentUser().isEmailVerified()){
             m_AnalyticsManager.audioBookSignupEvent(methodGoogle);
+            m_AnalyticsManager.setUserProperty("connect_with", methodGoogle);
         }
 
     }
@@ -391,12 +395,15 @@ private void analyticsLogInOrSingUp(boolean i_existsUserOrNot)
             m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(),!i_existsUserOrNot);
             m_AnalyticsManager.setUserProperty("email",null);
             m_AnalyticsManager.setUserProperty("name", methodAnonymous +" "+  m_Auth.getCurrentUser().getUid());
+            m_AnalyticsManager.setUserProperty("connect_with", methodAnonymous);
         }
         else if(m_Auth.getCurrentUser().getProviders().get(0).equals("facebook.com")) {
             m_AnalyticsManager.audioBookLoginEvent(methodFacebook);
+            m_AnalyticsManager.setUserProperty("connect_with", methodFacebook);
         }
         else if(!m_Auth.getCurrentUser().isEmailVerified()){
             m_AnalyticsManager.audioBookLoginEvent(methodGoogle);
+            m_AnalyticsManager.setUserProperty("connect_with", methodGoogle);
         }
 
     }
@@ -404,6 +411,7 @@ if(!m_Auth.getCurrentUser().isAnonymous()) {
     m_AnalyticsManager.setUserID(m_Auth.getCurrentUser().getUid(), !i_existsUserOrNot);
     m_AnalyticsManager.setUserProperty("email", m_Auth.getCurrentUser().getEmail());
     m_AnalyticsManager.setUserProperty("name", m_Auth.getCurrentUser().getDisplayName());
+    m_AnalyticsManager.setUserProperty("connect_with", methodUserPassword);
 }
 
 }
