@@ -8,3 +8,5 @@ App implants Recycle view, Navigation bar and push notifications.
 
 the code is a bit messy because it was our first time programing at android studio (and 1st time programing in java).
 for any questions contact me via idoul@mta.co.il
+
+Created by Ido Ulmer, shai Hasan and Lior Ben - Yehuda
